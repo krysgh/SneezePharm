@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SneezePharm
 {
-    internal class Cliente
+    public class Cliente
     {
         #region gets e sets
         public string Cpf { get; private set; }
@@ -23,21 +23,9 @@ namespace SneezePharm
         }
         #endregion
 
-        #region construtores
+        #region construtor
         public Cliente(string cpf, string nome, DateOnly dataNascismento,
             string telefone, DateOnly ultimaCompra, DateOnly dataCadastro, char situacao)
-        {
-            Cpf = cpf;
-            Nome = nome;
-            DataNascimento = dataNascismento;
-            Telefone = telefone;
-            UltimaCompra = DateOnly.FromDateTime(DateTime.Now);
-            DataCadastro = DateOnly.FromDateTime(DateTime.Now);
-            Situacao = 'A';
-        }
-
-        public Cliente(string cpf, string nome,
-            DateOnly dataNascismento, string telefone)
         {
             Cpf = cpf;
             Nome = nome;
@@ -57,7 +45,7 @@ namespace SneezePharm
             {
                 Console.Write("Informe o cpf: ");
                 cpf = Console.ReadLine()!;
-            } while (!ValidarCpf(cpf)); // informar o cpf até que ele seja validado
+            } while (!ValidarCpf(cpf));
 
             Console.Write("Informe o nome: ");
             string nome = Console.ReadLine()!;
@@ -66,19 +54,23 @@ namespace SneezePharm
                 nome = nome.Substring(0, 50);
             }
 
-            Console.Write("Informe a data de nascimento: ");
-            DateOnly dataNascimento = DateOnly.Parse(Console.ReadLine()!);
-
-            if (!ValidarIdade(dataNascimento))
+            DateOnly dataNascimento;
+            do
             {
-                Console.WriteLine("Impossivel cadastrar cliente com menos de 18 anos! Retornando ao menu principal!\n");
-                return null;
-                //metodo de chamar menu
-            }
+                Console.Write("Informe a data de nascimento: ");
+                dataNascimento = DateOnly.Parse(Console.ReadLine()!);
+            } while (!ValidarIdade(dataNascimento));
 
+            string telefone;
+            do {
+                Console.Write("Informe o telefone com ddd: ");
+                telefone = Console.ReadLine()!;
 
-            Console.Write("Informe o telefone com ddd: ");
-            string telefone = Console.ReadLine()!;
+                if (telefone.Length != 11)
+                {
+                    Console.WriteLine("\nTelefone deve obrigatóriamente ter 11 dígitos, 2 do DDD e 9 do número! Tente novamente!\n");
+                }
+            } while (telefone.Length != 11);
 
             DateOnly dataAtual = DateOnly.FromDateTime(DateTime.Now);
 
@@ -173,18 +165,24 @@ namespace SneezePharm
         #region validação idade
         public static bool ValidarIdade(DateOnly dataNascimento) // desenvolver a validação de maior idade
         {
+
+            if (dataNascimento > DateOnly.FromDateTime(DateTime.Now))
+            {
+                Console.WriteLine("Data de nascimento não pode estar no futuro! Retornando ao menu principal!\n");
+                return false;
+            }
+
             DateOnly diaHoje = DateOnly.FromDateTime(DateTime.Now);
-            //int diferencaDias = diaHoje.DayNumber - dataNascimento.DayNumber;
             dataNascimento = dataNascimento.AddYears(18);
 
             if (dataNascimento > diaHoje)
             {
+                Console.WriteLine("Impossivel cadastrar cliente com menos de 18 anos! Retornando ao menu principal!\n");
+                //AQUI DEVE CHAMAR O MENU PARA RETORNAR
                 return false;
             }
-            else
-            {
-                return true;
-            }
+
+            return true;
         }
         #endregion
 
