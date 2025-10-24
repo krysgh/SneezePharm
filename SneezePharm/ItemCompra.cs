@@ -1,6 +1,6 @@
 ﻿namespace SneezePharm
 {
-    internal class ItemCompra
+    public class ItemCompra
     {
         public int IdCompra { get; private set; }
         public string Ingrediente { get; private set; }
