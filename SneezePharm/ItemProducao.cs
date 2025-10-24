@@ -1,6 +1,6 @@
 ﻿namespace SneezePharm;
 
-internal class ItemProducao
+public  class ItemProducao
 {
     public int IdProducao { get; private set; }
     public string Principio { get; private set; }
@@ -34,9 +34,9 @@ internal class ItemProducao
 
     public override string ToString()
     {
-        return $"\nId da Produção: {IdProducao}\n\r" +
-            $"Princípio: {Principio}\n\r" +
-            $"Quantidade de Princípio: {QuantidadePrincipio}\n\r";
+        return $"\nId da Produção: {IdProducao.ToString().Trim()}\n\r" +
+            $"Princípio: {Principio.ToString().Trim()}\n\r" +
+            $"Quantidade de Princípio: {QuantidadePrincipio.ToString().Trim()}\n\r";
     }
 
 
