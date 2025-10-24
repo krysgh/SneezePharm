@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -151,30 +152,62 @@ namespace SneezePharm
 
             var principioAtivo = BuscarPA(idPrincipioAtivo);
 
-            if (principioAtivo is null)
+            if (principioAtivo is null || principioAtivo.Situacao == 'I')
             {
                 return null;
             }
 
             Console.Write("Informe a quantidade: (max: 9999) ");
-            var quantidade = int.Parse(Console.ReadLine()!);
 
-
-            while (quantidade > 9999)
+            if(!int.TryParse(Console.ReadLine(), out var quantidade))
             {
-                Console.WriteLine("A quantidade não pode ultrapassar 9999 itens");
-                Console.Write("Informe a quantidade: ");
-                quantidade = int.Parse(Console.ReadLine()!);
+                Console.WriteLine("Erro. Informe uma quantidade valida!");
+                Console.Write("Informe a quantidade: (max: 9999) ");
+                quantidade = int.Parse(Console.ReadLine()!, CultureInfo.InvariantCulture);
+
+                while (!int.TryParse(Console.ReadLine(), out quantidade))
+                {
+                    Console.WriteLine("Erro. Informe uma quantidade valida!");
+                    Console.Write("Informe a quantidade: (max: 9999) ");
+                    quantidade = int.Parse(Console.ReadLine()!, CultureInfo.InvariantCulture);
+                }
+            }
+
+            while (quantidade > 9999 && quantidade <= 0)
+            {
+                Console.WriteLine("A quantidade não pode ultrapassar 9999 itens, e não pode ser menor ou igual a zero");
+                Console.Write("Informe a quantidade: (max: 9999) ");
+                while (!int.TryParse(Console.ReadLine(), out quantidade))
+                {
+                    Console.WriteLine("Erro. Informe uma quantidade valida!");
+                    Console.Write("Informe a quantidade: (max: 9999) ");
+                    quantidade = int.Parse(Console.ReadLine()!, CultureInfo.InvariantCulture);
+                }
             }
 
             Console.Write($"Valor unitario: (max 999.99) ");
-            var valorUnitario = decimal.Parse(Console.ReadLine()!);
-
-            while (valorUnitario > 999.99m)
+            if(!decimal.TryParse(Console.ReadLine(), out var valorUnitario))
             {
-                Console.WriteLine("O valor unitario não pode ultrapassar 999.99");
+                Console.WriteLine("Erro. Informe um valor unitario valido!");
+                Console.Write("Informe o valor unitario: (max: 999.99) ");
+                while (!decimal.TryParse(Console.ReadLine(), out valorUnitario))
+                {
+                    Console.WriteLine("Erro. Informe um valor unitario valido!");
+                    Console.Write("Informe o valor unitario: (max: 999.99) ");
+                    valorUnitario = decimal.Parse(Console.ReadLine()!);
+                }
+            }
+
+            while (valorUnitario > 999.99m && valorUnitario <= 0)
+            {
+                Console.WriteLine("O valor unitario não pode ultrapassar R$ 999.99, e não pode ser menor ou igual a zero");
                 Console.Write("Informe a quantidade: ");
-                valorUnitario = decimal.Parse(Console.ReadLine()!);
+                while (!decimal.TryParse(Console.ReadLine(), out valorUnitario))
+                {
+                    Console.WriteLine("Erro. Informe um valor unitario valido!");
+                    Console.Write("Informe o valor unitario: (max: 999.99) ");
+                    valorUnitario = decimal.Parse(Console.ReadLine()!);
+                }
             }
 
             return new ItemCompra(idCompra, principioAtivo.Id, quantidade, valorUnitario);
@@ -239,35 +272,38 @@ namespace SneezePharm
                 principioAtivo = BuscarPA(idPrincipioAtivo);
             }
 
+
             Console.Write("Informe a quantidade: (max: 9999) ");
-            var quantidade = int.Parse(Console.ReadLine()!);
-
-            if (quantidade == 0)
-                quantidade = itemVendido.Quantidade;
-
-            while (quantidade > 9999)
+            if (!int.TryParse(Console.ReadLine(), out var quantidade))
             {
-                Console.WriteLine("A quantidade não pode ultrapassar 9999 itens");
-                Console.Write("Informe a quantidade: ");
-                quantidade = int.Parse(Console.ReadLine()!);
-
-                if (quantidade == 0)
-                    quantidade = itemVendido.Quantidade;
+                quantidade = itemVendido.Quantidade;
             }
 
-            Console.Write($"Valor unitario: (max 999.99) ");
-            var valorUnitario = decimal.Parse(Console.ReadLine()!);
-
-            if (valorUnitario == 0.0m)
-                valorUnitario = itemVendido.ValorUnitario;
-
-            while (valorUnitario > 999.99m)
+            while (quantidade > 9999 && quantidade <= 0)
             {
-                Console.WriteLine("O valor unitario não pode ultrapassar 999.99");
-                Console.Write("Informe a quantidade: ");
-                valorUnitario = decimal.Parse(Console.ReadLine()!);
-                if (valorUnitario == 0.0m)
+                Console.WriteLine("A quantidade não pode ultrapassar 9999 itens, e não pode ser menor ou igual a zero");
+                Console.Write("Informe a quantidade: (max: 9999) ");
+
+                if (!int.TryParse(Console.ReadLine(), out quantidade))
+                {
+                    quantidade = itemVendido.Quantidade;
+                }
+            }
+
+            Console.Write($"Informe o valor unitario: (max 999.99) ");
+            if (!decimal.TryParse(Console.ReadLine(), out var valorUnitario))
+            {
+                valorUnitario = itemVendido.ValorUnitario;
+            }
+
+            while (valorUnitario > 999.99m && valorUnitario <= 0.0m)
+            {
+                Console.WriteLine("O valor unitario não pode ultrapassar R$ 999.99, e não pode ser menor ou igual a zero");
+                Console.Write($"Informe o valor unitario: (max: 999.99) ");
+                if (!decimal.TryParse(Console.ReadLine(), out valorUnitario))
+                {
                     valorUnitario = itemVendido.ValorUnitario;
+                }
             }
 
             itemVendido.SetIngrediente(principioAtivo.Id);
