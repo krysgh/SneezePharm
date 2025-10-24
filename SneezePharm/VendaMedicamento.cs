@@ -22,6 +22,8 @@ namespace SneezePharm
 
         public decimal ValorTotal { get; private set; }
 
+    
+
         #endregion
 
         #region Construtores
