@@ -1,7 +1,9 @@
 ﻿using SneezePharm;
 
 char verificar;
+int opcao;
 List<Cliente> clientes = LerArquivo();
+List<string> clientesBloqueados = new List<string>();
 
 Cliente BuscarCliente(string cpf)
 {
@@ -22,8 +24,16 @@ void AlterarCliente()
     {
         do
         {
-            Console.WriteLine($"Cliente {Cliente.Nome.Trim()} encontrado, ele está {Cliente.Situacao} atualmente, deseja alterar? (S/N)");
-            verificar = Convert.ToChar(Console.ReadLine()!);
+            if (Cliente.Situacao == 'A')
+            {
+                Console.WriteLine($"Cliente {Cliente.Nome.Trim()} encontrado, ele está ATIVO atualmente, deseja alterar para INATIVO? (S/N)");
+                verificar = Convert.ToChar(Console.ReadLine()!);
+            }
+            else
+            {
+                Console.WriteLine($"Cliente {Cliente.Nome.Trim()} encontrado, ele está INATIVO atualmente, deseja alterar para ATIVO? (S/N)");
+                verificar = Convert.ToChar(Console.ReadLine()!);
+            }
 
             switch (verificar)
             {
@@ -48,6 +58,21 @@ void AlterarCliente()
                     break;
             }
         } while (verificar != 'S' && verificar != 's' && verificar != 'n' && verificar != 'N');
+    }
+}
+
+void ImprimirClienteLocalizado()
+{
+    Console.Write("Informe o CPF do cliente: ");
+    string cpf = Console.ReadLine()!;
+    var c = BuscarCliente(cpf);
+    if (c is null)
+    {
+        Console.WriteLine("Cliente não encontrado!\n");
+    }
+    else
+    {
+        Console.WriteLine("\nCliente encontrado!\n" + c);
     }
 }
 
@@ -115,14 +140,18 @@ void GravarArquivo(List<Cliente> clientes)
     }
 }
 
-int opcao;
+
 
 do
 {
     Console.WriteLine("1 - cadastrar cliente");
-    Console.WriteLine("2 - listar");
-    Console.WriteLine("3 - Alterar situação de ativo do cliente");
-    Console.WriteLine("4 - sair");
+    Console.WriteLine("2 - listar clientes");
+    Console.WriteLine("3 - Alterar situação do cliente");
+    Console.WriteLine("4 - Localizar cliente");
+    Console.WriteLine("5 - Bloquear cliente");
+    Console.WriteLine("6 - Desbloquear cliente");
+    Console.WriteLine("7 - Listar clientes bloqueados");
+    Console.WriteLine("8 - sair");
     opcao = Convert.ToInt32(Console.ReadLine());
 
     switch (opcao)
@@ -131,7 +160,7 @@ do
             Cliente novoCliente = Cliente.IncluirCliente();
             if (novoCliente != null)
             {
-                if(BuscarCliente == null)
+                if (BuscarCliente == null)
                 {
                     clientes.Add(novoCliente);
                 }
@@ -152,12 +181,19 @@ do
             AlterarCliente();
             break;
         case 4:
+            ImprimirClienteLocalizado();
+            break;
+        case 5:
+            break;
+        case 6:
+            break;
+        case 7:
             Console.WriteLine("Salvando e saindo...");
             break;
         default:
-            Console.WriteLine("Informe entre 1 e 3!");
+            Console.WriteLine("Informe entre 1 e 5!");
             break;
     }
-} while (opcao != 4);
+} while (opcao != 7);
 
 GravarArquivo(clientes);
