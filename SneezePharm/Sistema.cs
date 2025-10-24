@@ -215,9 +215,9 @@ namespace SneezePharm
         {
             Console.Write("Insere o código de barras do medicamento em produção: ");
             string cdb = Console.ReadLine()!;
-            //if (cdb == null)
+            //if (Medicamentos.Find(m => m.CDB == cdb) is null)
             //{
-            //    Console.WriteLine("Esse medicamento não existe!");
+            //    Console.WriteLine("Não existe um medicamento com esse código de barras!\nCancelando operação...");
             //    return;
             //}
 
@@ -229,12 +229,15 @@ namespace SneezePharm
                 return;
             }
 
-            Random random = new();
-            int id = random.Next(100000);
-            //while (id == 1)
-            //{
-            //    id = random.Next(1000);
-            //}
+            int id;
+            try
+            {
+                id = Producoes.Last().Id + 1;
+            }
+            catch
+            {
+                id = 0;
+            }
 
             this.Producoes.Add(new(id, cdb, quantidade));
         }
@@ -255,7 +258,7 @@ namespace SneezePharm
             }
             else
             {
-                Console.WriteLine(producao);
+                Console.WriteLine(producao);                            // Falta imprimir o princípio ativo da produção junto                        
             }
         }
 
@@ -302,7 +305,7 @@ namespace SneezePharm
             }
             foreach (var producao in Producoes)
             {
-                Console.WriteLine(producao + "\n");
+                Console.WriteLine(producao + "\n");                            // Falta imprimir o princípio ativo da produção junto
             }
         }
         #endregion
@@ -477,7 +480,7 @@ namespace SneezePharm
             {
                 foreach (var producao in this.Producoes)
                 {
-                    sw.WriteLine(producao);
+                    sw.WriteLine(producao.ToFile());
                 }
                 sw.Close();
             }

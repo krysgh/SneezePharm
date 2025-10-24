@@ -8,9 +8,9 @@ namespace SneezePharm
 {
     public class Producao
     {
-        public int Id {  get; private set; }
+        public int Id { get; private set; }
         public DateOnly DataProducao { get; private set; } = DateOnly.FromDateTime(DateTime.Now);
-        public string CDB {  get; private set; }
+        public string CDB { get; private set; }
         public int Quantidade { get; private set; }
 
         public Producao(
@@ -53,7 +53,7 @@ namespace SneezePharm
         // Retorna todos os dados da produção num string só para armazenar em arquivo
         public string ToFile()
         {
-            return $"{this.Id:D5}{this.DataProducao.ToString().Replace("/", "")}{this.CDB}{this.Quantidade:D3)}";
+            return $"{this.Id:D5}{this.DataProducao.ToString().Replace("/", "")}{this.CDB}{this.Quantidade:D3}";
         }
     }
 }

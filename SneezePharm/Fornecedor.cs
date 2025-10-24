@@ -64,6 +64,11 @@ namespace SneezePharm
         // Valida CNPJ por tamanho, por dígito verificador, e se tiver todos os números iguais
         public static bool ValidarCNPJ(string cnpj)
         {
+            if (cnpj.All(char.IsDigit))
+            {
+                return false;
+            }
+
             int[] cnpjNumeros = cnpj.ToCharArray().Select(c => (int)char.GetNumericValue(c)).ToArray();
             if (cnpjNumeros.Length != 14)
             {
