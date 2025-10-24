@@ -8,6 +8,7 @@ namespace SneezePharm
 {
     internal class Cliente
     {
+        #region gets e sets
         public string Cpf { get; private set; }
         public string Nome { get; private set; }
         public DateOnly DataNascimento { get; private set; }
@@ -20,7 +21,9 @@ namespace SneezePharm
         {
             this.Situacao = situacao;
         }
+        #endregion
 
+        #region construtores
         public Cliente(string cpf, string nome, DateOnly dataNascismento,
             string telefone, DateOnly ultimaCompra, DateOnly dataCadastro, char situacao)
         {
@@ -44,7 +47,9 @@ namespace SneezePharm
             DataCadastro = DateOnly.FromDateTime(DateTime.Now);
             Situacao = 'A';
         }
+        #endregion
 
+        #region Método Incluir Cliente
         public static Cliente IncluirCliente()
         {
             string cpf;
@@ -75,7 +80,9 @@ namespace SneezePharm
 
             return new Cliente(cpf, nome, dataNascimento, telefone, dataAtual, dataAtual, 'A');
         }
+        #endregion
 
+        #region validação cpf
         public static bool ValidarCpf(string cpf)
         {
             #region // regiao de verificação de tamanho e números iguais
@@ -146,7 +153,9 @@ namespace SneezePharm
 
             return true;
         }
+        #endregion
 
+        #region validação idade
         public static bool ValidarIdade(DateOnly dataNascimento) // desenvolver a validação de maior idade
         {
             DateOnly diaHoje = DateOnly.FromDateTime(DateTime.Now);
@@ -162,15 +171,21 @@ namespace SneezePharm
                 return true;
             }
         }
+        #endregion
 
+        #region toString
         public override string ToString() // ver de usar o trim o algo do tipo para exibir o nome
         {
-            return $"CPF: {this.Cpf}\nNome: {this.Nome.Trim()}\nData de Nascimento: {this.DataNascimento}\nTelefone: {this.Telefone}\n" +
-                   $"Ultima compra: {this.UltimaCompra}\nData de Cadastro: {this.DataCadastro}\nSituação: {this.Situacao}";
+            return $"\nCPF: {this.Cpf}\nNome: {this.Nome.Trim()}\nData de Nascimento: {this.DataNascimento}\nTelefone: {this.Telefone}\n" +
+                   $"Ultima compra: {this.UltimaCompra}\nData de Cadastro: {this.DataCadastro}\nSituação: {this.Situacao}\n";
         }
+        #endregion
+
+        #region toFile
         public string ToFile()
         {
             return $"{this.Cpf}{this.Nome,-50}{this.DataNascimento.ToString("ddMMyyyy")}{this.Telefone}{this.UltimaCompra.ToString("ddMMyyyy")}{this.DataCadastro.ToString("ddMMyyyy")}{this.Situacao}";
         }
+        #endregion
     }
 }

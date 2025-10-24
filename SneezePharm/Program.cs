@@ -1,15 +1,20 @@
 ﻿using SneezePharm;
 
+#region Inicialização
 char verificar;
 int opcao;
 List<Cliente> clientes = LerArquivo();
-List<string> clientesBloqueados = new List<string>();
+List<string> clientesBloqueados = LerArquivoBloqueado();
+#endregion
 
+#region BuscarCliente
 Cliente BuscarCliente(string cpf)
 {
     return clientes.Find(c => c.Cpf == cpf);
 }
+#endregion
 
+#region AlterarCliente
 void AlterarCliente()
 {
     Console.WriteLine("Informe o CPF do cliente que deseja alterar a situação: ");
@@ -60,7 +65,9 @@ void AlterarCliente()
         } while (verificar != 'S' && verificar != 's' && verificar != 'n' && verificar != 'N');
     }
 }
+#endregion
 
+#region ImprimirClienteLocalizado
 void ImprimirClienteLocalizado()
 {
     Console.Write("Informe o CPF do cliente: ");
@@ -75,7 +82,9 @@ void ImprimirClienteLocalizado()
         Console.WriteLine("\nCliente encontrado!\n" + c);
     }
 }
+#endregion
 
+#region CarregarPrograma
 string CarregarPrograma()
 {
     string diretorio = @"C:\SneezePharma\Files\";
@@ -92,7 +101,65 @@ string CarregarPrograma()
 
     return Path.Combine(diretorio, arquivo);
 }
+#endregion
 
+#region CarregarProgramaBloqueado
+string CarregarProgramaBloqueado()
+{
+    string diretorio = @"C:\SneezePharma\Files\";
+    string arquivoBloqueado = "RestrictedCustomers.data";
+
+    if (!File.Exists(Path.Combine(diretorio, arquivoBloqueado)))
+    {
+        using (File.Create(Path.Combine(diretorio, arquivoBloqueado))) { }
+    }
+
+    return Path.Combine(diretorio, arquivoBloqueado);
+}
+#endregion
+
+#region LerArquivoBloqueado
+List<string> LerArquivoBloqueado()
+{
+    var caminhoCompletoBloqueado = CarregarProgramaBloqueado();
+
+    StreamReader sr = new StreamReader(caminhoCompletoBloqueado);
+
+    using (sr)
+    {
+        List<string> clientes = new List<string>();
+
+        while (sr.Peek() >= 0)
+        {
+            string linha = sr.ReadLine();
+
+            clientes.Add(linha);
+        }
+        sr.Close();
+        return clientes;
+    }
+}
+#endregion
+
+#region GravarArquivoBloqueado
+void GravarArquivoBloqueado(List<string> clienteBloqueados)
+{
+    var caminho = CarregarProgramaBloqueado();
+
+    StreamWriter sw = new StreamWriter(caminho);
+
+    using (sw)
+    {
+        foreach (string cpf in clienteBloqueados)
+        {
+            sw.WriteLine(cpf);
+        }
+        sw.Close();
+    }
+}
+#endregion
+
+#region LerArquivo
 List<Cliente> LerArquivo()
 {
     var caminhoCompleto = CarregarPrograma();
@@ -123,7 +190,91 @@ List<Cliente> LerArquivo()
         return clientes;
     }
 }
+#endregion
 
+#region BloquearCliente
+void BloquearCliente()
+{
+    Console.Write("Informe o CPF do cliente: ");
+    string cpf = Console.ReadLine()!;
+    var cliente = BuscarCliente(cpf);
+    if (cliente is not null)
+    {
+        if (!clientesBloqueados.Contains(cpf))
+        {
+            Console.WriteLine($"Deseja mesmo bloquear o cliente {cliente.Nome.Trim()}? (0 - cancelar, 1 - confirmar)");
+            var confirma = Console.ReadLine() ?? "";
+            if (confirma == "1")
+            {
+                clientesBloqueados.Add(cliente.Cpf);
+                Console.WriteLine("Cliente bloqueado com sucesso!\n");
+            }
+            else
+            {
+                Console.WriteLine("Operação cancelada. Retornando para menu...");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Esse cliente já está bloqueado!\n");
+        }
+    }
+    else
+    {
+        Console.WriteLine("\nCliente não encontrado!");
+    }
+
+}
+#endregion
+
+#region DesbloquearCliente
+void DesbloquearCliente()
+{
+    Console.Write("Informe o CPF do cliente: ");
+    string cpf = Console.ReadLine()!;
+    var cliente = BuscarCliente(cpf);
+    if (cliente is not null)
+    {
+        if (clientesBloqueados.Contains(cpf))
+        {
+            Console.WriteLine($"Deseja desbloquear o cliente {cliente.Nome.Trim()}? (0 - cancelar, 1 - confirmar)");
+            var confirma = Console.ReadLine() ?? "";
+            if (confirma == "1")
+            {
+                clientesBloqueados.Remove(cliente.Cpf);
+                Console.WriteLine($"\nCliente {cliente.Nome.Trim()} desbloqueado!\n");
+            }
+            else
+            {
+                Console.WriteLine("\nOperação cancelada!\n");
+            }
+        }
+        else
+        {
+            Console.WriteLine("\nEsse cliente não está bloqueado!\n");
+        }
+    }
+    else
+    {
+        Console.WriteLine("\nCliente não encontrado!\n");
+    }
+}
+#endregion
+
+#region ImprimirClienteBloqueado
+void ImprimirClienteBloqueado(){
+    if (clientesBloqueados.Count == 0)
+    {
+        Console.WriteLine("\nLista vazia!\n");
+    }
+    foreach (var cpf in clientesBloqueados)
+    {
+        Console.WriteLine(BuscarCliente(cpf).ToString());
+    }
+}
+#endregion
+
+#region GravarArquivo
 void GravarArquivo(List<Cliente> clientes)
 {
     var caminho = CarregarPrograma();
@@ -139,9 +290,9 @@ void GravarArquivo(List<Cliente> clientes)
         sw.Close();
     }
 }
+#endregion
 
-
-
+#region Menu Cliente (Necessario fazer a classe Menu)
 do
 {
     Console.WriteLine("1 - cadastrar cliente");
@@ -184,16 +335,25 @@ do
             ImprimirClienteLocalizado();
             break;
         case 5:
+            BloquearCliente();
             break;
         case 6:
+            DesbloquearCliente();
             break;
         case 7:
+            ImprimirClienteBloqueado();
+            break;
+        case 8:
             Console.WriteLine("Salvando e saindo...");
             break;
         default:
             Console.WriteLine("Informe entre 1 e 5!");
             break;
     }
-} while (opcao != 7);
+} while (opcao != 8);
+#endregion
 
+#region GravaçãoDosArquivos
 GravarArquivo(clientes);
+GravarArquivoBloqueado(clientesBloqueados);
+#endregion
