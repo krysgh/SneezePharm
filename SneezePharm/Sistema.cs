@@ -445,6 +445,7 @@ namespace SneezePharm
 
         public List<Medicamento> LerArquivoMedicamento()
         {
+            
             var caminho = CarregarMedicamento();
 
             List<Medicamento> listaMed = new();
@@ -453,7 +454,11 @@ namespace SneezePharm
 
             using (reader)
             {
-              string cDB = linha.Substring(0, 13);
+                while(reader.Peek() >= 0)
+                {
+
+                    string linha = reader.ReadLine();
+                    string cDB = linha.Substring(0, 13);
                     string nome = linha.Substring(13, 40);
                     string categoria = linha.Substring(53, 1);
                     string valorVenda = linha.Substring(54, 7);
@@ -470,11 +475,15 @@ namespace SneezePharm
 
                     listaMed.Add(medicamento);
                 }
+              
+
+                    
+                }
                 reader.Close();
                 return listaMed;
             }
 
-        }
+        
 
         public void GravarArquivoMedicamento()
         {
@@ -561,7 +570,9 @@ namespace SneezePharm
                 writer.Close();
             }
         }
-              
+
+        #endregion
+
         #region Listas de Dados
         public List<Fornecedor> Fornecedores { get; set; } = [];
         public List<string> FornecedoresBloqueados { get; set; } = [];
