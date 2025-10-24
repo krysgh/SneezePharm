@@ -212,8 +212,6 @@ namespace SneezePharm
         private string CarregarFornecedor()
         {
             string diretorio = @"C:\SneezePharma\Files";
-            if (!Directory.Exists(diretorio))
-                Directory.CreateDirectory(diretorio);
             string arquivoFornecedor = "Suppliers.data";
             var diretorioFornecedor = Path.Combine(diretorio, arquivoFornecedor);
             if (!File.Exists(diretorioFornecedor))
@@ -230,8 +228,6 @@ namespace SneezePharm
         private string CarregarFornecedorBloqueado()
         {
             string diretorio = @"C:\SneezePharma\Files";
-            if (!Directory.Exists(diretorio))
-                Directory.CreateDirectory(diretorio);
             string arquivoFornecedor = "RestrictedSuppliers.data";
             var diretorioFornecedor = Path.Combine(diretorio, arquivoFornecedor);
             if (!File.Exists(diretorioFornecedor))
