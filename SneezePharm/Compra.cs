@@ -42,7 +42,6 @@ internal class Compra
             $"Valor Total: {ValorTotal:c}\n\r";
     }
 
-
     // PARA O SISTEMA
 
     //public List<Compra> Compras { get; private set; }
