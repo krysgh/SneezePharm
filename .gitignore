@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/SneezePharm/GereadorIdPrincipioAtivo.cs
+/SneezePharm/Program.cs
+/SneezePharm/PrincipioAtivo.cs
