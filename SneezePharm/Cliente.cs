@@ -168,7 +168,7 @@ namespace SneezePharm
 
             if (dataNascimento > DateOnly.FromDateTime(DateTime.Now))
             {
-                Console.WriteLine("Data de nascimento não pode estar no futuro! Retornando ao menu principal!\n");
+                Console.WriteLine("Data de nascimento não pode estar no futuro!\n");
                 return false;
             }
 
