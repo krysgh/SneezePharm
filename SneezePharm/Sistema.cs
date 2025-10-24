@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@ namespace SneezePharm
         #region Listas de Dados
         public List<Fornecedor> Fornecedores { get; set; } = [];
         public List<string> FornecedoresBloqueados { get; set; } = [];
+        public List<Producao> Producoes { get; set; } = [];
         #endregion
 
         #region Métodos Fornecedor
@@ -91,7 +93,7 @@ namespace SneezePharm
             }
         }
 
-        public void AlterarFornecedor() 
+        public void AlterarFornecedor()
         {
             Console.WriteLine("Insere o CNPJ do fornecedor: ");
             string cnpj = Console.ReadLine();
@@ -99,13 +101,13 @@ namespace SneezePharm
             if (fornecedor is not null)
             {
                 Console.WriteLine($"Deseja mesmo alterar a situação do fornecedor {fornecedor.RazaoSocial}? (0 - cancelar, 1 - confirmar)");
-                var confirma = Console.ReadLine() ?? "2";
+                var confirma = Console.ReadLine() ?? "0";
                 if (confirma == "1")
                 {
                     fornecedor.AlterarSituacao();
                     Console.WriteLine("\nSituação do fornecedor alterado com sucesso!");
                 }
-                else 
+                else
                 {
                     Console.WriteLine("\nOperação cancelada. Retornando para menu...");
                 }
@@ -139,7 +141,7 @@ namespace SneezePharm
                 if (!FornecedoresBloqueados.Contains(cnpj))
                 {
                     Console.WriteLine($"Deseja mesmo bloquear o fornecedor {fornecedor.RazaoSocial}? (0 - cancelar, 1 - confirmar)");
-                    var confirma = Console.ReadLine() ?? "";
+                    var confirma = Console.ReadLine() ?? "0";
                     if (confirma == "1")
                     {
                         FornecedoresBloqueados.Add(fornecedor.Cnpj);
@@ -159,7 +161,7 @@ namespace SneezePharm
             {
                 Console.WriteLine("\nCNPJ não encontrado.");
             }
-            
+
         }
 
         public void DesbloquearFornecedor()
@@ -172,7 +174,7 @@ namespace SneezePharm
                 if (FornecedoresBloqueados.Contains(cnpj))
                 {
                     Console.WriteLine($"Deseja mesmo desbloquear o fornecedor {fornecedor.RazaoSocial}? (0 - cancelar, 1 - confirmar)");
-                    var confirma = Console.ReadLine() ?? "";
+                    var confirma = Console.ReadLine() ?? "0";
                     if (confirma == "1")
                     {
                         FornecedoresBloqueados.Remove(fornecedor.Cnpj);
@@ -196,7 +198,7 @@ namespace SneezePharm
 
         public void ImprimirFornecedoresBloqueados()
         {
-            Console.WriteLine("-=-=- Lista de Fornecedores  Bloqueados -=-=-");
+            Console.WriteLine("-=-=- Lista de Fornecedores Bloqueados -=-=-");
             if (FornecedoresBloqueados.Count == 0)
             {
                 Console.WriteLine("Nenhum fornecedor bloqueado.");
@@ -208,12 +210,107 @@ namespace SneezePharm
         }
         #endregion
 
+        #region Métodos Produção
+        public void IncluirProducao()
+        {
+            Console.Write("Insere o código de barras do medicamento em produção: ");
+            string cdb = Console.ReadLine()!;
+            //if (cdb == null)
+            //{
+            //    Console.WriteLine("Esse medicamento não existe!");
+            //    return;
+            //}
+
+            Console.Write("Insere a quantidade do produto produzido (entre 0 e 1000): ");
+            int quantidade = int.Parse(Console.ReadLine() ?? "0");
+            if ((quantidade < 1) || (quantidade > 999))
+            {
+                Console.WriteLine("Quantidade inválida! A quantidade precisa ser entre 0 e 1000.\nCancelando operação...");
+                return;
+            }
+
+            Random random = new();
+            int id = random.Next(100000);
+            //while (id == 1)
+            //{
+            //    id = random.Next(1000);
+            //}
+
+            this.Producoes.Add(new(id, cdb, quantidade));
+        }
+
+        private Producao? LocalizarProducao(int id)
+        {
+            return Producoes.Find(p => p.Id == id);
+        }
+
+        public void ImprimirProducaoLocalizado()
+        {
+            Console.Write("Insere o ID da produção: ");
+            int id = int.Parse(Console.ReadLine() ?? "-1");
+            var producao = LocalizarProducao(id);
+            if (producao is null)
+            {
+                Console.WriteLine("Produção não encontrado!");
+            }
+            else
+            {
+                Console.WriteLine(producao);
+            }
+        }
+
+        public void AlterarProducao()
+        {
+            Console.WriteLine("Insere o ID da produção: ");
+            int id = int.Parse(Console.ReadLine() ?? "-1");
+            var producao = LocalizarProducao(id);
+            if (producao is not null)
+            {
+                Console.WriteLine("Insere a quantidade nova da produção (entre 0 e 1000): ");
+                int quantidade = int.Parse(Console.ReadLine() ?? "0");
+                if ((quantidade < 1) || (quantidade > 999)) {
+                    Console.WriteLine("Quantidade inválida! A quantidade precisa ser entre 0 e 1000.\nCancelando operação...");
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("Deseja mesmo alterar a quantidade da produção? (0 - cancelar, 1 - confirmar)");
+                    var confirmar = Console.ReadLine() ?? "0";
+                    if (confirmar == "1")
+                    {
+                        producao.AlterarQuantidade(quantidade);
+                        Console.WriteLine("\nQuantidade da produção alterada com sucesso!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nOperação cancelada. Retornando para menu...");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Produção não encontrado!");
+            }
+        }
+
+        public void ImprimirProducoes()
+        {
+            Console.WriteLine("-=-=- Lista de Produções -=-=-");
+            if (Producoes.Count == 0)
+            {
+                Console.WriteLine("Nenhuma producao registrada.");
+            }
+            foreach (var producao in Producoes)
+            {
+                Console.WriteLine(producao + "\n");
+            }
+        }
+        #endregion
+
         #region Métodos Arquivos
         private string CarregarFornecedor()
         {
             string diretorio = @"C:\SneezePharma\Files";
-            if (!Directory.Exists(diretorio))
-                Directory.CreateDirectory(diretorio);
             string arquivoFornecedor = "Suppliers.data";
             var diretorioFornecedor = Path.Combine(diretorio, arquivoFornecedor);
             if (!File.Exists(diretorioFornecedor))
@@ -230,8 +327,6 @@ namespace SneezePharm
         private string CarregarFornecedorBloqueado()
         {
             string diretorio = @"C:\SneezePharma\Files";
-            if (!Directory.Exists(diretorio))
-                Directory.CreateDirectory(diretorio);
             string arquivoFornecedor = "RestrictedSuppliers.data";
             var diretorioFornecedor = Path.Combine(diretorio, arquivoFornecedor);
             if (!File.Exists(diretorioFornecedor))
@@ -243,6 +338,22 @@ namespace SneezePharm
                 }
             }
             return diretorioFornecedor;
+        }
+
+        private string CarregarProducao()
+        {
+            string diretorio = @"C:\SneezePharma\Files";
+            string arquivoProducao = "Produce.data";
+            var diretorioProducao = Path.Combine(diretorio, arquivoProducao);
+            if (!File.Exists(diretorioProducao))
+            {
+                using (StreamWriter sw = File.CreateText(diretorioProducao))
+                {
+                    Console.WriteLine("Arquivo criado com sucesso");
+                    Console.ReadKey();
+                }
+            }
+            return diretorioProducao;
         }
 
         public void LerArquivoFornecedor()
@@ -302,6 +413,34 @@ namespace SneezePharm
 
         }
 
+        public void LerArquivoProducao()
+        {
+            StreamReader reader = new(CarregarProducao());
+            using (reader)
+            {
+                while (reader.Peek() >= 0)
+                {
+                    var linha = reader.ReadLine();
+
+                    string id = linha.Substring(0, 5);
+                    string dataProducao = linha.Substring(5, 8);
+                    string cdb = linha.Substring(13, 13);
+                    string quantidade = linha.Substring(21, 3);
+
+                    Producao producao = new(
+                        id,
+                        dataProducao,
+                        cdb,
+                        quantidade
+                        );
+
+                    Producoes.Add(producao);
+                }
+                reader.Close();
+
+            }
+        }
+
         public void GravarArquivoFornecedor()
         {
             StreamWriter sw = new StreamWriter(CarregarFornecedor());
@@ -325,6 +464,20 @@ namespace SneezePharm
                 foreach (var bloqueado in this.FornecedoresBloqueados)
                 {
                     sw.WriteLine(bloqueado);
+                }
+                sw.Close();
+            }
+        }
+
+        public void GravarArquivoProducao()
+        {
+            StreamWriter sw = new(CarregarProducao());
+
+            using (sw)
+            {
+                foreach (var producao in this.Producoes)
+                {
+                    sw.WriteLine(producao);
                 }
                 sw.Close();
             }
