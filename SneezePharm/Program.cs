@@ -262,7 +262,8 @@ void DesbloquearCliente()
 #endregion
 
 #region ImprimirClienteBloqueado
-void ImprimirClienteBloqueado(){
+void ImprimirClienteBloqueado()
+{
     if (clientesBloqueados.Count == 0)
     {
         Console.WriteLine("\nLista vazia!\n");
