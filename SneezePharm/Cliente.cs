@@ -61,6 +61,10 @@ namespace SneezePharm
 
             Console.Write("Informe o nome: ");
             string nome = Console.ReadLine()!;
+            if (nome.Length > 50)
+            {
+                nome = nome.Substring(0, 50);
+            }
 
             Console.Write("Informe a data de nascimento: ");
             DateOnly dataNascimento = DateOnly.Parse(Console.ReadLine()!);
@@ -85,6 +89,17 @@ namespace SneezePharm
         #region validação cpf
         public static bool ValidarCpf(string cpf)
         {
+            #region validação de somente numeros
+            if (cpf.All(char.IsDigit))
+            {
+                return true;
+            }
+            else
+            {
+                Console.Write("Informe apenas números - ");
+            }
+            #endregion
+
             #region // regiao de verificação de tamanho e números iguais
             cpf.ToCharArray();
 

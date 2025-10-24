@@ -309,16 +309,21 @@ do
     {
         case 1:
             Cliente novoCliente = Cliente.IncluirCliente();
-            if (novoCliente != null)
+            if (novoCliente == null)
             {
-                if (BuscarCliente == null)
-                {
-                    clientes.Add(novoCliente);
-                }
-                else
-                {
-                    Console.WriteLine("CPF de cliente já cadastrado!\n");
-                }
+                break;
+            }
+
+            var clienteExistente = BuscarCliente(novoCliente.Cpf);
+
+            if (clienteExistente == null)
+            {
+                clientes.Add(novoCliente);
+                Console.WriteLine("Cliente cadastrado com sucesso!\n");
+            }
+            else
+            {
+                Console.WriteLine("CPF de cliente já cadastrado!\n");
             }
             break;
         case 2:
@@ -347,7 +352,7 @@ do
             Console.WriteLine("Salvando e saindo...");
             break;
         default:
-            Console.WriteLine("Informe entre 1 e 5!");
+            Console.WriteLine("Informe entre 1 e 8!");
             break;
     }
 } while (opcao != 8);
