@@ -11,6 +11,12 @@ namespace SneezePharm.PastaProducao
         public List<Producao> Producoes { get; set; } = [];
         public List<ItemProducao> ItensProducao { get; set; } = [];
 
+        public ServicosProducao()
+        {
+            Producoes = LerArquivoProducao();
+            ItensProducao = LerArquivoItemProducao();
+        }
+
         public void IncluirProducao()
         {
             Console.Write("Insere o código de barras do medicamento em produção: ");
@@ -121,11 +127,13 @@ namespace SneezePharm.PastaProducao
             }
             return diretorioProducao;
         }
-        public void LerArquivoProducao()
+        public List<Producao> LerArquivoProducao()
         {
             StreamReader reader = new(CriarArquivosProducao());
             using (reader)
             {
+                List<Producao> producoes = [];
+
                 while (reader.Peek() >= 0)
                 {
                     var linha = reader.ReadLine();
@@ -142,9 +150,10 @@ namespace SneezePharm.PastaProducao
                         quantidade
                         );
 
-                    Producoes.Add(producao);
+                    producoes.Add(producao);
                 }
                 reader.Close();
+                return producoes;
 
             }
         }

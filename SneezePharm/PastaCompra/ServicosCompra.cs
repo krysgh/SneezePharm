@@ -13,8 +13,14 @@ namespace SneezePharm.PastaCompra
     {
         public List<Compra> Compras { get; private set; } = [];
         public List<ItemCompra> ItensCompra { get; private set; } = [];
-        private ServicosFornecedor _fornecedor { get; set; }
+        private ServicosFornecedor _fornecedor { get; set; } = new ServicosFornecedor();
         private List<PrincipioAtivo> _principioAtivo { get; set; } = [];
+
+        public ServicosCompra()
+        {
+            Compras = LerArquivoCompra();
+            ItensCompra = LerArquivoItemCompra();
+        }
 
         public void SetCompras(List<Compra> compra)
         {

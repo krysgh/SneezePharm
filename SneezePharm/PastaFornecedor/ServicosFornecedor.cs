@@ -8,8 +8,23 @@ namespace SneezePharm.PastaFornecedor
 {
     public class ServicosFornecedor
     {
-        public List<Fornecedor> Fornecedores { get; set; } = [];
-        public List<string> FornecedoresBloqueados { get; set; } = [];
+        public List<Fornecedor> Fornecedores { get; private set; } = [];
+        public List<string> FornecedoresBloqueados { get; private set; } = [];
+
+        public ServicosFornecedor()
+        {
+            Fornecedores = LerArquivoFornecedor();
+            FornecedoresBloqueados = LerArquivoFornecedorBloqueado();
+        }
+
+        public void SetFornecedores(List<Fornecedor> fornecedores)
+        {
+            Fornecedores = fornecedores;
+        }
+        public void SetFornecedoresBloqueados(List<string> fornecedoresBloqueados)
+        {
+            FornecedoresBloqueados = fornecedoresBloqueados;
+        }
 
         public void IncluirFornecedor()
         {
@@ -239,7 +254,7 @@ namespace SneezePharm.PastaFornecedor
             }
             return diretorioFornecedor;
         }
-        public void LerArquivoFornecedor()
+        public List<Fornecedor> LerArquivoFornecedor()
         {
             StreamReader reader = new(CriarArquivosFornecedor());
             using (reader)
@@ -272,12 +287,12 @@ namespace SneezePharm.PastaFornecedor
                     fornecedores.Add(fornecedor);
                 }
                 reader.Close();
-                this.Fornecedores = fornecedores;
+                return fornecedores;
             }
 
         }
 
-        public void LerArquivoFornecedorBloqueado()
+        public List<string> LerArquivoFornecedorBloqueado()
         {
             StreamReader reader = new(CriarArquivosFornecedoresBloqueados());
             using (reader)
@@ -291,7 +306,7 @@ namespace SneezePharm.PastaFornecedor
                     bloqueados.Add(linha);
                 }
                 reader.Close();
-                this.FornecedoresBloqueados = bloqueados;
+                return bloqueados;
             }
 
         }

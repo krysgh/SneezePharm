@@ -14,8 +14,13 @@ namespace SneezePharm.PastaCliente
 
         public ServicosCliente()
         {
-            Clientes = LerArquivo();
+            Clientes = LerArquivoCliente();
             ClientesBloqueados = LerArquivoClientesBloqueados();
+        }
+
+        public void SetCliente(List<Cliente> clientes)
+        {
+            Clientes = clientes;
         }
 
         private Cliente BuscarCliente(string cpf)
@@ -127,7 +132,7 @@ namespace SneezePharm.PastaCliente
         #endregion
 
         #region LerArquivoBloqueado
-        public List<string> LerArquivoClientesBloqueados()
+        private List<string> LerArquivoClientesBloqueados()
         {
             var caminhoCompletoBloqueado = CriarArquivosClientesBloqueados();
 
@@ -168,7 +173,7 @@ namespace SneezePharm.PastaCliente
         #endregion
 
         #region LerArquivo
-        public List<Cliente> LerArquivoCliente()
+        private List<Cliente> LerArquivoCliente()
         {
             var caminhoCompleto = CriarArquivosCliente();
 

@@ -13,8 +13,12 @@ namespace SneezePharm.PastaVenda
         public int idItensVenda = 0;
         public int id = 0;
 
+        public ServicosVenda()
+        {
+            ItensVenda = LerItensVenda();
+        }
 
-        public string CarregarItensVenda()
+        public string CriarArquivosItensVenda()
         {
             string diretorio = @"C:\SneezePharma\Files\";
             if (!Directory.Exists(diretorio))
@@ -35,7 +39,7 @@ namespace SneezePharm.PastaVenda
 
         public List<ItemVenda> LerItensVenda()
         {
-            var diretorioItemVenda = CarregarItensVenda();
+            var diretorioItemVenda = CriarArquivosItensVenda();
 
             StreamReader sr = new StreamReader(diretorioItemVenda);
 
@@ -69,7 +73,7 @@ namespace SneezePharm.PastaVenda
 
         public void GravaritensVenda()
         {
-            var diretorioItemVenda = CarregarItensVenda();
+            var diretorioItemVenda = CriarArquivosItensVenda();
 
             using (StreamWriter sw = new StreamWriter(diretorioItemVenda))
             {
@@ -133,7 +137,7 @@ namespace SneezePharm.PastaVenda
             return ItensVenda.Find(i => i.IdVenda == id);
         }
 
-        void AlterarItemVenda()
+        public void AlterarItemVenda()
         {
             Console.WriteLine("=== ALTERAR ITEM ===");
             Console.Write("Informe o ID do item: ");
