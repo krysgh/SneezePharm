@@ -13,8 +13,6 @@ namespace SneezePharm.PastaCompra
     {
         public List<Compra> Compras { get; private set; } = [];
         public List<ItemCompra> ItensCompra { get; private set; } = [];
-        
-
 
         public void SetCompras(List<Compra> compra)
         {
