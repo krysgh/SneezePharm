@@ -18,7 +18,7 @@ namespace SneezePharm.PastaCliente
             ClientesBloqueados = LerArquivoBloqueado();
         }
 
-        private Cliente BuscarCliente(string cpf)
+        public Cliente BuscarCliente(string cpf)
         {
             return Clientes.Find(c => c.Cpf == cpf);
         }
