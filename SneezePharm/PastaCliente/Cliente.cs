@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SneezePharm
+namespace SneezePharm.Cliente
 {
     public class Cliente
     {
@@ -19,7 +19,7 @@ namespace SneezePharm
 
         public void setSituacao(char situacao)
         {
-            this.Situacao = situacao;
+            Situacao = situacao;
         }
         #endregion
 
@@ -120,10 +120,10 @@ namespace SneezePharm
 
             for (int i = 0; i < 9; i++)
             {
-                soma = soma + (numeros[i] * multiplicacao1[i]);
+                soma = soma + numeros[i] * multiplicacao1[i];
             }
 
-            int resto = (soma * 10) % 11;
+            int resto = soma * 10 % 11;
             if (resto == 10)
             {
                 resto = 0;
@@ -142,10 +142,10 @@ namespace SneezePharm
 
             for (int i = 0; i < 10; i++)
             {
-                soma = soma + (numeros[i] * multiplicacao2[i]);
+                soma = soma + numeros[i] * multiplicacao2[i];
             }
 
-            int resto2 = (soma * 10) % 11;
+            int resto2 = soma * 10 % 11;
             if (resto2 == 10)
             {
                 resto2 = 0;
@@ -189,16 +189,23 @@ namespace SneezePharm
         #region toString
         public override string ToString() // ver de usar o trim o algo do tipo para exibir o nome
         {
-            return $"\nCPF: {this.Cpf}\nNome: {this.Nome.Trim()}\nData de Nascimento: {this.DataNascimento}\nTelefone: {this.Telefone}\n" +
-                   $"Ultima compra: {this.UltimaCompra}\nData de Cadastro: {this.DataCadastro}\nSituação: {this.Situacao}\n";
+            return $"\nCPF: {Cpf}\nNome: {Nome.Trim()}\nData de Nascimento: {DataNascimento}\nTelefone: {Telefone}\n" +
+                   $"Ultima compra: {UltimaCompra}\nData de Cadastro: {DataCadastro}\nSituação: {Situacao}\n";
         }
         #endregion
 
         #region toFile
         public string ToFile()
         {
-            return $"{this.Cpf}{this.Nome,-50}{this.DataNascimento.ToString("ddMMyyyy")}{this.Telefone}{this.UltimaCompra.ToString("ddMMyyyy")}{this.DataCadastro.ToString("ddMMyyyy")}{this.Situacao}";
+            return $"{Cpf}{Nome,-50}{DataNascimento.ToString("ddMMyyyy")}{Telefone}{UltimaCompra.ToString("ddMMyyyy")}{DataCadastro.ToString("ddMMyyyy")}{Situacao}";
         }
         #endregion
+
+        public void ClienteMemu()
+        {
+            int opcao;
+
+            do 
+        }
     }
 }

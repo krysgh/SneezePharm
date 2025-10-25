@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace SneezePharm
+namespace SneezePharm.PastaPrincipioAtivo
 {
     public class PrincipioAtivo
     {
@@ -19,21 +19,21 @@ namespace SneezePharm
 
         public PrincipioAtivo(string nome, char situacao)
         {
-            this.Id = VerificarExistenciaId();
-            this.Nome = nome;
-            this.UltimaCompra = DateOnly.FromDateTime(DateTime.Now);
-            this.DataCadastro = DateOnly.FromDateTime(DateTime.Now);
-            this.Situacao = situacao;
+            Id = VerificarExistenciaId();
+            Nome = nome;
+            UltimaCompra = DateOnly.FromDateTime(DateTime.Now);
+            DataCadastro = DateOnly.FromDateTime(DateTime.Now);
+            Situacao = situacao;
 
         }
 
         public PrincipioAtivo(string id, string nome, DateOnly ultimaCompra, DateOnly dataCadastro, char situacao)
         {
-            this.Id = id;
-            this.Nome = nome;
-            this.UltimaCompra = ultimaCompra;
-            this.DataCadastro = dataCadastro;
-            this.Situacao = situacao;
+            Id = id;
+            Nome = nome;
+            UltimaCompra = ultimaCompra;
+            DataCadastro = dataCadastro;
+            Situacao = situacao;
         }
 
         public string GerarId()
@@ -45,7 +45,7 @@ namespace SneezePharm
             int numero3 = Random.Shared.Next(0, 10);
             int numero4 = Random.Shared.Next(0, 10);
 
-            string numId = (numero1.ToString()) + (numero2.ToString()) + (numero3.ToString()) + (numero4.ToString());
+            string numId = numero1.ToString() + numero2.ToString() + numero3.ToString() + numero4.ToString();
 
             return prefixo + numId;
         }
@@ -73,7 +73,7 @@ namespace SneezePharm
 
         public void SetSituacao(char situacao)
         {
-            this.Situacao = situacao;
+            Situacao = situacao;
         }
 
         public void SetNome(string nome)
@@ -84,7 +84,7 @@ namespace SneezePharm
             }
             else
             {
-                this.Nome = nome;
+                Nome = nome;
             }
         }
 

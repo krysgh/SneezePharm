@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace SneezePharm
+namespace SneezePharm.PastaMedicamento
 {
     public class Medicamento
     {
@@ -22,33 +22,33 @@ namespace SneezePharm
 
         public Medicamento(string nome, char cataegoria, decimal valorVenda, char situacao)
         {
-            this.CDB = VerificarExistencia();
-            this.Nome = nome;
-            this.Categoria = cataegoria;
-            this.ValorVenda = valorVenda;
-            this.UltimaVenda = DateOnly.FromDateTime(DateTime.Now);
-            this.DataCadastro = DateOnly.FromDateTime(DateTime.Now);
-            this.Situacao = situacao;
+            CDB = VerificarExistencia();
+            Nome = nome;
+            Categoria = cataegoria;
+            ValorVenda = valorVenda;
+            UltimaVenda = DateOnly.FromDateTime(DateTime.Now);
+            DataCadastro = DateOnly.FromDateTime(DateTime.Now);
+            Situacao = situacao;
         }
 
         public Medicamento(string cdb, string nome, char categoria, decimal valorVenda, DateOnly ultimaVenda, DateOnly dataCadastro, char situacao)
         {
-            this.CDB = cdb;
-            this.Nome = nome;
-            this.Categoria = categoria;
-            this.ValorVenda = valorVenda;
-            this.UltimaVenda = ultimaVenda;
-            this.DataCadastro = dataCadastro;
-            this.Situacao = situacao;
+            CDB = cdb;
+            Nome = nome;
+            Categoria = categoria;
+            ValorVenda = valorVenda;
+            UltimaVenda = ultimaVenda;
+            DataCadastro = dataCadastro;
+            Situacao = situacao;
         }
 
         public void SetSituacao(char situacao)
         {
-            this.Situacao = situacao;
+            Situacao = situacao;
         } 
         public void SetCategoria(char categoria)
         {
-            this.Categoria = categoria;
+            Categoria = categoria;
         }
         public void SetNome(string nome)
         {
@@ -58,12 +58,12 @@ namespace SneezePharm
             }
             else
             {
-                this.Nome = nome;
+                Nome = nome;
             }
         }
         public void SetValorVenda(decimal valorVenda)
         {
-            this.ValorVenda = valorVenda;
+            ValorVenda = valorVenda;
         }
         public override string ToString()
         {
@@ -96,7 +96,7 @@ namespace SneezePharm
             int numero3 = Random.Shared.Next(0, 10);
             int numero4 = Random.Shared.Next(0, 10);
 
-            string produto = (numero1.ToString()) + (numero2.ToString()) + (numero3.ToString()) + (numero4.ToString());
+            string produto = numero1.ToString() + numero2.ToString() + numero3.ToString() + numero4.ToString();
 
             string codigoParcial = prefixoFixo + produto;
 
@@ -116,7 +116,7 @@ namespace SneezePharm
                     somaPares += digito;
                 }
             }
-            int resultado = somaImpares + (somaPares * 3);
+            int resultado = somaImpares + somaPares * 3;
             int resto = resultado % 10;
             int digitoVerificador = 10 - resto;
 

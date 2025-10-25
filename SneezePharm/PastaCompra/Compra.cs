@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace SneezePharm;
+namespace SneezePharm.PastaCompra;
 
 public class Compra
 {
