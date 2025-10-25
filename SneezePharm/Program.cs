@@ -1,8 +1,6 @@
-﻿void CriarTodosArquivos()
-{
-    string diretorio = @"C:\SneezePharma\Files\";
-    if (!Directory.Exists(diretorio))
-    {
-        Directory.CreateDirectory(diretorio);
-    }
-}
+﻿using SneezePharm.Menu;
+
+var sneezePharm = new SistemaSneezePharm();
+
+sneezePharm.CriarDiretorio();
+sneezePharm.CriarTodosArquivos();

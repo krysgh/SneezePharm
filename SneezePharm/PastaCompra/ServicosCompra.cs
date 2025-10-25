@@ -100,7 +100,7 @@ namespace SneezePharm.PastaCompra
             if (Compras is null)
                 Console.WriteLine("Nao foi encontrada nenhuma compra!");
             else
-                foreach (Compra compra in Compras)
+                foreach (var compra in Compras)
                 {
                     Console.WriteLine("=== Compra ===");
                     Console.WriteLine(compra);
@@ -384,11 +384,11 @@ namespace SneezePharm.PastaCompra
         }
 
         // criar arquivos
-        public string CarregarCompra()
+        public string CriarArquivosCompra()
         {
             string diretorio = @"C:\SneezePharma\Files";
-
             string arquivoCompra = "Purchases.data";
+            
             var diretorioCompra = Path.Combine(diretorio, arquivoCompra);
 
             if (!File.Exists(diretorioCompra))
@@ -397,10 +397,9 @@ namespace SneezePharm.PastaCompra
                 Console.WriteLine("Arquivo criado com sucesso");
                 Console.ReadKey();
             }
-
             return diretorioCompra;
         }
-        public string CarregarItemCompra()
+        public string CriarArquivosItensCompra()
         {
             string diretorio = @"C:\SneezePharma\Files";
 
@@ -420,7 +419,7 @@ namespace SneezePharm.PastaCompra
         // leitura de arquivos
         public List<Compra> LerArquivoCompra()
         {
-            var caminho = CarregarCompra();
+            var caminho = CriarArquivosCompra();
 
             StreamReader reader = new(caminho);
             using (reader)
@@ -452,7 +451,7 @@ namespace SneezePharm.PastaCompra
         }
         public List<ItemCompra> LerArquivoItemCompra()
         {
-            var caminho = CarregarItemCompra();
+            var caminho = CriarArquivosItensCompra();
 
             StreamReader reader = new(caminho);
             using (reader)
@@ -486,7 +485,7 @@ namespace SneezePharm.PastaCompra
         // gravar a lista nos arquivos
         public void GravarArquivoCompra(List<Compra> compras)
         {
-            var caminho = CarregarCompra();
+            var caminho = CriarArquivosCompra();
 
             StreamWriter writer = new(caminho);
             using (writer)
@@ -500,7 +499,7 @@ namespace SneezePharm.PastaCompra
         }
         public void GravarArquivoItemCompra(List<ItemCompra> itensCompra)
         {
-            var caminho = CarregarItemCompra();
+            var caminho = CriarArquivosItensCompra();
 
             StreamWriter writer = new(caminho);
             using (writer)

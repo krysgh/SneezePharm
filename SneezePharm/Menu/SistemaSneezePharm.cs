@@ -18,6 +18,14 @@ internal class SistemaSneezePharm
     public ServicosProducao ServicosProducao { get; set; } = new ServicosProducao();
     public ServicosVenda ServicosVenda { get; set; } = new ServicosVenda();
 
+    public void CriarDiretorio()
+    {
+        string diretorio = @"C:\SneezePharma\Files\";
+        if (!Directory.Exists(diretorio))
+        {
+            Directory.CreateDirectory(diretorio);
+        }
+    }
     public void CriarTodosArquivos()
     {
         // Criar arquivos Cliente
@@ -27,5 +35,19 @@ internal class SistemaSneezePharm
         // Criar arquivos Fornecedor
         ServicosFornecedor.CriarArquivosFornecedor();
         ServicosFornecedor.CriarArquivosFornecedoresBloqueados();
+
+        // Criar arquivos Compra 
+        ServicosCompra.CriarArquivosCompra();
+        ServicosCompra.CriarArquivosItensCompra();
+
+        // Criar arquivos Medicamento
+        ServicosMedicamento.CriarArquivosMedicamento();
+
+        // Criar arquivos Principio Ativo
+        ServicosPrincipioAtivo.CriarArquivosPrincipioAtivo();
+
+        // Criar arquivos Producao
+        ServicosProducao.CriarArquivosProducao();
+        ServicosProducao.CriarArquivosItemProducao();
     }
 }

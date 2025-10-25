@@ -172,15 +172,12 @@ namespace SneezePharm.PastaPrincipioAtivo
             }
         }
 
-        public string CarregarPrincipioAtivo()
+        public string CriarArquivosPrincipioAtivo()
         {
             string diretorio = @"C:\SneezePharma\Files";
-            if (!Directory.Exists(diretorio))
-                Directory.CreateDirectory(diretorio);
-
             string arquivoPrincipioAtivo = "Ingredient.data";
-            var caminho = Path.Combine(diretorio, arquivoPrincipioAtivo);
 
+            var caminho = Path.Combine(diretorio, arquivoPrincipioAtivo);
             if (!File.Exists(caminho))
             {
                 using (StreamWriter sw = File.CreateText(caminho))
@@ -194,7 +191,7 @@ namespace SneezePharm.PastaPrincipioAtivo
 
         public List<PrincipioAtivo> LerArquivoPrincipioAtivo()
         {
-            var caminho = CarregarPrincipioAtivo();
+            var caminho = CriarArquivosPrincipioAtivo();
 
             List<PrincipioAtivo> lista = new();
 
@@ -230,7 +227,7 @@ namespace SneezePharm.PastaPrincipioAtivo
         public void GravarArquivoPrincipioAtivo()
         {
 
-            StreamWriter writer = new StreamWriter(CarregarPrincipioAtivo());
+            StreamWriter writer = new StreamWriter(CriarArquivosPrincipioAtivo());
 
             using (writer)
             {

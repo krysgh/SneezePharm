@@ -226,7 +226,9 @@ namespace SneezePharm.PastaFornecedor
         {
             string diretorio = @"C:\SneezePharma\Files";
             string arquivoFornecedor = "RestrictedSuppliers.data";
+
             var diretorioFornecedor = Path.Combine(diretorio, arquivoFornecedor);
+
             if (!File.Exists(diretorioFornecedor))
             {
                 using (StreamWriter sw = File.CreateText(diretorioFornecedor))
