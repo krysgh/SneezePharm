@@ -1,4 +1,5 @@
-﻿using SneezePharm.Cliente;
+﻿using SneezePharm.PastaCliente;
+
 
 #region Inicialização
 char verificar;

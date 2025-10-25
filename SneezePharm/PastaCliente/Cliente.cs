@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SneezePharm.PastaCliente;
 
-namespace SneezePharm.Cliente
+
+namespace SneezePharm.PastaCliente
 {
     public class Cliente
     {
@@ -201,11 +203,5 @@ namespace SneezePharm.Cliente
         }
         #endregion
 
-        public void ClienteMemu()
-        {
-            int opcao;
-
-            do 
-        }
     }
 }
