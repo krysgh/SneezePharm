@@ -8,8 +8,23 @@ namespace SneezePharm.PastaFornecedor
 {
     public class ServicosFornecedor
     {
-        public List<Fornecedor> Fornecedores { get; set; } = [];
-        public List<string> FornecedoresBloqueados { get; set; } = [];
+        public List<Fornecedor> Fornecedores { get; private set; } = [];
+        public List<string> FornecedoresBloqueados { get; private set; } = [];
+
+        public ServicosFornecedor()
+        {
+            Fornecedores = LerArquivoFornecedor();
+            FornecedoresBloqueados = LerArquivoFornecedorBloqueado();
+        }
+
+        public void SetFornecedores(List<Fornecedor> fornecedores)
+        {
+            Fornecedores = fornecedores;
+        }
+        public void SetFornecedoresBloqueados(List<string> fornecedoresBloqueados)
+        {
+            FornecedoresBloqueados = fornecedoresBloqueados;
+        }
 
         public void IncluirFornecedor()
         {
@@ -68,7 +83,7 @@ namespace SneezePharm.PastaFornecedor
             Fornecedores.Add(new(cnpj, razaoSocial, pais, dataAbertura, dataFornecimento));
         }
 
-        private Fornecedor? LocalizarFornecedor(string cnpj)
+        public Fornecedor? LocalizarFornecedor(string cnpj)
         {
             return Fornecedores.Find(f => f.Cnpj == cnpj);
         }
@@ -204,11 +219,13 @@ namespace SneezePharm.PastaFornecedor
             }
         }
 
-        private string CarregarFornecedor()
+        public string CriarArquivosFornecedor()
         {
             string diretorio = @"C:\SneezePharma\Files";
             string arquivoFornecedor = "Suppliers.data";
+
             var diretorioFornecedor = Path.Combine(diretorio, arquivoFornecedor);
+
             if (!File.Exists(diretorioFornecedor))
             {
                 using (StreamWriter sw = File.CreateText(diretorioFornecedor))
@@ -220,11 +237,13 @@ namespace SneezePharm.PastaFornecedor
             return diretorioFornecedor;
         }
 
-        private string CarregarFornecedorBloqueado()
+        public string CriarArquivosFornecedoresBloqueados()
         {
             string diretorio = @"C:\SneezePharma\Files";
             string arquivoFornecedor = "RestrictedSuppliers.data";
+
             var diretorioFornecedor = Path.Combine(diretorio, arquivoFornecedor);
+
             if (!File.Exists(diretorioFornecedor))
             {
                 using (StreamWriter sw = File.CreateText(diretorioFornecedor))
@@ -235,9 +254,9 @@ namespace SneezePharm.PastaFornecedor
             }
             return diretorioFornecedor;
         }
-        public void LerArquivoFornecedor()
+        public List<Fornecedor> LerArquivoFornecedor()
         {
-            StreamReader reader = new(CarregarFornecedor());
+            StreamReader reader = new(CriarArquivosFornecedor());
             using (reader)
             {
                 List<Fornecedor> fornecedores = new();
@@ -268,14 +287,14 @@ namespace SneezePharm.PastaFornecedor
                     fornecedores.Add(fornecedor);
                 }
                 reader.Close();
-                this.Fornecedores = fornecedores;
+                return fornecedores;
             }
 
         }
 
-        public void LerArquivoFornecedorBloqueado()
+        public List<string> LerArquivoFornecedorBloqueado()
         {
-            StreamReader reader = new(CarregarFornecedorBloqueado());
+            StreamReader reader = new(CriarArquivosFornecedoresBloqueados());
             using (reader)
             {
                 List<string> bloqueados = new();
@@ -287,14 +306,14 @@ namespace SneezePharm.PastaFornecedor
                     bloqueados.Add(linha);
                 }
                 reader.Close();
-                this.FornecedoresBloqueados = bloqueados;
+                return bloqueados;
             }
 
         }
 
         public void GravarArquivoFornecedor()
         {
-            StreamWriter sw = new StreamWriter(CarregarFornecedor());
+            StreamWriter sw = new StreamWriter(CriarArquivosFornecedor());
 
             using (sw)
             {
@@ -308,7 +327,7 @@ namespace SneezePharm.PastaFornecedor
 
         public void GravarArquivoFornecedorBloqueado()
         {
-            StreamWriter sw = new StreamWriter(CarregarFornecedorBloqueado());
+            StreamWriter sw = new StreamWriter(CriarArquivosFornecedoresBloqueados());
 
             using (sw)
             {

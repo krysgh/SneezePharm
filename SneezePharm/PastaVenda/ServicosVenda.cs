@@ -15,31 +15,18 @@ namespace SneezePharm.PastaVenda
         public List<Venda> Vendas { get; private set; } = [];
         public List<ItemVenda> ItensVenda { get; set; } = [];
 
-        private ServicosCliente _cliente { get; set; }
+        public ServicosVenda()
+        {
+            ItensVenda = LerItensVenda();
+        }
 
-        public void SetVendas(List<Venda> venda)
+        public string CriarArquivosItensVenda()
         {
             Vendas = venda;
         }
         public void SetItensVenda(List<ItemVenda> itensVenda)
         {
-            ItensVenda = itensVenda;
-        }
-    }
-}
-    /*
-        // CRUD Vendas
-        
-        public void IncluirCompra()
-        {
-            int id = 1;
-            if (Vendas.Select(x => x.Id).Any())
-                id = Vendas.Select(x => x.Id).Last() + 1;
-
-            Console.WriteLine($"Id da venda: {id}");
-            Console.Write("Informe o CPF do cliente: ");
-
-            var cpf = Console.ReadLine() ?? "";
+            var diretorioItemVenda = CriarArquivosItensVenda();
 
             var cliente = _cliente.BuscarCliente(cpf);
 
@@ -78,7 +65,9 @@ namespace SneezePharm.PastaVenda
 
             } while (resp == 's');
 
-            var valorItens = ItensVenda.Where(x => x.IdVenda == id).Select(x => x.ValorTotalItem);
+        public void GravaritensVenda()
+        {
+            var diretorioItemVenda = CriarArquivosItensVenda();
 
             var valorTotalItens = 0.0m;
 
@@ -141,7 +130,7 @@ namespace SneezePharm.PastaVenda
             return ItensVenda.Find(i => i.IdVenda == id);
         }
 
-        void AlterarItemVenda()
+        public void AlterarItemVenda()
         {
             Console.WriteLine("=== ALTERAR ITEM ===");
             Console.Write("Informe o ID do item: ");

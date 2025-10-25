@@ -11,6 +11,12 @@ namespace SneezePharm.PastaProducao
         public List<Producao> Producoes { get; set; } = [];
         public List<ItemProducao> ItensProducao { get; set; } = [];
 
+        public ServicosProducao()
+        {
+            Producoes = LerArquivoProducao();
+            ItensProducao = LerArquivoItemProducao();
+        }
+
         public void IncluirProducao()
         {
             Console.Write("Insere o código de barras do medicamento em produção: ");
@@ -107,26 +113,27 @@ namespace SneezePharm.PastaProducao
                 Console.WriteLine(producao + "\n");                            // Falta imprimir o princípio ativo da produção junto
             }
         }
-        private string CarregarProducao()
+        public string CriarArquivosProducao()
         {
             string diretorio = @"C:\SneezePharma\Files";
             string arquivoProducao = "Produce.data";
+
             var diretorioProducao = Path.Combine(diretorio, arquivoProducao);
             if (!File.Exists(diretorioProducao))
             {
-                using (StreamWriter sw = File.CreateText(diretorioProducao))
-                {
-                    Console.WriteLine("Arquivo criado com sucesso");
-                    Console.ReadKey();
-                }
+                using StreamWriter sw = File.CreateText(diretorioProducao);
+                Console.WriteLine("Arquivo criado com sucesso");
+                Console.ReadKey();
             }
             return diretorioProducao;
         }
-        public void LerArquivoProducao()
+        public List<Producao> LerArquivoProducao()
         {
-            StreamReader reader = new(CarregarProducao());
+            StreamReader reader = new(CriarArquivosProducao());
             using (reader)
             {
+                List<Producao> producoes = [];
+
                 while (reader.Peek() >= 0)
                 {
                     var linha = reader.ReadLine();
@@ -143,16 +150,17 @@ namespace SneezePharm.PastaProducao
                         quantidade
                         );
 
-                    Producoes.Add(producao);
+                    producoes.Add(producao);
                 }
                 reader.Close();
+                return producoes;
 
             }
         }
 
         public void GravarArquivoProducao()
         {
-            StreamWriter sw = new(CarregarProducao());
+            StreamWriter sw = new(CriarArquivosProducao());
 
             using (sw)
             {
@@ -295,13 +303,12 @@ namespace SneezePharm.PastaProducao
                 ItensProducao.ForEach(x => Console.WriteLine(x));
         }
 
-        public string CarregarItemProducao()
+        public string CriarArquivosItemProducao()
         {
             string diretorio = @"C:\SneezePharma\Files";
-
             string arquivoItemCompra = "ProduceItem.data";
-            var diretorioItemCompra = Path.Combine(diretorio, arquivoItemCompra);
 
+            var diretorioItemCompra = Path.Combine(diretorio, arquivoItemCompra);
             if (!File.Exists(diretorioItemCompra))
             {
                 using StreamWriter sw = File.CreateText(diretorioItemCompra);
@@ -313,7 +320,7 @@ namespace SneezePharm.PastaProducao
         }
         public List<ItemProducao> LerArquivoItemProducao()
         {
-            var caminho = CarregarItemProducao();
+            var caminho = CriarArquivosItemProducao();
 
             StreamReader reader = new(caminho);
             using (reader)
@@ -343,7 +350,7 @@ namespace SneezePharm.PastaProducao
         }
         public void GravarArquivoItemProducao(List<ItemProducao> itensProducao)
         {
-            var caminho = CarregarItemProducao();
+            var caminho = CriarArquivosItemProducao();
 
             StreamWriter writer = new(caminho);
             using (writer)

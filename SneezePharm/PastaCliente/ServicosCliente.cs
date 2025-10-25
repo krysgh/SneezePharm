@@ -14,8 +14,13 @@ namespace SneezePharm.PastaCliente
 
         public ServicosCliente()
         {
-            Clientes = LerArquivo();
-            ClientesBloqueados = LerArquivoBloqueado();
+            Clientes = LerArquivoCliente();
+            ClientesBloqueados = LerArquivoClientesBloqueados();
+        }
+
+        public void SetCliente(List<Cliente> clientes)
+        {
+            Clientes = clientes;
         }
 
         public Cliente BuscarCliente(string cpf)
@@ -77,7 +82,6 @@ namespace SneezePharm.PastaCliente
                 }
             } while (verificar != 'S' && verificar != 's' && verificar != 'n' && verificar != 'N');
         }
-
         #endregion
 
         #region ImprimirClienteLocalizado
@@ -98,7 +102,7 @@ namespace SneezePharm.PastaCliente
         #endregion
 
         #region CarregarPrograma
-        public string CarregarProgramaCliente()
+        public string CriarArquivosCliente()
         {
             string diretorio = @"C:\SneezePharma\Files\";
             string arquivo = "Customers.data";
@@ -113,7 +117,7 @@ namespace SneezePharm.PastaCliente
         #endregion
 
         #region CarregarProgramaBloqueado
-        public string CarregarProgramaBloqueado()
+        public string CriarArquivosClientesBloqueados()
         {
             string diretorio = @"C:\SneezePharma\Files\";
             string arquivoBloqueado = "RestrictedCustomers.data";
@@ -128,9 +132,9 @@ namespace SneezePharm.PastaCliente
         #endregion
 
         #region LerArquivoBloqueado
-        public List<string> LerArquivoBloqueado()
+        private List<string> LerArquivoClientesBloqueados()
         {
-            var caminhoCompletoBloqueado = CarregarProgramaBloqueado();
+            var caminhoCompletoBloqueado = CriarArquivosClientesBloqueados();
 
             StreamReader sr = new StreamReader(caminhoCompletoBloqueado);
 
@@ -153,7 +157,7 @@ namespace SneezePharm.PastaCliente
         #region GravarArquivoBloqueado
         public void GravarArquivoBloqueado(List<string> clienteBloqueados)
         {
-            var caminho = CarregarProgramaBloqueado();
+            var caminho = CriarArquivosClientesBloqueados();
 
             StreamWriter sw = new StreamWriter(caminho);
 
@@ -169,9 +173,9 @@ namespace SneezePharm.PastaCliente
         #endregion
 
         #region LerArquivo
-        public List<Cliente> LerArquivo()
+        private List<Cliente> LerArquivoCliente()
         {
-            var caminhoCompleto = CarregarProgramaCliente();
+            var caminhoCompleto = CriarArquivosCliente();
 
 
             StreamReader sr = new StreamReader(caminhoCompleto);
@@ -285,9 +289,9 @@ namespace SneezePharm.PastaCliente
         #endregion
 
         #region GravarArquivo
-        public void GravarArquivo(List<Cliente> clientes)
+        public void GravarArquivoCliente(List<Cliente> clientes)
         {
-            var caminho = CarregarProgramaCliente();
+            var caminho = CriarArquivosCliente();
 
             StreamWriter sw = new StreamWriter(caminho);
 
