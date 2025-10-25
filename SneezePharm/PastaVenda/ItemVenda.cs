@@ -11,7 +11,6 @@ namespace SneezePharm.PastaVenda
     {
 
         #region Propriedades
-        public int Id { get; private set; }
 
         public int IdVenda { get; private set; }
 
@@ -26,100 +25,67 @@ namespace SneezePharm.PastaVenda
         #endregion
 
 
-        #region Construtores
+        #region Construtor
 
         public ItemVenda(
-            int id,
             int idVenda,
             string medicamento,
             int quantidade,
             decimal valorUnitario
             )
         {
-            this.Id = id;
 
             this.IdVenda = idVenda;
 
             this.Medicamento = medicamento;
 
-            this.SetQuantidade(quantidade);
+            this.Quantidade = quantidade;
 
-            this.SetValorUnitario(valorUnitario);
+            this.ValorUnitario = valorUnitario;
+
+            this.ValorTotalItem = quantidade * valorUnitario;
 
         }
 
-
-        //Construtor para criação de objeto arquivo => lista
-        public ItemVenda(
-            string linhaArquivo
-            )
-        {
-            if (linhaArquivo.Length < 41)
-                throw new Exception("Linha de arquivo inválida!");
-
-            Id = Convert.ToInt32(linhaArquivo.Substring(0, 5).Trim());
-            IdVenda = Convert.ToInt32(linhaArquivo.Substring(5, 5).Trim());
-            Medicamento = linhaArquivo.Substring(10, 13).Trim();
-            SetQuantidade(Convert.ToInt32(linhaArquivo.Substring(23, 3).Trim()));
-            SetValorUnitario(Convert.ToDecimal(linhaArquivo.Substring(26, 7).Trim()));
-        }
         #endregion
 
-
-        #region Validacoes
-
-
-        public bool SetQuantidade(int q)
+        public void SetMedicamento(string medicamento)
         {
-            if (q <= 0 || q > 999)
-            {
-                Console.WriteLine("Quantidade inválida! Deve ser entre 1 e 999.");
-                return false;
-            }
-            Quantidade = q;
-            AtualizarValorTotal();
-            return true;
+            this.Medicamento = medicamento;
         }
 
-        public bool SetValorUnitario(decimal v)
+        public void SetQuantidade(int quantidade)
         {
-            if (v <= 0 || v > 9999.99m)
-            {
-                Console.WriteLine("Valor unitário inválido! Deve ser entre 0.01 e 9999.99.");
-                return false;
-            }
-            ValorUnitario = v;
-            AtualizarValorTotal();
-            return true;
+            this.Quantidade = quantidade;
         }
 
-        private void AtualizarValorTotal()
+        public void SetValorUnitario(decimal valorUnitario)
         {
-            decimal total = Quantidade * ValorUnitario;
-            if (total > 99999.99m)
-            {
-                Console.WriteLine("Valor total do item excede o limite de 99999.99.");
-                return;
-            }
-            ValorTotalItem = total;
+            this.ValorUnitario = valorUnitario;
         }
-        #endregion
 
+        public void SetValorTotalItem()
+        {
+            this.ValorTotalItem = this.Quantidade * this.ValorUnitario;
+        }
 
         #region ExibicaoGravacao
         public override string ToString()
         {
-            return $"Id: {this.Id}\nId da Venda: {this.IdVenda}\nMedicamento: {this.Medicamento}\nQuantidade: {this.Quantidade}\nValorUnitario: {this.ValorUnitario}\nTotalItem: {this.ValorTotalItem}";
+            return $"Id da Venda: {this.IdVenda}\n\r" +
+                $"Medicamento: {this.Medicamento}\n\r" +
+                $"Quantidade: {this.Quantidade}\n\r" +
+                $"ValorUnitario: {this.ValorUnitario:c}\n\r" +
+                $"TotalItem: {this.ValorTotalItem:c}\r";
         }
 
         public string ToFile()
         {
-            return Id.ToString().PadLeft(5) +
-                   IdVenda.ToString().PadLeft(5) +
-                   Medicamento.PadLeft(13) +
-                   Quantidade.ToString().PadLeft(3) +
-                   ValorUnitario.ToString("F2").PadLeft(7) +
-                   ValorTotalItem.ToString("F2").PadLeft(8);
+            return this.IdVenda.ToString().PadLeft(5) +
+                   this.Medicamento.PadLeft(13) +
+                   this.Quantidade.ToString().PadLeft(3) +
+                   this.ValorUnitario.ToString().PadLeft(7) +
+                   this.ValorTotalItem.ToString().PadLeft(8);
         }
 
         #endregion

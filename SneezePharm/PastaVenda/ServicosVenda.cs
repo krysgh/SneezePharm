@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SneezePharm.PastaCliente;
+using SneezePharm.PastaPrincipioAtivo;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +10,10 @@ namespace SneezePharm.PastaVenda
 {
     public class ServicosVenda
     {
+        private List<PrincipioAtivo> _principioAtivo { get; set; } = [];
 
-        public List<ItemVenda> ItensVenda = new List<ItemVenda>();
-        public int idItensVenda = 0;
-        public int id = 0;
+        public List<Venda> Vendas { get; private set; } = [];
+        public List<ItemVenda> ItensVenda { get; set; } = [];
 
         public ServicosVenda()
         {
@@ -20,72 +22,63 @@ namespace SneezePharm.PastaVenda
 
         public string CriarArquivosItensVenda()
         {
-            string diretorio = @"C:\SneezePharma\Files\";
-            if (!Directory.Exists(diretorio))
-                Directory.CreateDirectory(diretorio);
-            string arquivo = "SaleItems.data";
-            var diretorioItemVenda = Path.Combine(diretorio, arquivo);
-            if (!File.Exists(diretorioItemVenda))
-            {
-                using (StreamWriter sw = File.CreateText(diretorioItemVenda))
-                {
-                    sw.Close();
-                }
-
-            }
-
-            return diretorioItemVenda;
+            Vendas = venda;
         }
-
-        public List<ItemVenda> LerItensVenda()
+        public void SetItensVenda(List<ItemVenda> itensVenda)
         {
             var diretorioItemVenda = CriarArquivosItensVenda();
 
-            StreamReader sr = new StreamReader(diretorioItemVenda);
+            var cliente = _cliente.BuscarCliente(cpf);
 
-            using (sr)
+            if (cliente is null)
             {
+                Console.WriteLine("Cliente não encotrado!");
+                return;
+            }
 
-                List<ItemVenda> Itens = new List<ItemVenda>();
+            char resp;
+            int cont = 1;
 
-                int numRegistros = 0;
+            do
+            {
+                Console.WriteLine("\nAdicione o item");
+                var item = IncluirItemVenda(id);
 
-                while (sr.Peek() >= 0)
+                if (item == null)
                 {
-                    string linha = sr.ReadLine();
-                    string id = linha.Substring(0, 5);
-                    string idVenda = linha.Substring(5, 5);
-                    string medicamento = linha.Substring(10, 13);
-                    string quantidade = linha.Substring(23, 3);
-                    string valorUnitario = linha.Substring(26, 8);
-                    string totalItem = linha.Substring(34, 8);
-
-                    Itens.Add(new ItemVenda(Convert.ToInt32(id), Convert.ToInt32(idVenda), medicamento, Convert.ToInt32(quantidade), Convert.ToDecimal(valorUnitario)));
-
-                    numRegistros++;
+                    return;
                 }
 
-                idItensVenda = numRegistros;
-                sr.Close();
-                return Itens;
-            }
-        }
+                ItensVenda.Add(item);
+                cont++;
+
+                if (cont <= 3)
+                {
+                    Console.Write("Deseja adicionar outro produto? (s/n) ");
+                    resp = char.Parse(Console.ReadLine()!.ToLower().Trim());
+                }
+                else
+                {
+                    Console.WriteLine("Você atingiu o limite maáimo de itens!");
+                    break;
+                }
+
+            } while (resp == 's');
 
         public void GravaritensVenda()
         {
             var diretorioItemVenda = CriarArquivosItensVenda();
 
-            using (StreamWriter sw = new StreamWriter(diretorioItemVenda))
-            {
-                foreach (ItemVenda item in ItensVenda)
-                {
-                    sw.WriteLine(item.ToFile());
-                }
-                sw.Close();
-            }
-        }
+            var valorTotalItens = 0.0m;
 
-        public void IncluirItemVenda()
+            foreach (var item in valorItens)
+                valorTotalItens += item;
+
+            Vendas.Add(new(id, cliente.Cpf, valorTotalItens));
+        }
+        
+
+        public void IncluirItemVenda(int idVenda)
         {
             int qntItens = 1;
             do
@@ -99,7 +92,7 @@ namespace SneezePharm.PastaVenda
                 Console.Write("Informe o valor unitário: R$ ");
                 decimal valorUnitario = Convert.ToDecimal(Console.ReadLine());
 
-                ItensVenda.Add(new ItemVenda(id, idItensVenda, cdb, quantidade, valorUnitario));
+                ItensVenda.Add(new ItemVenda(idVenda, cdb, quantidade, valorUnitario));
 
                 Console.Clear();
 
@@ -162,40 +155,5 @@ namespace SneezePharm.PastaVenda
 
         }
 
-        public void MenuItensVenda()
-        {
-            Console.WriteLine("=== MENU ITENS DE VENDAS ===");
-            Console.Write("1 - Incluir item\n2 - Localizar\n3 - Alterar item\n4 - Imprimir itens\n5 - Voltar\n\nDigite a opção desejada: ");
-            int opcao = Convert.ToInt32(Console.ReadLine()!);
-            do
-            {
-                switch (opcao)
-                {
-                    case 1:
-                        IncluirItemVenda();
-                        Console.ReadKey();
-                        Console.Clear();
-                        break;
-                    case 2:
-                        break;
-
-                    case 3:
-                        break;
-
-                    case 4:
-                        ImprimirItensVenda();
-                        break;
-
-                    case 5:
-                        break;
-                    default:
-                        Console.WriteLine("Informe uma opção válida!");
-                        break;
-
-                }
-
-            } while (opcao < 1 || opcao > 5);
-
-        }
     }
-}
+    */
