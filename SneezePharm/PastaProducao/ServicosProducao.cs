@@ -9,6 +9,7 @@ namespace SneezePharm.PastaProducao
     public class ServicosProducao
     {
         public List<Producao> Producoes { get; set; } = [];
+        public List<ItemProducao> ItensProducao { get; set; } = [];
 
         public void IncluirProducao()
         {
@@ -160,6 +161,198 @@ namespace SneezePharm.PastaProducao
                     sw.WriteLine(producao.ToFile());
                 }
                 sw.Close();
+            }
+        }
+
+        // falta validacao de princípio ativo e verificacao de producao existente
+        public void IncluirItemProducao(int idProducao)
+        {
+            Console.Write("Informe o ID do princípio ativo: ");
+            var idPrincipioAtivo = Console.ReadLine() ?? "";
+
+            while (idPrincipioAtivo == "")
+            {
+                Console.WriteLine("Erro. Informe um ID valido!\n");
+                Console.Write("Informe o ID do princípio ativo: ");
+                idPrincipioAtivo = Console.ReadLine() ?? "";
+            }
+
+            Console.Write("Informe a quantidade em gramas do princípio ativo: (max: 9999) ");
+            if (!int.TryParse(Console.ReadLine(), out var quantidadePrincipio))
+            {
+                Console.WriteLine("Erro. Informe uma quantidade valida!\n");
+                Console.Write("Informe a quantidade em gramas do princípio ativo: (max: 9999) ");
+                while (!int.TryParse(Console.ReadLine(), out quantidadePrincipio))
+                {
+                    Console.WriteLine("Erro. Informe uma quantidade valida!\n");
+                    Console.Write("Informe a quantidade em gramas do princípio ativo: (max: 9999) ");
+                }
+            }
+
+            while (quantidadePrincipio > 9999 || quantidadePrincipio <= 0)
+            {
+                Console.WriteLine("Erro. A quantidade deve ser menor que 10000 e maior que zero!\n");
+                Console.Write("Informe a quantidade em gramas do princípio ativo: (max: 9999) ");
+                while (!int.TryParse(Console.ReadLine(), out quantidadePrincipio))
+                {
+                    Console.WriteLine("Erro. Informe uma quantidade valida!\n");
+                    Console.Write("Informe a quantidade em gramas do princípio ativo: (max: 9999) ");
+                }
+            }
+
+            ItemProducao itemProducao = new ItemProducao(idProducao, idPrincipioAtivo, quantidadePrincipio);
+            ItensProducao.Add(itemProducao);
+
+        }
+        public void LocalizarItemProducao()
+        {
+            Console.Write("Informe o ID da produção: ");
+            if (!int.TryParse(Console.ReadLine(), out var idProducao))
+            {
+                Console.WriteLine("Erro. Informe um ID válido!\n");
+                Console.Write("Informe o ID da produção: ");
+                while (!int.TryParse(Console.ReadLine(), out idProducao))
+                {
+                    Console.WriteLine("Erro. Informe um ID válido!\n");
+                    Console.Write("Informe o ID da produção: ");
+                }
+            }
+            // logica para ver  se a producao existe
+            //Console.WriteLine(idProducao) //Mostrar os dados da producao
+
+            var itensProducao = ItensProducao.FirstOrDefault(x => x.IdProducao == idProducao);
+
+            Console.WriteLine(itensProducao);
+        }
+        public void AlterarItemProducao()
+        {
+            Console.Write("Informe o ID da produção: ");
+            if (!int.TryParse(Console.ReadLine(), out var idProducao))
+            {
+                Console.WriteLine("Erro. Informe um ID válido!\n");
+                Console.Write("Informe o ID da produção: ");
+                while (!int.TryParse(Console.ReadLine(), out idProducao))
+                {
+                    Console.WriteLine("Erro. Informe um ID válido!\n");
+                    Console.Write("Informe o ID da produção: ");
+                }
+            }
+            // logica para ver  se a producao existe
+            //Console.WriteLine(idProducao) //Mostrar os dados da producao
+
+            var itensProducao = ItensProducao.FirstOrDefault(x => x.IdProducao == idProducao);
+
+            Console.WriteLine(itensProducao);
+
+            Console.WriteLine("Caso não queira fazer alteração, aperte o enter!");
+            Console.Write("Informe o novo ID do Princípio: ");
+            var principioAtivo = Console.ReadLine() ?? "";
+
+            if (principioAtivo == "")
+                principioAtivo = itensProducao.Principio;
+
+            // logica para ver se o principio ativo existe e se esta ativo
+
+            Console.Write("Informe a quantidade em gramas do princípio ativo: (max: 9999) ");
+            var quantidadePrincipio = Console.ReadLine() ?? "";
+
+            if (quantidadePrincipio == "")
+                quantidadePrincipio = itensProducao.QuantidadePrincipio.ToString();
+
+            if (!int.TryParse(quantidadePrincipio, out var quantidade))
+            {
+                Console.WriteLine("Erro. Informe uma quantidade valida!\n");
+                Console.Write("Informe a quantidade em gramas do princípio ativo: (max: 9999) ");
+                while (!int.TryParse(Console.ReadLine(), out quantidade))
+                {
+                    Console.WriteLine("Erro. Informe uma quantidade valida!\n");
+                    Console.Write("Informe a quantidade em gramas do princípio ativo: (max: 9999) ");
+                }
+            }
+
+            while (quantidade > 9999 || quantidade <= 0)
+            {
+                Console.WriteLine("Erro. Informe uma quantidade valida!\n");
+                Console.Write("Informe a quantidade em gramas do princípio ativo: (max: 9999) ");
+                while (!int.TryParse(Console.ReadLine(), out quantidade))
+                {
+                    Console.WriteLine("Erro. Informe uma quantidade valida!\n");
+                    Console.Write("Informe a quantidade em gramas do princípio ativo: (max: 9999) ");
+                }
+            }
+
+            itensProducao.SetPrincipio(principioAtivo);
+            itensProducao.SetQuantidadePrincipio(quantidade);
+
+            Console.WriteLine("Alteração concluída com sucesso!");
+            Console.WriteLine(itensProducao);
+        }
+        public void ImprimirItemProducao()
+        {
+            if (ItensProducao is null)
+                Console.WriteLine("Não existe item de produção");
+            else
+                ItensProducao.ForEach(x => Console.WriteLine(x));
+        }
+
+        public string CarregarItemProducao()
+        {
+            string diretorio = @"C:\SneezePharma\Files";
+
+            string arquivoItemCompra = "ProduceItem.data";
+            var diretorioItemCompra = Path.Combine(diretorio, arquivoItemCompra);
+
+            if (!File.Exists(diretorioItemCompra))
+            {
+                using StreamWriter sw = File.CreateText(diretorioItemCompra);
+                Console.WriteLine("Arquivo criado com sucesso");
+                Console.ReadKey();
+            }
+
+            return diretorioItemCompra;
+        }
+        public List<ItemProducao> LerArquivoItemProducao()
+        {
+            var caminho = CarregarItemProducao();
+
+            StreamReader reader = new(caminho);
+            using (reader)
+            {
+                List<ItemProducao> itensProducao = new();
+
+                while (reader.Peek() >= 0)
+                {
+                    var linha = reader.ReadLine();
+
+                    string idProducao = linha.Substring(0, 5);
+                    string idPrincipio = linha.Substring(5, 6);
+                    string quantidadePrincipio = linha.Substring(11, 4);
+
+                    ItemProducao itemCompra = new(
+                        int.Parse(idProducao),
+                        idPrincipio,
+                        int.Parse(quantidadePrincipio)
+                        );
+
+                    itensProducao.Add(itemCompra);
+                }
+                reader.Close();
+                return itensProducao;
+            }
+
+        }
+        public void GravarArquivoItemProducao(List<ItemProducao> itensProducao)
+        {
+            var caminho = CarregarItemProducao();
+
+            StreamWriter writer = new(caminho);
+            using (writer)
+            {
+                foreach (var item in itensProducao)
+                {
+                    writer.WriteLine(item.ToFile());
+                }
+                writer.Close();
             }
         }
     }
