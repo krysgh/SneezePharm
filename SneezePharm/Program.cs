@@ -1,6 +1,4 @@
-﻿using SneezePharm;
-using SneezePharm.PastaVenda;
-
+﻿
 void CarregarTodosArquivos()
 {
     string diretorio = @"C:\SneezePharma\Files\";
