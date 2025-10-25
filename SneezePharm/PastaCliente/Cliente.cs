@@ -38,44 +38,7 @@ namespace SneezePharm.PastaCliente
         #endregion
 
         #region Método Incluir Cliente
-        public static Cliente IncluirCliente()
-        {
-            string cpf;
-            do
-            {
-                Console.Write("Informe o cpf: ");
-                cpf = Console.ReadLine()!;
-            } while (!ValidarCpf(cpf));
-
-            Console.Write("Informe o nome: ");
-            string nome = Console.ReadLine()!;
-            if (nome.Length > 50)
-            {
-                nome = nome.Substring(0, 50);
-            }
-
-            DateOnly dataNascimento;
-            do
-            {
-                Console.Write("Informe a data de nascimento: ");
-                dataNascimento = DateOnly.Parse(Console.ReadLine()!);
-            } while (!ValidarIdade(dataNascimento));
-
-            string telefone;
-            do {
-                Console.Write("Informe o telefone com ddd: ");
-                telefone = Console.ReadLine()!;
-
-                if (telefone.Length != 11)
-                {
-                    Console.WriteLine("\nTelefone deve obrigatóriamente ter 11 dígitos, 2 do DDD e 9 do número! Tente novamente!\n");
-                }
-            } while (telefone.Length != 11);
-
-            DateOnly dataAtual = DateOnly.FromDateTime(DateTime.Now);
-
-            return new Cliente(cpf, nome, dataNascimento, telefone, dataAtual, dataAtual, 'A');
-        }
+        
         #endregion
 
         #region validação cpf

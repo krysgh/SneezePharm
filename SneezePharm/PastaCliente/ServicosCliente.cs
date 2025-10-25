@@ -1,4 +1,5 @@
 ﻿using SneezePharm.PastaCliente;
+using SneezePharm.PastaFornecedor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,9 +19,61 @@ namespace SneezePharm.PastaCliente
             ClientesBloqueados = LerArquivoBloqueado();
         }
 
+        public Cliente IncluirCliente()
+        {
+            string cpf;
+            do
+            {
+                Console.Write("Informe o cpf: ");
+                cpf = Console.ReadLine()!;
+            } while (!Cliente.ValidarCpf(cpf));
+
+            Console.Write("Informe o nome: ");
+            string nome = Console.ReadLine()!;
+            if (nome.Length > 50)
+            {
+                nome = nome.Substring(0, 50);
+            }
+
+            DateOnly dataNascimento;
+            do
+            {
+                Console.Write("Informe a data de nascimento: ");
+                dataNascimento = DateOnly.Parse(Console.ReadLine()!);
+            } while (!Cliente.ValidarIdade(dataNascimento));
+
+            string telefone;
+            do
+            {
+                Console.Write("Informe o telefone com ddd: ");
+                telefone = Console.ReadLine()!;
+
+                if (telefone.Length != 11)
+                {
+                    Console.WriteLine("\nTelefone deve obrigatóriamente ter 11 dígitos, 2 do DDD e 9 do número! Tente novamente!\n");
+                }
+            } while (telefone.Length != 11);
+
+            DateOnly dataAtual = DateOnly.FromDateTime(DateTime.Now);
+
+            return new Cliente(cpf, nome, dataNascimento, telefone, dataAtual, dataAtual, 'A');
+        }
         private Cliente BuscarCliente(string cpf)
         {
             return Clientes.Find(c => c.Cpf == cpf);
+        }
+
+        public void ImprimirClientes()
+        {
+            Console.WriteLine("-=-=- Lista de Clientes -=-=-");
+            if (Clientes.Count == 0)
+            {
+                Console.WriteLine("Nenhum fornecedor cadastrado.");
+            }
+            foreach (var cliente in Clientes)
+            {
+                Console.WriteLine(cliente + "\n");
+            }
         }
 
         #region AlterarCliente
