@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SneezePharm.PastaFornecedor;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,11 +10,10 @@ namespace SneezePharm.PastaVenda
     public class Venda
     {
 
-
         #region Propriedades
         public int Id { get; private set; }
 
-        public DateOnly DataVenda { get; private set; }
+        public DateOnly DataVenda { get; private set; } = DateOnly.FromDateTime(DateTime.Now);
 
         public string CPF { get; private set; }
 
@@ -22,57 +22,59 @@ namespace SneezePharm.PastaVenda
         #endregion
 
         #region Construtores
-        //Construtor aquivo => lista
         public Venda(
-            string id,
-            string dataVenda,
+            int id,
             string cpf,
-            string valorTotal
+            decimal valorTotal
             )
         {
-            this.Id = Convert.ToInt32(id.Trim());
-            this.DataVenda = DateOnly.ParseExact(dataVenda, "ddMMyyyy");
-            this.CPF = cpf.Trim();
-            this.ValorTotal = Convert.ToDecimal(valorTotal);
+            this.Id = id;
+            this.CPF = cpf;
+            this.ValorTotal = valorTotal;
         }
 
         public Venda(
-            string cpf
-            )
-        {
-            this.CPF = cpf;
-            this.DataVenda = DateOnly.FromDateTime(DateTime.Now);
-        }
-        #endregion
-
-
-
-        #region Alteracao
-        public void AlterarData(DateOnly dataVenda)
+            int id,
+            DateOnly dataVenda,
+            string cpf,
+            decimal valorTotal
+            ):
+            this(
+                id,
+                cpf,
+                valorTotal
+                )
         {
             this.DataVenda = dataVenda;
-
         }
+
         #endregion
+
+        public void SetCPF(string cpf)
+        {
+            this.CPF = cpf;
+        }
 
         #region Exibicao
 
         public override string ToString()
         {
-            return $"ID da Venda: {this.Id}\n" +
-                $"Data da Venda: {this.DataVenda}\n" +
-                $"CPF do cliente: {this.CPF}\n" +
-                $"Valor Total? {this.ValorTotal}\n";
+            return $"ID da Venda: {this.Id}\n\r" +
+                $"Data da Venda: {this.DataVenda}\n\r" +
+                $"CPF do cliente: {this.CPF}\n\r" +
+                $"Valor Total: {this.ValorTotal:c}\n\r";
         }
 
         public string ToFile()
         {
             return this.Id.ToString().PadLeft(5) +
-                this.DataVenda.ToString().Replace("/", "") +
+                this.DataVenda.ToString("ddMMyyyy") +
                 this.CPF +
-                this.ValorTotal.ToString("F2").Replace(',', '.').PadLeft(8);
+                this.ValorTotal.ToString().PadLeft(8);
         }
         #endregion
+
+
 
     }
 }

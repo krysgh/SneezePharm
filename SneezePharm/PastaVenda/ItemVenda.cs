@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,11 +42,10 @@ namespace SneezePharm.PastaVenda
 
             this.Medicamento = medicamento;
 
-            this.Quantidade = quantidade;
+            this.SetQuantidade(quantidade);
 
-            this.ValorUnitario = valorUnitario;
+            this.SetValorUnitario(valorUnitario);
 
-            this.ValorTotalItem = quantidade * valorUnitario;
         }
 
 
@@ -57,12 +57,11 @@ namespace SneezePharm.PastaVenda
             if (linhaArquivo.Length < 41)
                 throw new Exception("Linha de arquivo inválida!");
 
-            IdVenda = Convert.ToInt32(linhaArquivo.Substring(0, 5).Trim());
-            Id = Convert.ToInt32(linhaArquivo.Substring(5, 5).Trim());
+            Id = Convert.ToInt32(linhaArquivo.Substring(0, 5).Trim());
+            IdVenda = Convert.ToInt32(linhaArquivo.Substring(5, 5).Trim());
             Medicamento = linhaArquivo.Substring(10, 13).Trim();
-            Quantidade = Convert.ToInt32(linhaArquivo.Substring(23, 3).Trim());
-            ValorUnitario = Convert.ToDecimal(linhaArquivo.Substring(26, 7).Trim());
-            ValorTotalItem = Convert.ToDecimal(linhaArquivo.Substring(33, 8).Trim());
+            SetQuantidade(Convert.ToInt32(linhaArquivo.Substring(23, 3).Trim()));
+            SetValorUnitario(Convert.ToDecimal(linhaArquivo.Substring(26, 7).Trim()));
         }
         #endregion
 
@@ -70,18 +69,39 @@ namespace SneezePharm.PastaVenda
         #region Validacoes
 
 
-        public bool ValidarQuantidade(int quantidade)
+        public bool SetQuantidade(int q)
         {
-            return quantidade > 0 && quantidade < 1000;
+            if (q <= 0 || q > 999)
+            {
+                Console.WriteLine("Quantidade inválida! Deve ser entre 1 e 999.");
+                return false;
+            }
+            Quantidade = q;
+            AtualizarValorTotal();
+            return true;
         }
 
-        public bool ValidarValorUniatario(decimal valorUnitario)
+        public bool SetValorUnitario(decimal v)
         {
-            return valorUnitario > 0 && valorUnitario <= Convert.ToDecimal(9999.99);
+            if (v <= 0 || v > 9999.99m)
+            {
+                Console.WriteLine("Valor unitário inválido! Deve ser entre 0.01 e 9999.99.");
+                return false;
+            }
+            ValorUnitario = v;
+            AtualizarValorTotal();
+            return true;
         }
-        public bool ValidarValorTotalItem(decimal valorTotalItem)
+
+        private void AtualizarValorTotal()
         {
-            return valorTotalItem > 0 && valorTotalItem < Convert.ToDecimal(99999.99);
+            decimal total = Quantidade * ValorUnitario;
+            if (total > 99999.99m)
+            {
+                Console.WriteLine("Valor total do item excede o limite de 99999.99.");
+                return;
+            }
+            ValorTotalItem = total;
         }
         #endregion
 
