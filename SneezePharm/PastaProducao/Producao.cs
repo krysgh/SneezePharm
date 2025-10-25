@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SneezePharm
+namespace SneezePharm.PastaProducao
 {
     public class Producao
     {
@@ -15,45 +15,45 @@ namespace SneezePharm
 
         public Producao(
             int id,
-            string cdb, 
+            string cdb,
             int quantidade
             )
         {
-            this.Id = id;
-            this.CDB = cdb;
-            this.Quantidade = quantidade;
+            Id = id;
+            CDB = cdb;
+            Quantidade = quantidade;
         }
 
         public Producao(
-            string id, 
-            string dataProducao, 
-            string cdb, 
+            string id,
+            string dataProducao,
+            string cdb,
             string quantidade
             )
         {
-            this.Id = int.Parse(id);
-            this.DataProducao = DateOnly.ParseExact(dataProducao, "ddMMyyyy");
-            this.CDB = cdb;
-            this.Quantidade = int.Parse(quantidade);
+            Id = int.Parse(id);
+            DataProducao = DateOnly.ParseExact(dataProducao, "ddMMyyyy");
+            CDB = cdb;
+            Quantidade = int.Parse(quantidade);
         }
 
         public void AlterarQuantidade(int quantidade)
         {
-            this.Quantidade = quantidade;
+            Quantidade = quantidade;
         }
 
         public override string ToString()
         {
-            return $"ID: {this.Id:D5}" +
-                $"\nData de Produção: {this.DataProducao}" +
+            return $"ID: {Id:D5}" +
+                $"\nData de Produção: {DataProducao}" +
                 // $"\nMedicamento: {this.CDB}" +                    // Make this show the medicine name and not just bar code
-                $"\nQuantidade: {this.Quantidade}";
+                $"\nQuantidade: {Quantidade}";
         }
 
         // Retorna todos os dados da produção num string só para armazenar em arquivo
         public string ToFile()
         {
-            return $"{this.Id:D5}{this.DataProducao.ToString().Replace("/", "")}{this.CDB}{this.Quantidade:D3}";
+            return $"{Id:D5}{DataProducao.ToString().Replace("/", "")}{CDB}{Quantidade:D3}";
         }
     }
 }

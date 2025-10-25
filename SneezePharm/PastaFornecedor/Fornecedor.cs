@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SneezePharm
+namespace SneezePharm.PastaFornecedor
 {
     public class Fornecedor
     {
@@ -23,11 +23,11 @@ namespace SneezePharm
             DateOnly ultimoFornecimento
             )
         {
-            this.Cnpj = cnpj;
-            this.RazaoSocial = razaoSocial;
-            this.Pais = pais;
-            this.DataAbertura = dataAbertura;
-            this.UltimoFornecimento = ultimoFornecimento;
+            Cnpj = cnpj;
+            RazaoSocial = razaoSocial;
+            Pais = pais;
+            DataAbertura = dataAbertura;
+            UltimoFornecimento = ultimoFornecimento;
         }
 
         public Fornecedor(string cnpj,
@@ -39,25 +39,25 @@ namespace SneezePharm
             string situacao
             )
         {
-            this.Cnpj = cnpj;
-            this.RazaoSocial = razaoSocial.Trim();
-            this.Pais = pais.Trim();
-            this.DataAbertura = DateOnly.ParseExact(dataAbertura, "ddMMyyyy");
-            this.UltimoFornecimento = DateOnly.ParseExact(ultimoFornecimento, "ddMMyyyy"); ;
-            this.DataCadastro = DateOnly.ParseExact(dataCadastro, "ddMMyyyy"); ;
-            this.Situacao = char.Parse(situacao);
+            Cnpj = cnpj;
+            RazaoSocial = razaoSocial.Trim();
+            Pais = pais.Trim();
+            DataAbertura = DateOnly.ParseExact(dataAbertura, "ddMMyyyy");
+            UltimoFornecimento = DateOnly.ParseExact(ultimoFornecimento, "ddMMyyyy"); ;
+            DataCadastro = DateOnly.ParseExact(dataCadastro, "ddMMyyyy"); ;
+            Situacao = char.Parse(situacao);
         }
 
         // Altera a situação do fornecedor de 'A' para 'I' e vice-versa
         public void AlterarSituacao()
         {
-            if (this.Situacao == 'A')
+            if (Situacao == 'A')
             {
-                this.Situacao = 'I';
+                Situacao = 'I';
             }
             else
             {
-                this.Situacao = 'A';
+                Situacao = 'A';
             }
         }
 
@@ -80,9 +80,9 @@ namespace SneezePharm
             }
 
 
-            int calculo = (cnpjNumeros[0] * 6) + (cnpjNumeros[1] * 7) + (cnpjNumeros[2] * 8) + (cnpjNumeros[3] * 9) + (cnpjNumeros[4] * 2)
-                + (cnpjNumeros[5] * 3) + (cnpjNumeros[6] * 4) + (cnpjNumeros[7] * 5) + (cnpjNumeros[8] * 6) + (cnpjNumeros[9] * 7)
-                + (cnpjNumeros[10] * 8) + (cnpjNumeros[11] * 9);
+            int calculo = cnpjNumeros[0] * 6 + cnpjNumeros[1] * 7 + cnpjNumeros[2] * 8 + cnpjNumeros[3] * 9 + cnpjNumeros[4] * 2
+                + cnpjNumeros[5] * 3 + cnpjNumeros[6] * 4 + cnpjNumeros[7] * 5 + cnpjNumeros[8] * 6 + cnpjNumeros[9] * 7
+                + cnpjNumeros[10] * 8 + cnpjNumeros[11] * 9;
 
 
             calculo = calculo % 11;
@@ -94,9 +94,9 @@ namespace SneezePharm
                 return false;
             }
 
-            calculo = (cnpjNumeros[0] * 5) + (cnpjNumeros[1] * 6) + (cnpjNumeros[2] * 7) + (cnpjNumeros[3] * 8) + (cnpjNumeros[4] * 9)
-                + (cnpjNumeros[5] * 2) + (cnpjNumeros[6] * 3) + (cnpjNumeros[7] * 4) + (cnpjNumeros[8] * 5) + (cnpjNumeros[9] * 6)
-                + (cnpjNumeros[10] * 7) + (cnpjNumeros[11] * 8) + (cnpjNumeros[12] * 9);
+            calculo = cnpjNumeros[0] * 5 + cnpjNumeros[1] * 6 + cnpjNumeros[2] * 7 + cnpjNumeros[3] * 8 + cnpjNumeros[4] * 9
+                + cnpjNumeros[5] * 2 + cnpjNumeros[6] * 3 + cnpjNumeros[7] * 4 + cnpjNumeros[8] * 5 + cnpjNumeros[9] * 6
+                + cnpjNumeros[10] * 7 + cnpjNumeros[11] * 8 + cnpjNumeros[12] * 9;
 
             calculo = calculo % 11;
             if (calculo == 10)
@@ -126,23 +126,23 @@ namespace SneezePharm
 
         public override string ToString()
         {
-            return $"Razão Social: {this.RazaoSocial}\n" +
-                $"CNPJ: {this.Cnpj}\n" +
-                $"País: {this.Pais}\n" +
-                $"Data de Abertura: {this.DataAbertura}\n" +
-                $"Data do Último Fornecimento: {this.UltimoFornecimento}\n" +
-                $"Data de Cadastro: {this.DataCadastro}\n" +
-                $"Situação: " + (this.Situacao == 'A' ? "Ativo" : "Inativo");
+            return $"Razão Social: {RazaoSocial}\n" +
+                $"CNPJ: {Cnpj}\n" +
+                $"País: {Pais}\n" +
+                $"Data de Abertura: {DataAbertura}\n" +
+                $"Data do Último Fornecimento: {UltimoFornecimento}\n" +
+                $"Data de Cadastro: {DataCadastro}\n" +
+                $"Situação: " + (Situacao == 'A' ? "Ativo" : "Inativo");
         }
 
         // Retorna todos os dados do fornecedor num string só para armazenar em arquivo
         public string ToFile()
         {
-            return $"{this.Cnpj}{this.RazaoSocial,-50}{this.Pais,-20}" +
-                this.DataAbertura.ToString().Replace("/", "") +
-                this.UltimoFornecimento.ToString().Replace("/", "") +
-                this.DataCadastro.ToString().Replace("/", "") +
-                this.Situacao;
+            return $"{Cnpj}{RazaoSocial,-50}{Pais,-20}" +
+                DataAbertura.ToString().Replace("/", "") +
+                UltimoFornecimento.ToString().Replace("/", "") +
+                DataCadastro.ToString().Replace("/", "") +
+                Situacao;
             ;
         }
     }

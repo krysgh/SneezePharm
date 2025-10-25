@@ -1,4 +1,4 @@
-﻿namespace SneezePharm
+﻿namespace SneezePharm.PastaCompra
 {
     public class ItemCompra
     {
