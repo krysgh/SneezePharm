@@ -15,6 +15,7 @@ public class Compra
         Fornecedor = cnpj;
         ValorTotal = valorTotal;
     }
+
     public Compra(int id, string cnpj, decimal valorTotal, DateOnly dataCompra) : this(id, cnpj, valorTotal)
     {
         DataCompra = dataCompra;
@@ -34,6 +35,7 @@ public class Compra
         string valorTotal = ValorTotal.ToString().PadLeft(8);
         return $"{id}{dataCompra}{Fornecedor}{valorTotal}";
     }
+
     public override string ToString()
     {
         return $"\nId: {Id}\n\r" +
