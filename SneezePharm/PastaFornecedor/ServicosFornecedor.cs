@@ -319,56 +319,5 @@ namespace SneezePharm.PastaFornecedor
                 sw.Close();
             }
         }
-
-        // ler arquivo item da producao
-        public List<ItemProducao> LerArquivoItemProducao()
-        {
-            var caminho = CarregarItemProducao();
-
-            StreamReader reader = new(caminho);
-            using (reader)
-            {
-                List<ItemProducao> itensProducao = new();
-
-                while (reader.Peek() >= 0)
-                {
-                    var linha = reader.ReadLine();
-
-                    string idProducao = linha.Substring(0, 5);
-                    string idPrincipio = linha.Substring(5, 6);
-                    string quantidadePrincipio = linha.Substring(11, 4);
-
-                    ItemProducao itemCompra = new(
-                        int.Parse(idProducao),
-                        idPrincipio,
-                        int.Parse(quantidadePrincipio)
-                        );
-
-                    itensProducao.Add(itemCompra);
-                }
-                reader.Close();
-                return itensProducao;
-            }
-
-        }
-
-        // gravar arquivo item da producao
-        public void GravarArquivoItemProducao(List<ItemProducao> itensProducao)
-        {
-            var caminho = CarregarItemProducao();
-
-            StreamWriter writer = new(caminho);
-            using (writer)
-            {
-                foreach (var item in itensProducao)
-                {
-                    writer.WriteLine(item.ToFile());
-                }
-                writer.Close();
-            }
-        }
-
-
-
     }
 }

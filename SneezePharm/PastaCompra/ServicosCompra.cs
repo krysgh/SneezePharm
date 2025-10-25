@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SneezePharm.PastaFornecedor;
 using SneezePharm.PastaPrincipioAtivo;
 
 namespace SneezePharm.PastaCompra
@@ -12,8 +13,8 @@ namespace SneezePharm.PastaCompra
     {
         public List<Compra> Compras { get; private set; } = [];
         public List<ItemCompra> ItensCompra { get; private set; } = [];
+        
 
-        #region Métodos Compra
 
         public void SetCompras(List<Compra> compra)
         {
@@ -569,6 +570,6 @@ namespace SneezePharm.PastaCompra
                 "Imprimir os Itens",
                 "Voltar ao Menu Principal"
             ];
-        #endregion
+  
     }
 }
