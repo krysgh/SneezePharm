@@ -243,15 +243,13 @@ namespace SneezePharm.PastaMedicamento
             }
 
         }
-        public string CarregarMedicamento()
+        public string CriarArquivosMedicamento()
         {
             string diretorio = @"C:\SneezePharma\Files";
-            if (!Directory.Exists(diretorio))
-                Directory.CreateDirectory(diretorio);
 
             string arquivoMedicamento = "Medicine.data";
-            var caminho = Path.Combine(diretorio, arquivoMedicamento);
 
+            var caminho = Path.Combine(diretorio, arquivoMedicamento);
             if (!File.Exists(caminho))
             {
                 using (StreamWriter sw = File.CreateText(caminho))
@@ -265,7 +263,7 @@ namespace SneezePharm.PastaMedicamento
         public List<Medicamento> LerArquivoMedicamento()
         {
 
-            var caminho = CarregarMedicamento();
+            var caminho = CriarArquivosMedicamento();
 
             List<Medicamento> listaMed = new();
 
@@ -304,7 +302,7 @@ namespace SneezePharm.PastaMedicamento
 
         public void GravarArquivoMedicamento()
         {
-            StreamWriter writer = new StreamWriter(CarregarMedicamento());
+            StreamWriter writer = new StreamWriter(CriarArquivosMedicamento());
 
             using (writer)
             {
