@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SneezePharm.Cliente
+namespace SneezePharm.PastaCliente
 {
     public class Cliente
     {
@@ -205,7 +205,7 @@ namespace SneezePharm.Cliente
         {
             int opcao;
 
-            do 
+            
         }
     }
 }

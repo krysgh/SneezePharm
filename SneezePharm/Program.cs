@@ -1,21 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
-using SneezePharm.PastaFornecedor;
-using SneezePharm.PastaMedicamento;
-using SneezePharm.PastaCompra;
-using SneezePharm.PastaProducao;
-using SneezePharm.PastaPrincipioAtivo;
-
-namespace SneezePharm
+﻿void CarregarTodosArquivos()
 {
-    public class Program
+    string diretorio = @"C:\SneezePharma\Files\";
+    if (!Directory.Exists(diretorio))
     {
-
+        Directory.CreateDirectory(diretorio);
     }
 }
