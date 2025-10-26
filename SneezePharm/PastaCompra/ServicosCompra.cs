@@ -546,5 +546,38 @@ namespace SneezePharm.PastaCompra
                 "Voltar ao Menu Principal"
             ];
 
+
+        public void GerarRelatorioCompras()
+        {
+            Console.Write("Informe o CNPJ do fornecedor que deseja gerar o relatório: ");
+            string cnpj = Console.ReadLine()!;
+
+            var fornecedor = _fornecedor.LocalizarFornecedor(cnpj);
+
+            if (fornecedor == null)
+            {
+                Console.WriteLine("Fornecedor não encontrado!");
+                return;
+            }
+
+            var comprasFornecedor = Compras.Where(c => c.Fornecedor == cnpj).ToList();
+
+            if (comprasFornecedor.Count == 0)
+            {
+                Console.WriteLine("Nenhuma compra encontrada para este fornecedor!");
+                return;
+            }
+
+            string nomeFornecedor = fornecedor.RazaoSocial;
+            DateOnly dataPrimeiraCompra = comprasFornecedor.Min(c => c.DataCompra);
+            DateOnly dataUltimaCompra = comprasFornecedor.Max(c => c.DataCompra);
+            decimal valorTotalGasto = comprasFornecedor.Sum(c => c.ValorTotal);
+
+            Console.WriteLine($"CNPJ informado para relatório: {cnpj}");
+            Console.WriteLine($"Nome do fornecedor: {nomeFornecedor}");
+            Console.WriteLine($"Data da primeira compra: {dataPrimeiraCompra:dd/MM/yyyy}");
+            Console.WriteLine($"Data da última compra: {dataUltimaCompra:dd/MM/yyyy}");
+            Console.WriteLine($"Valor total gasto com esse fornecedor: R$ {valorTotalGasto:F2}\n");
+        }
     }
 }
