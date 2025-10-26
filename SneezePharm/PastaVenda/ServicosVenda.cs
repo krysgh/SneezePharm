@@ -1,11 +1,12 @@
 ﻿using SneezePharm.Menu;
 using SneezePharm.PastaCliente;
-using SneezePharm.PastaCompra;
 using SneezePharm.PastaMedicamento;
+using SneezePharm.PastaProducao;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,10 +20,6 @@ namespace SneezePharm.PastaVenda
         public List<Venda> Vendas { get; private set; } = [];
 
         public List<ItemVenda> ItensVenda { get; set; } = [];
-
-        public ServicosCliente _cliente { get; set; }
-
-        private List<Medicamento> _medicamento { get; set; } = [];
 
         public SistemaMenuVenda Menu { get; private set; }
         public SistemaMenuItemVenda MenuItem { get; private set; }
@@ -174,7 +171,7 @@ namespace SneezePharm.PastaVenda
 
         #region CRUD
 
-        public void IncluirVenda()
+        public void IncluirVenda(ServicosCliente clientes, List<Medicamento> medicamentos)
         {
             int id = 1;
             if (Vendas.Select(x => x.Id).Any())
@@ -183,23 +180,36 @@ namespace SneezePharm.PastaVenda
             Console.WriteLine($"Id da Venda: {id}");
             Console.Write("Informe o CPF do cliente: ");
 
-            var cPFCliente = Console.ReadLine() ?? "";
+            var clienteCPF = Console.ReadLine() ?? "";
 
-            var cliente = _cliente.BuscarCliente(cPFCliente);
+            var cliente = clientes.BuscarCliente(clienteCPF);
 
             if (cliente is null)
             {
-                Console.WriteLine("Fornecedor não encotrado!");
+                Console.WriteLine("Cliente não encotrado!");
                 return;
             }
 
-            char resp;
+            if (clientes.ClienteEstaBloqueado(clienteCPF))
+            {
+                Console.WriteLine("Cliente está bloqueado!");
+                return;
+            }
+
+            if (cliente.Situacao == 'I')
+            {
+                Console.WriteLine("Cliente está inativo!");
+                return;
+
+            }
+
+            char resp = ' ';
             int cont = 1;
 
             do
             {
-                Console.WriteLine("Inclua um item");
-                var item = IncluirItem(id);
+                Console.WriteLine("Inclua um item:");
+                var item = IncluirItem(id, medicamentos);
 
                 if (item == null)
                 {
@@ -212,11 +222,11 @@ namespace SneezePharm.PastaVenda
                 if (cont <= 3)
                 {
                     Console.Write("Deseja adicionar outro item? [S]Sim [N]Não ");
-                    resp = char.Parse(Console.ReadLine()!.ToLower().Trim());
+                    resp = char.Parse(Console.ReadLine()!);
                 }
                 else
                 {
-                    Console.WriteLine("Você atingiu o limite maximo de itens!");
+                    Console.WriteLine("Você atingiu o limite máximo de itens!");
                     break;
                 }
 
@@ -229,6 +239,7 @@ namespace SneezePharm.PastaVenda
                 valorTotalItens += item;
 
             Vendas.Add(new(id, cliente.Cpf, valorTotalItens));
+            cliente.SetUltimaCompra(DateOnly.FromDateTime(DateTime.Now));
         }
         public void LocalizarVenda()
         {
@@ -265,21 +276,22 @@ namespace SneezePharm.PastaVenda
         {
             return Vendas.Find(x => x.Id == id)!;
         }
-        private Medicamento BuscarCDB(string codigoDeBarras)
+        private Medicamento BuscarCDB(string codigoDeBarras, List<Medicamento> medicamentos)
         {
-            return _medicamento.Find(x => x.CDB == codigoDeBarras)!;
+            return medicamentos.Find(x => x.CDB == codigoDeBarras)!;
         }
+
 
         #endregion
 
         #region CRUDITENS
 
-        private ItemVenda IncluirItem(int idVenda)
+        private ItemVenda IncluirItem(int idVenda, List<Medicamento> medicamentos)
         {
             Console.Write("Informe o código de barras do medicamento: ");
             var codigoDeBarras = Console.ReadLine()!.ToUpper();
 
-            var medicamento = BuscarCDB(codigoDeBarras);
+            var medicamento = BuscarCDB(codigoDeBarras, medicamentos);
 
             if (medicamento is null)
             {
@@ -317,33 +329,10 @@ namespace SneezePharm.PastaVenda
                 }
             }
 
-            Console.Write($"Valor unitário (máx 9999.99): ");
 
-            if (!decimal.TryParse(Console.ReadLine(), CultureInfo.InvariantCulture, out var valorUnitario))
-            {
-                Console.WriteLine("Erro. Informe um valor unitário válido!");
-                Console.Write("Informe o valor unitario do medicamento (máx 9999.99): ");
-                while (!decimal.TryParse(Console.ReadLine(), CultureInfo.InvariantCulture, out valorUnitario))
-                {
-                    Console.WriteLine("Erro. Informe um valor unitário válido!");
-                    Console.Write("Informe o valor unitario do ingrediente (máx 9999.99): ");
-                }
-            }
-
-            while (valorUnitario > 9999.99m || valorUnitario <= 0)
-            {
-                Console.WriteLine("O valor unitario não pode ultrapassar R$ 9999.99, e não pode ser menor ou igual a zero");
-                Console.Write("Informe o valor unitario do medicamento (máx: 9999.99): ");
-                while (!decimal.TryParse(Console.ReadLine(), CultureInfo.InvariantCulture, out valorUnitario))
-                {
-                    Console.WriteLine("Erro. Informe um valor unitário valido!");
-                    Console.Write("Informe o valor unitário do medicamento (máx: 999.99): ");
-                }
-            }
-
-            return new ItemVenda(idVenda, medicamento.CDB, quantidade, valorUnitario);
+            return new ItemVenda(idVenda, medicamento.CDB, quantidade, medicamento.ValorVenda);
         }
-        public void AlterarItemVenda()
+        public void AlterarItemVenda(List<Medicamento> medicamentos)
         {
             Console.Write("Informe o ID da venda: ");
             var id = int.Parse(Console.ReadLine()!);
@@ -363,7 +352,7 @@ namespace SneezePharm.PastaVenda
             Console.Write("Informe o código de barras do medicamento que deseja alterar: ");
             var codigoDeBarras = Console.ReadLine()!.ToUpper() ?? "";
 
-            var idItem = BuscarCDB(codigoDeBarras);
+            var idItem = BuscarCDB(codigoDeBarras, medicamentos);
 
             if (idItem is null)
             {
@@ -389,7 +378,7 @@ namespace SneezePharm.PastaVenda
             Console.Write("Informe o código de barras do medicamento: ");
             codigoDeBarras = Console.ReadLine()!.ToUpper() ?? itemVendido.Medicamento;
 
-            var medicamento = BuscarCDB(codigoDeBarras);
+            var medicamento = BuscarCDB(codigoDeBarras, medicamentos);
 
             while (medicamento is null)
             {
@@ -400,7 +389,7 @@ namespace SneezePharm.PastaVenda
                 Console.Write("Informe o código de barras do medicamento: ");
                 codigoDeBarras = Console.ReadLine()!.ToUpper() ?? itemVendido.Medicamento;
 
-                medicamento = BuscarCDB(codigoDeBarras);
+                medicamento = BuscarCDB(codigoDeBarras, medicamentos);
             }
 
 
@@ -434,44 +423,16 @@ namespace SneezePharm.PastaVenda
                 }
             }
 
-            Console.Write($"Informe o valor unitário (máx: 9999.99): ");
-            var valorUnit = Console.ReadLine() ?? "";
-
-            if (valorUnit is "")
-                valorUnit = itemVendido.ValorUnitario.ToString();
-
-            if (!decimal.TryParse(valorUnit, out var valorUnitario))
-            {
-                Console.WriteLine("Erro. Informe um valor unitário válido!");
-                Console.Write("Informe o valor unitário do medicamento (máx: 9999.99): ");
-                while (!decimal.TryParse(Console.ReadLine(), CultureInfo.InvariantCulture, out valorUnitario))
-                {
-                    Console.WriteLine("Erro. Informe um valor unitário válido!");
-                    Console.Write("Informe o valor unitario do medicamento (máx: 9999.99): ");
-                }
-            }
-
-            while (valorUnitario > 9999.99m || valorUnitario <= 0.0m)
-            {
-                Console.WriteLine("O valor unitário não pode ultrapassar R$ 9999.99, e não pode ser menor ou igual a zero");
-                Console.Write($"Informe o valor unitário (máx: 9999.99): ");
-                while (!decimal.TryParse(Console.ReadLine(), CultureInfo.InvariantCulture, out valorUnitario))
-                {
-                    Console.WriteLine("Erro. Informe um valor unitário válido!");
-                    Console.Write("Informe o valor unitário do medicamento (máx: 9999.99): ");
-                }
-            }
-
             itemVendido.SetMedicamento(medicamento.CDB);
             itemVendido.SetQuantidade(quantidade);
-            itemVendido.SetValorUnitario(valorUnitario);
+            itemVendido.SetValorUnitario(medicamento.ValorVenda);
 
             itemVendido.SetValorTotalItem();
 
             Console.WriteLine("Item Atualizado com sucesso!");
             Console.WriteLine(itemVendido);
         }
-        public void LocalizarItemVenda()
+        public void LocalizarItemVenda(List<Medicamento> medicamentos)
         {
             Console.Write("Informe o ID da venda: ");
             var id = int.Parse(Console.ReadLine()!);
@@ -491,7 +452,7 @@ namespace SneezePharm.PastaVenda
             Console.Write("Informe o código de barras do Medicamento: ");
             var codigoDeBarras = Console.ReadLine()!.ToUpper() ?? "";
 
-            var idItem = BuscarCDB(codigoDeBarras);
+            var idItem = BuscarCDB(codigoDeBarras, medicamentos);
 
             if (idItem is null)
             {
@@ -532,33 +493,7 @@ namespace SneezePharm.PastaVenda
         #endregion
 
 
-        #region MENU
-        public static int Display(string title, List<string> options)
-        {
-            Console.WriteLine(title);
-            for (int i = 0; i < options.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}. {options[i]}");
-            }
-            Console.Write("Escolha uma opção válida: ");
-            return int.Parse(Console.ReadLine() ?? "0");
-        }
 
-        public List<string> OpcoesVenda = [
-            "Incluir Venda",
-                "Localizar Venda",
-                "Imprimir Vendas",
-                "Voltar ao Menu Principal"
-            ];
-
-        public List<string> OpcoesItemVenda = [
-            "Localizar Item",
-                "Alterar Item",
-                "Imprimir Itens",
-                "Voltar ao Menu Principal"
-            ];
-
-        #endregion
     }
 }
 
