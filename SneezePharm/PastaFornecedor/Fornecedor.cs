@@ -73,16 +73,19 @@ namespace SneezePharm.PastaFornecedor
         {
             if (!cnpj.All(char.IsDigit))
             {
+                Console.WriteLine("CNPJ só pode conter números!");
                 return false;
             }
 
             int[] cnpjNumeros = cnpj.ToCharArray().Select(c => (int)char.GetNumericValue(c)).ToArray();
             if (cnpjNumeros.Length != 14)
             {
+                Console.WriteLine("Tamanho de CNPJ inválido!");
                 return false;
             }
             if (cnpjNumeros.Distinct().Count() == 1)
             {
+                Console.WriteLine("CNPJ inválido!");
                 return false;
             }
 
@@ -98,6 +101,7 @@ namespace SneezePharm.PastaFornecedor
 
             if (calculo != cnpjNumeros[12])
             {
+                Console.WriteLine("CNPJ inválido!");
                 return false;
             }
 
@@ -111,6 +115,7 @@ namespace SneezePharm.PastaFornecedor
 
             if (calculo != cnpjNumeros[13])
             {
+                Console.WriteLine("CNPJ inválido!");
                 return false;
             }
 

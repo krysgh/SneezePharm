@@ -32,11 +32,11 @@ namespace SneezePharm.PastaFornecedor
 
         public void IncluirFornecedor()
         {
-            Console.Write("Insere o cnpj da empresa fornecedor (apenas números): ");
+            Console.Write("Insere o CNPJ da empresa fornecedor (apenas números): ");
             string cnpj = Console.ReadLine() ?? "";
             if (!Fornecedor.ValidarCNPJ(cnpj))
             {
-                Console.WriteLine("CNPJ inválido! Retornando para menu...");
+                Console.WriteLine("Retornando para menu...");
                 return;
 
             }
