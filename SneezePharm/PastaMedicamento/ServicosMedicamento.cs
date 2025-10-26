@@ -10,6 +10,11 @@ namespace SneezePharm.PastaMedicamento
     {
         public List<Medicamento> Medicamentos { get; set; } = [];
 
+        public ServicosMedicamento()
+        {
+            Medicamentos = LerArquivoMedicamento();
+        }
+
         public void IncluirMedicamento()
         {
             string nome;

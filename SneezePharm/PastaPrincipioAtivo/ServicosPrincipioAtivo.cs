@@ -8,7 +8,12 @@ namespace SneezePharm.PastaPrincipioAtivo
 {
     public class ServicosPrincipioAtivo
     {
-        public List<PrincipioAtivo> PrincipiosAtivos { get; set; } = [];
+        public List<PrincipioAtivo> PrincipiosAtivos { get; private set; } = [];
+
+        public ServicosPrincipioAtivo()
+        {
+            PrincipiosAtivos = LerArquivoPrincipioAtivo(); 
+        }
 
         public void IncluirPrincipioAtivo()
         {

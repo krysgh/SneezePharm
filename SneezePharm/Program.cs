@@ -1,6 +1,10 @@
-﻿using SneezePharm.Menu;
+﻿
+void CarregarTodosArquivos()
+{
+    string diretorio = @"C:\SneezePharma\Files\";
+    if (!Directory.Exists(diretorio))
+    {
+        Directory.CreateDirectory(diretorio);
+    }
+}
 
-var sneezePharm = new SistemaSneezePharm();
-
-sneezePharm.CriarDiretorio();
-sneezePharm.CriarTodosArquivos();

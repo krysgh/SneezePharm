@@ -18,6 +18,8 @@ internal class SistemaSneezePharm
     public ServicosProducao ServicosProducao { get; set; } = new ServicosProducao();
     public ServicosVenda ServicosVenda { get; set; } = new ServicosVenda();
 
+    // Todos as classes iniciam populadas pelo proprio construtor.
+
     public void CriarDiretorio()
     {
         string diretorio = @"C:\SneezePharma\Files\";
@@ -49,5 +51,8 @@ internal class SistemaSneezePharm
         // Criar arquivos Producao
         ServicosProducao.CriarArquivosProducao();
         ServicosProducao.CriarArquivosItemProducao();
+
+        // Criar arquivos Venda
+        ServicosVenda.CriarArquivosItensVenda();
     }
 }
