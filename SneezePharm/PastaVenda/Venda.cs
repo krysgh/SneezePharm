@@ -15,7 +15,7 @@ namespace SneezePharm.PastaVenda
 
         public DateOnly DataVenda { get; private set; } = DateOnly.FromDateTime(DateTime.Now);
 
-        public string CPF { get; private set; }
+        public string Cliente { get; private set; }
 
         public decimal ValorTotal { get; private set; }
 
@@ -29,7 +29,7 @@ namespace SneezePharm.PastaVenda
             )
         {
             this.Id = id;
-            this.CPF = cpf;
+            this.Cliente = cpf;
             this.ValorTotal = valorTotal;
         }
 
@@ -52,7 +52,7 @@ namespace SneezePharm.PastaVenda
 
         public void SetCPF(string cpf)
         {
-            this.CPF = cpf;
+            this.Cliente = cpf;
         }
 
         #region Exibicao
@@ -61,7 +61,7 @@ namespace SneezePharm.PastaVenda
         {
             return $"ID da Venda: {this.Id}\n\r" +
                 $"Data da Venda: {this.DataVenda}\n\r" +
-                $"CPF do cliente: {this.CPF}\n\r" +
+                $"CPF do cliente: {this.Cliente}\n\r" +
                 $"Valor Total: {this.ValorTotal:c}\n\r";
         }
 
@@ -69,7 +69,7 @@ namespace SneezePharm.PastaVenda
         {
             return this.Id.ToString().PadLeft(5) +
                 this.DataVenda.ToString("ddMMyyyy") +
-                this.CPF +
+                this.Cliente +
                 this.ValorTotal.ToString().PadLeft(8);
         }
         #endregion
