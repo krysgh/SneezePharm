@@ -1,14 +1,15 @@
-﻿using SneezePharm.Menu;
-using SneezePharm.PastaCliente;
-using SneezePharm.PastaMedicamento;
-using SneezePharm.PastaProducao;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using SneezePharm.Menu;
+using SneezePharm.PastaCliente;
+using SneezePharm.PastaCompra;
+using SneezePharm.PastaMedicamento;
+using SneezePharm.PastaProducao;
 
 namespace SneezePharm.PastaVenda
 {
@@ -492,8 +493,40 @@ namespace SneezePharm.PastaVenda
 
         #endregion
 
+        public void GerarRelatorioVendas()
+        {
+            Console.Write("Informe a data inicial do periodo (dd/mm/yyyy): ");
+            DateOnly dataInicial = DateOnly.Parse(Console.ReadLine()!);
+            Console.Write("Informe a data final do periodo (dd/mm/yyyy): ");
+            DateOnly dataFinal = DateOnly.Parse(Console.ReadLine()!);
 
+            if (dataInicial > dataFinal)
+            {
+                Console.WriteLine("\nA data inicial do relatório não pode ser maior que a data final!\n");
+                return;
+            }
 
+            if (dataFinal > DateOnly.FromDateTime(DateTime.Now) || dataInicial > DateOnly.FromDateTime(DateTime.Now))
+            {
+                Console.WriteLine("\nAs datas não podem ser maiores que o dia de hoje!\n");
+                return;
+            }
+
+            var vendasNoPeriodo = Vendas.Where(v => v.DataVenda >= dataInicial && v.DataVenda <= dataFinal).ToList();
+
+            if (vendasNoPeriodo.Count == 0)
+            {
+                Console.WriteLine("\nNenhuma venda encontrada nesse período!\n");
+                return;
+            }
+
+            Console.WriteLine("\nRelatório de vendas no periodo selecionado: ");
+
+            foreach (Venda v in vendasNoPeriodo)
+            {
+                Console.WriteLine("\n" + v);
+            }
+        }
     }
 }
 
