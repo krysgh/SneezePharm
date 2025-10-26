@@ -129,9 +129,25 @@ namespace SneezePharm.PastaCliente
         }
 
         // Busca
-        private Cliente BuscarCliente(string cpf)
+        public Cliente BuscarCliente(string cpf)
         {
             return Clientes.Find(c => c.Cpf == cpf);
+        }
+
+        public bool ClienteEstaBloqueado(string cpf) // Cliente está bloqueado? Não = false
+        {
+            if (ClientesBloqueados.Contains(cpf))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        //Atulizar data de ultima compra - chamar a função quando o cliente fizer a compra
+        public void AtulizarUltimaCompraCliente(Cliente c)
+        {
+            c.SetUltimaCompra(DateOnly.FromDateTime(DateTime.Now));
         }
 
         // CRUD Clientes
