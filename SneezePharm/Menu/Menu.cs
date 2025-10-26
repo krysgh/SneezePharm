@@ -13,7 +13,7 @@ namespace SneezePharm.Menu
             Console.WriteLine(titulo);
             for (int i = 0; i < opcoes.Count; i++)
             {
-                Console.WriteLine($"{i + 1} - {opcoes[i]}");
+                Console.WriteLine($"[{i + 1}] - {opcoes[i]}");
             }
             Console.Write("\nEscolha uma opção valida: ");
             if (!int.TryParse(Console.ReadLine(), out var opcao))

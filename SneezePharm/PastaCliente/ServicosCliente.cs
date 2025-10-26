@@ -129,9 +129,25 @@ namespace SneezePharm.PastaCliente
         }
 
         // Busca
-        private Cliente BuscarCliente(string cpf)
+        public Cliente BuscarCliente(string cpf)
         {
             return Clientes.Find(c => c.Cpf == cpf);
+        }
+
+        public bool ClienteEstaBloqueado(string cpf) // Cliente está bloqueado? Não = false
+        {
+            if (ClientesBloqueados.Contains(cpf))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        //Atulizar data de ultima compra - chamar a função quando o cliente fizer a compra
+        public void AtulizarUltimaCompraCliente(Cliente c)
+        {
+            c.SetUltimaCompra(DateOnly.FromDateTime(DateTime.Now));
         }
 
         // CRUD Clientes
@@ -292,7 +308,7 @@ namespace SneezePharm.PastaCliente
         public void ImprimirClientes()
         {
             if (Clientes is null)
-                Console.WriteLine("Nao existe nenhum cliente na base de dados!");
+                Console.WriteLine("Não existe nenhum cliente na base de dados!");
             else
             {
                 foreach (var cliente in Clientes.OrderBy(x => x.Nome))
@@ -456,7 +472,7 @@ namespace SneezePharm.PastaCliente
         }
 
         // Armazenar clientes
-        public void GravarArquivoCliente(List<Cliente> clientes)
+        public void GravarArquivoCliente()
         {
             var caminho = CriarArquivosCliente();
 
@@ -464,14 +480,14 @@ namespace SneezePharm.PastaCliente
 
             using (sw)
             {
-                foreach (Cliente cliente in clientes)
+                foreach (var cliente in Clientes)
                 {
                     sw.WriteLine(cliente.ToFile());
                 }
                 sw.Close();
             }
         }
-        public void GravarArquivoBloqueado(List<string> clienteBloqueados)
+        public void GravarArquivoBloqueado()
         {
             var caminho = CriarArquivosClientesBloqueados();
 
@@ -479,7 +495,7 @@ namespace SneezePharm.PastaCliente
 
             using (sw)
             {
-                foreach (string cpf in clienteBloqueados)
+                foreach (var cpf in ClientesBloqueados)
                 {
                     sw.WriteLine(cpf);
                 }

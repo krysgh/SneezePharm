@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SneezePharm.Menu;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,10 +10,12 @@ namespace SneezePharm.PastaPrincipioAtivo
     public class ServicosPrincipioAtivo
     {
         public List<PrincipioAtivo> PrincipiosAtivos { get; private set; } = [];
+        public SistemaMenuPrincipioAtivo Menu { get; private set; }
 
         public ServicosPrincipioAtivo()
         {
-            PrincipiosAtivos = LerArquivoPrincipioAtivo(); 
+            PrincipiosAtivos = LerArquivoPrincipioAtivo();
+            Menu = new SistemaMenuPrincipioAtivo();
         }
 
         public void IncluirPrincipioAtivo()

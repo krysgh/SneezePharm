@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SneezePharm.Menu;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
@@ -9,13 +10,15 @@ namespace SneezePharm.PastaFornecedor
 {
     public class ServicosFornecedor
     {
-        public List<Fornecedor> Fornecedores { get; private set; }
-        public List<string> FornecedoresBloqueados { get; private set; }
+        public List<Fornecedor> Fornecedores { get; private set; } = [];
+        public List<string> FornecedoresBloqueados { get; private set; } = [];
+        public SistemaMenuFornecedor Menu { get; private set; }
 
         public ServicosFornecedor()
         {
             Fornecedores = LerArquivoFornecedor();
             FornecedoresBloqueados = LerArquivoFornecedorBloqueado();
+            Menu = new SistemaMenuFornecedor();
         }
 
         public void SetFornecedores(List<Fornecedor> fornecedores)
@@ -29,7 +32,7 @@ namespace SneezePharm.PastaFornecedor
 
         public void IncluirFornecedor()
         {
-            Console.Write("Insere o cnpj da empresa fornecedor: ");
+            Console.Write("Insere o cnpj da empresa fornecedor (apenas números): ");
             string cnpj = Console.ReadLine() ?? "";
             if (!Fornecedor.ValidarCNPJ(cnpj))
             {
@@ -44,12 +47,12 @@ namespace SneezePharm.PastaFornecedor
             }
 
             Console.Write("Insere a razão social da empresa: ");
-            string razaoSocial = Console.ReadLine() ?? ("Empresa" + cnpj);
+            string razaoSocial = Console.ReadLine() ?? "";
             razaoSocial = razaoSocial.Trim();
             while (!Fornecedor.ValidarRazaoSocial(razaoSocial))
             {
                 Console.WriteLine("Texto contem caracteres inválidas! Tente novamente.");
-                razaoSocial = Console.ReadLine() ?? ("Empresa" + cnpj);
+                razaoSocial = Console.ReadLine() ?? "";
             }
             if (razaoSocial.Length > 50)
             {
@@ -57,13 +60,13 @@ namespace SneezePharm.PastaFornecedor
             }
 
             Console.Write("Insere o país que a empresa está localizada: ");
-            string pais = Console.ReadLine() ?? "Brasil";
+            string pais = Console.ReadLine() ?? "";
             pais = pais.Trim();
             while (!Fornecedor.ValidarPais(pais))
             {
                 Console.WriteLine("Texto contem caracteres diferentes de letras e espaços." +
                                 "\nTente novamente.");
-                pais = Console.ReadLine() ?? "Brasil";
+                pais = Console.ReadLine() ?? "";
             }
             if (pais.Length > 20)
             {

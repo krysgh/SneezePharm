@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SneezePharm.Menu;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,13 @@ namespace SneezePharm.PastaMedicamento
 {
     public class ServicosMedicamento
     {
-        public List<Medicamento> Medicamentos { get; set; } = [];
+        public List<Medicamento> Medicamentos { get; private set; } = [];
+        public SistemaMenuMedicamento Menu { get; private set; }
 
         public ServicosMedicamento()
         {
             Medicamentos = LerArquivoMedicamento();
+            Menu = new SistemaMenuMedicamento();
         }
 
         public void IncluirMedicamento()

@@ -10,6 +10,7 @@ namespace SneezePharm.Menu
     {
         public string Titulo { get; private set; }
         public List<string> Opcoes { get; private set; }
+        
 
         public SistemaMenuPrincipal()
         {
@@ -28,5 +29,7 @@ namespace SneezePharm.Menu
                 "Sair"
                 ];
         }
+
+     
     }
 }

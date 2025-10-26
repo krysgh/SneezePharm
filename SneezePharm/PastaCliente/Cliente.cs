@@ -21,9 +21,12 @@ namespace SneezePharm.PastaCliente
         {
             Situacao = situacao;
         }
-        #endregion
 
-        #region construtor
+        public void SetUltimaCompra(DateOnly ultimaCompra)
+        {
+            this.UltimaCompra = ultimaCompra;
+        }
+
         public Cliente(string cpf, string nome, DateOnly dataNascismento,
             string telefone, DateOnly ultimaCompra, DateOnly dataCadastro, char situacao)
         {

@@ -18,7 +18,7 @@ public class SistemaSneezePharm
     public ServicosProducao ServicosProducao { get; set; } = new ServicosProducao();
     public ServicosVenda ServicosVenda { get; set; } = new ServicosVenda();
 
-    // Todos as classes iniciam populadas pelo proprio construtor.
+    // Todas as classes iniciam populadas pelo proprio construtor.
 
     public void CriarDiretorio()
     {
@@ -53,8 +53,36 @@ public class SistemaSneezePharm
         ServicosProducao.CriarArquivosItemProducao();
 
         // Criar arquivos Venda
+        ServicosVenda.CriarArquivoVenda();
         ServicosVenda.CriarArquivoItensVenda();
     }
+    public void GravarTodosArquivos()
+    {
+        // Gravar arquivos Cliente
+        ServicosCliente.GravarArquivoCliente();
+        ServicosCliente.GravarArquivoBloqueado();
 
+        // Gravar arquivos Fornecedor
+        ServicosFornecedor.GravarArquivoFornecedor();
+        ServicosFornecedor.GravarArquivoFornecedorBloqueado();
+
+        // Gravar arquivos Compra
+        ServicosCompra.GravarArquivoCompra();
+        ServicosCompra.GravarArquivoItemCompra();
+
+        // Gravar arquivos Medicamento
+        ServicosMedicamento.GravarArquivoMedicamento();
+
+        // Gravar aquivos Principio Ativo
+        ServicosPrincipioAtivo.GravarArquivoPrincipioAtivo();
+
+        // Gravar arquivos Producao
+        ServicosProducao.GravarArquivoProducao();
+        ServicosProducao.GravarArquivoItemProducao();
+
+        // Gravar arquivos Venda
+        ServicosVenda.GravarArquivoVenda();
+        ServicosVenda.GravarArquivoItemVenda();
+    }
 
 }
