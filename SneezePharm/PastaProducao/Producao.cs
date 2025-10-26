@@ -46,7 +46,7 @@ namespace SneezePharm.PastaProducao
         {
             return $"ID: {Id:D5}" +
                 $"\nData de Produção: {DataProducao}" +
-                // $"\nMedicamento: {this.CDB}" +                    // Make this show the medicine name and not just bar code
+                $"\nMedicamento Código: {this.CDB}" +
                 $"\nQuantidade: {Quantidade}";
         }
 

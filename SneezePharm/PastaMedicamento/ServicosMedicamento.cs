@@ -105,9 +105,8 @@ namespace SneezePharm.PastaMedicamento
 
             Console.WriteLine("\nRegistro adicionado com sucesso: ");
             Console.WriteLine(novoMed.ToString());
-
-            GravarArquivoMedicamento();
         }
+
         public void LocalizarMedicamento()
         {
             Console.WriteLine("Digite o codigo de barras do medicamento: ");
@@ -186,8 +185,6 @@ namespace SneezePharm.PastaMedicamento
 
                 Console.WriteLine("\nAlteração realizada com sucesso");
                 Console.WriteLine(achado.ToString());
-
-                GravarArquivoMedicamento();
             }
             else
             {
