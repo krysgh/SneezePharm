@@ -46,7 +46,7 @@ namespace SneezePharm.Menu
                         producao.AlterarProducao();
                         break;
                     case 4:
-                        producao.ImprimirProducoes(principios);
+                        producao.ImprimirProducoes(medicamentos, principios);
                         break;
                     case 5:
                         Console.WriteLine("Voltando ao menu principal...");

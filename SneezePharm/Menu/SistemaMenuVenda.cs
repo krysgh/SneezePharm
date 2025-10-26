@@ -22,6 +22,7 @@ namespace SneezePharm.Menu
                 "Cadastrar Venda",
                 "Localizar Venda",
                 "Imprimir Vendas",
+                "Gerar Relatório de Vendas",
                 "Voltar ao Menu Principal"
                 ];
         }
@@ -44,6 +45,9 @@ namespace SneezePharm.Menu
                         venda.ImprimirVendas();
                         break;
                     case 4:
+                        venda.GerarRelatorioVendas();
+                        break;
+                    case 5:
                         Console.WriteLine("Voltando ao menu principal...");
                         break;
                     default:
@@ -54,7 +58,7 @@ namespace SneezePharm.Menu
                 }
                 Console.ReadKey();
 
-            } while (Opcao != 4);
+            } while (Opcao != 5);
         }
     }
 }
