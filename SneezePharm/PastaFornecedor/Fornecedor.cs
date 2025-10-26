@@ -53,17 +53,28 @@ namespace SneezePharm.PastaFornecedor
         {
             if (Situacao == 'A')
             {
+                Console.WriteLine("Alterando situação para Inativo...");
                 Situacao = 'I';
             }
             else
             {
+                Console.WriteLine("Alterando situação para Ativo...");
                 Situacao = 'A';
             }
+        }
+
+        public void AlterarUltimoFornecimento()
+        {
+            UltimoFornecimento = DateOnly.FromDateTime(DateTime.Now);
         }
 
         // Valida CNPJ por tamanho, por dígito verificador, e se tiver todos os números iguais
         public static bool ValidarCNPJ(string cnpj)
         {
+            if (!cnpj.All(char.IsDigit))
+            {
+                return false;
+            }
 
             int[] cnpjNumeros = cnpj.ToCharArray().Select(c => (int)char.GetNumericValue(c)).ToArray();
             if (cnpjNumeros.Length != 14)
@@ -118,6 +129,33 @@ namespace SneezePharm.PastaFornecedor
             {
                 return true;
             }
+        }
+
+        // Valida razão social, retorna true se não for vazio e não possuir símbolos; senão, retorna false
+        public static bool ValidarRazaoSocial(string razaoSocial)
+        {
+            if (string.IsNullOrEmpty(razaoSocial))
+                return false;
+            string caracteres = "&%#/\\'\"()*,!@";
+            foreach (char c in razaoSocial)
+            {
+                if (char.IsSymbol(c) || caracteres.ToCharArray().Contains(c))
+                    return false;
+            }
+            return true;
+        }
+
+        // Valida pais, retorna true se todos os caracteres forem letras ou letras e espaços; senão, retorna false
+        public static bool ValidarPais(string pais)
+        {
+            if (string.IsNullOrEmpty(pais))
+                return false;
+            foreach (char c in pais)
+            {
+                if (!char.IsLetter(c) && c != ' ')
+                    return false;
+            }
+            return true;
         }
 
         public override string ToString()

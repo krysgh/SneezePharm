@@ -1,6 +1,7 @@
 ﻿using SneezePharm.Menu;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,51 +32,52 @@ namespace SneezePharm.PastaFornecedor
 
         public void IncluirFornecedor()
         {
-            string padrao = @"\D";
-
-            Console.Write("Insera o cnpj da empresa fornecedor: ");
-            if (!decimal.TryParse(Console.ReadLine() ?? "".Replace(padrao, ""), out var cnpj))
-            {
-                Console.WriteLine("Erro. Insira um CNPJ valido");
-                Console.Write("Insera o cnpj da empresa fornecedor: ");
-                while(!decimal.TryParse(Console.ReadLine() ?? "".Replace(padrao, ""), out cnpj))
-                {
-                    Console.WriteLine("Erro. Insira um CNPJ valido");
-                    Console.Write("Insera o cnpj da empresa fornecedor: ");
-                }
-            }
-
-            if (!Fornecedor.ValidarCNPJ(cnpj.ToString().PadLeft(14, '0')))
+            Console.Write("Insere o cnpj da empresa fornecedor (apenas números): ");
+            string cnpj = Console.ReadLine() ?? "";
+            if (!Fornecedor.ValidarCNPJ(cnpj))
             {
                 Console.WriteLine("CNPJ inválido! Retornando para menu...");
                 return;
 
             }
-            if (LocalizarFornecedor(cnpj.ToString().PadLeft(14, '0')) is not null)
+            if (LocalizarFornecedor(cnpj) is not null)
             {
                 Console.WriteLine("CNPJ já cadastrada! Retornando para menu...");
                 return;
             }
 
-            Console.Write("Insera a razão social da empresa: ");
+            Console.Write("Insere a razão social da empresa: ");
             string razaoSocial = Console.ReadLine() ?? "";
+            razaoSocial = razaoSocial.Trim();
+            while (!Fornecedor.ValidarRazaoSocial(razaoSocial))
+            {
+                Console.WriteLine("Texto contem caracteres inválidas! Tente novamente.");
+                razaoSocial = Console.ReadLine() ?? "";
+            }
             if (razaoSocial.Length > 50)
             {
                 razaoSocial = razaoSocial.Substring(0, 50);
             }
 
-            Console.Write("Insera o país que a empresa está localizada: ");
+            Console.Write("Insere o país que a empresa está localizada: ");
             string pais = Console.ReadLine() ?? "";
+            pais = pais.Trim();
+            while (!Fornecedor.ValidarPais(pais))
+            {
+                Console.WriteLine("Texto contem caracteres diferentes de letras e espaços." +
+                                "\nTente novamente.");
+                pais = Console.ReadLine() ?? "";
+            }
             if (pais.Length > 20)
             {
                 pais = pais.Substring(0, 20);
             }
 
+            DateOnly dataAbertura;
             Console.Write("Insere a data de abertura da empresa (formato ddMMyyyy): ");
-            if (!DateOnly.TryParseExact(Console.ReadLine(), "ddMMyyyy", out var dataAbertura))
+            while (!DateOnly.TryParseExact(Console.ReadLine(), "ddMMyyyy", out dataAbertura))
             {
-                Console.WriteLine("Data inválida! Cancelando operação...");
-                return;
+                Console.WriteLine("Data inválida! Tente novamente.");
             }
             if (!Fornecedor.ValidarDataAbertura(dataAbertura))
             {
@@ -83,11 +85,11 @@ namespace SneezePharm.PastaFornecedor
                 return;
             }
 
+            DateOnly dataFornecimento;
             Console.Write("Insere a data do último fornecimento (formato ddMMyyyy): ");
-            if (!DateOnly.TryParseExact(Console.ReadLine(), "ddMMyyyy", out var dataFornecimento))
+            while (!DateOnly.TryParseExact(Console.ReadLine(), "ddMMyyyy", out dataFornecimento))
             {
-                Console.WriteLine("Data inválida! Cancelando operação.");
-                return;
+                Console.WriteLine("Data inválida! Tente novamente.");
             }
             if (dataFornecimento > DateOnly.FromDateTime(DateTime.Now))
             {
@@ -95,7 +97,7 @@ namespace SneezePharm.PastaFornecedor
                 return;
             }
 
-            Fornecedores.Add(new(cnpj.ToString(), razaoSocial, pais, dataAbertura, dataFornecimento));
+            Fornecedores.Add(new(cnpj, razaoSocial, pais, dataAbertura, dataFornecimento));
         }
 
         public Fornecedor? LocalizarFornecedor(string cnpj)
@@ -103,25 +105,15 @@ namespace SneezePharm.PastaFornecedor
             return Fornecedores.Find(f => f.Cnpj == cnpj);
         }
 
-        public void ImprimirFornecedorLocalizado()
+        public bool VerificarFornecedorBloqueado(string cnpj) 
         {
-            Console.WriteLine("Insere o CNPJ do fornecedor: ");
-            string cnpj = Console.ReadLine();
-            var fornecedor = LocalizarFornecedor(cnpj);
-            if (fornecedor is null)
-            {
-                Console.WriteLine("\nCNPJ não encontrado.");
-            }
-            else
-            {
-                Console.WriteLine("\n\tFornecedor\n" + fornecedor);
-            }
+            return FornecedoresBloqueados.Contains(cnpj);
         }
 
         public void AlterarFornecedor()
         {
             Console.WriteLine("Insere o CNPJ do fornecedor: ");
-            string cnpj = Console.ReadLine();
+            string cnpj = Console.ReadLine()!;
             var fornecedor = LocalizarFornecedor(cnpj);
             if (fornecedor is not null)
             {
@@ -143,6 +135,21 @@ namespace SneezePharm.PastaFornecedor
             }
         }
 
+        public void ImprimirFornecedorLocalizado()
+        {
+            Console.WriteLine("Insere o CNPJ do fornecedor: ");
+            string cnpj = Console.ReadLine();
+            var fornecedor = LocalizarFornecedor(cnpj);
+            if (fornecedor is null)
+            {
+                Console.WriteLine("\nCNPJ não encontrado.");
+            }
+            else
+            {
+                Console.WriteLine("\n\tFornecedor\n" + fornecedor);
+            }
+        }
+
         public void ImprimirFornecedores()
         {
             Console.WriteLine("-=-=- Lista de Fornecedores -=-=-");
@@ -153,6 +160,19 @@ namespace SneezePharm.PastaFornecedor
             foreach (var fornecedor in Fornecedores)
             {
                 Console.WriteLine(fornecedor + "\n");
+            }
+        }
+
+        public void ImprimirFornecedoresBloqueados()
+        {
+            Console.WriteLine("-=-=- Lista de Fornecedores Bloqueados -=-=-");
+            if (FornecedoresBloqueados.Count == 0)
+            {
+                Console.WriteLine("Nenhum fornecedor bloqueado.");
+            }
+            foreach (var cnpj in FornecedoresBloqueados)
+            {
+                Console.WriteLine(LocalizarFornecedor(cnpj));
             }
         }
 
@@ -221,19 +241,6 @@ namespace SneezePharm.PastaFornecedor
             }
         }
 
-        public void ImprimirFornecedoresBloqueados()
-        {
-            Console.WriteLine("-=-=- Lista de Fornecedores Bloqueados -=-=-");
-            if (FornecedoresBloqueados.Count == 0)
-            {
-                Console.WriteLine("Nenhum fornecedor bloqueado.");
-            }
-            foreach (var cnpj in FornecedoresBloqueados)
-            {
-                Console.WriteLine(LocalizarFornecedor(cnpj));
-            }
-        }
-
         public string CriarArquivosFornecedor()
         {
             string diretorio = @"C:\SneezePharma\Files";
@@ -269,6 +276,7 @@ namespace SneezePharm.PastaFornecedor
             }
             return diretorioFornecedor;
         }
+
         public List<Fornecedor> LerArquivoFornecedor()
         {
             StreamReader reader = new(CriarArquivosFornecedor());
