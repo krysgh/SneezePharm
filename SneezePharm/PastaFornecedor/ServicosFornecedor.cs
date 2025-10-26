@@ -30,7 +30,7 @@ namespace SneezePharm.PastaFornecedor
         public void IncluirFornecedor()
         {
             Console.Write("Insere o cnpj da empresa fornecedor: ");
-            string cnpj = Console.ReadLine();
+            string cnpj = Console.ReadLine() ?? "";
             if (!Fornecedor.ValidarCNPJ(cnpj))
             {
                 Console.WriteLine("CNPJ inválido! Retornando para menu...");
@@ -44,24 +44,37 @@ namespace SneezePharm.PastaFornecedor
             }
 
             Console.Write("Insere a razão social da empresa: ");
-            string razaoSocial = Console.ReadLine();
+            string razaoSocial = Console.ReadLine() ?? ("Empresa" + cnpj);
+            razaoSocial = razaoSocial.Trim();
+            while (!Fornecedor.ValidarRazaoSocial(razaoSocial))
+            {
+                Console.WriteLine("Texto contem caracteres inválidas! Tente novamente.");
+                razaoSocial = Console.ReadLine() ?? ("Empresa" + cnpj);
+            }
             if (razaoSocial.Length > 50)
             {
                 razaoSocial = razaoSocial.Substring(0, 50);
             }
 
             Console.Write("Insere o país que a empresa está localizada: ");
-            string pais = Console.ReadLine();
+            string pais = Console.ReadLine() ?? "Brasil";
+            pais = pais.Trim();
+            while (!Fornecedor.ValidarPais(pais))
+            {
+                Console.WriteLine("Texto contem caracteres diferentes de letras e espaços." +
+                                "\nTente novamente.");
+                pais = Console.ReadLine() ?? "Brasil";
+            }
             if (pais.Length > 20)
             {
                 pais = pais.Substring(0, 20);
             }
 
+            DateOnly dataAbertura;
             Console.Write("Insere a data de abertura da empresa (formato ddMMyyyy): ");
-            if (!DateOnly.TryParseExact(Console.ReadLine(), "ddMMyyyy", out var dataAbertura))
+            while (!DateOnly.TryParseExact(Console.ReadLine(), "ddMMyyyy", out dataAbertura))
             {
-                Console.WriteLine("Data inválida! Cancelando operação...");
-                return;
+                Console.WriteLine("Data inválida! Tente novamente.");
             }
             if (!Fornecedor.ValidarDataAbertura(dataAbertura))
             {
@@ -69,11 +82,11 @@ namespace SneezePharm.PastaFornecedor
                 return;
             }
 
+            DateOnly dataFornecimento;
             Console.Write("Insere a data do último fornecimento (formato ddMMyyyy): ");
-            if (!DateOnly.TryParseExact(Console.ReadLine(), "ddMMyyyy", out var dataFornecimento))
+            while (!DateOnly.TryParseExact(Console.ReadLine(), "ddMMyyyy", out dataFornecimento))
             {
-                Console.WriteLine("Data inválida! Cancelando operação.");
-                return;
+                Console.WriteLine("Data inválida! Tente novamente.");
             }
             if (dataFornecimento > DateOnly.FromDateTime(DateTime.Now))
             {

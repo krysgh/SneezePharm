@@ -63,9 +63,9 @@ namespace SneezePharm.PastaFornecedor
             }
         }
 
-        public void AlterarUltimoFornecimento(DateOnly data)
+        public void AlterarUltimoFornecimento()
         {
-            UltimoFornecimento = data;
+            UltimoFornecimento = DateOnly.FromDateTime(DateTime.Now);
         }
 
         // Valida CNPJ por tamanho, por dígito verificador, e se tiver todos os números iguais
@@ -129,6 +129,32 @@ namespace SneezePharm.PastaFornecedor
             {
                 return true;
             }
+        }
+
+        // Valida razão social, retorna true se não for vazio e não possuir símbolos; senão, retorna false
+        public static bool ValidarRazaoSocial(string razaoSocial)
+        {
+            if (string.IsNullOrEmpty(razaoSocial))
+                return false;
+            foreach (char c in razaoSocial)
+            {
+                if (char.IsSymbol(c))
+                    return false;
+            }
+            return true;
+        }
+
+        // Valida pais, retorna true se todos os caracteres forem letras ou letras e espaços; senão, retorna false
+        public static bool ValidarPais(string pais)
+        {
+            if (string.IsNullOrEmpty(pais))
+                return false;
+            foreach (char c in pais)
+            {
+                if (!char.IsLetter(c) && c != ' ')
+                    return false;
+            }
+            return true;
         }
 
         public override string ToString()
