@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,8 +9,8 @@ namespace SneezePharm.PastaFornecedor
 {
     public class ServicosFornecedor
     {
-        public List<Fornecedor> Fornecedores { get; private set; } = [];
-        public List<string> FornecedoresBloqueados { get; private set; } = [];
+        public List<Fornecedor> Fornecedores { get; private set; }
+        public List<string> FornecedoresBloqueados { get; private set; }
 
         public ServicosFornecedor()
         {
@@ -88,25 +89,15 @@ namespace SneezePharm.PastaFornecedor
             return Fornecedores.Find(f => f.Cnpj == cnpj);
         }
 
-        public void ImprimirFornecedorLocalizado()
+        public bool VerificarFornecedorBloqueado(string cnpj) 
         {
-            Console.WriteLine("Insere o CNPJ do fornecedor: ");
-            string cnpj = Console.ReadLine();
-            var fornecedor = LocalizarFornecedor(cnpj);
-            if (fornecedor is null)
-            {
-                Console.WriteLine("\nCNPJ não encontrado.");
-            }
-            else
-            {
-                Console.WriteLine("\n\tFornecedor\n" + fornecedor);
-            }
+            return FornecedoresBloqueados.Contains(cnpj);
         }
 
         public void AlterarFornecedor()
         {
             Console.WriteLine("Insere o CNPJ do fornecedor: ");
-            string cnpj = Console.ReadLine();
+            string cnpj = Console.ReadLine()!;
             var fornecedor = LocalizarFornecedor(cnpj);
             if (fornecedor is not null)
             {
@@ -128,6 +119,21 @@ namespace SneezePharm.PastaFornecedor
             }
         }
 
+        public void ImprimirFornecedorLocalizado()
+        {
+            Console.WriteLine("Insere o CNPJ do fornecedor: ");
+            string cnpj = Console.ReadLine();
+            var fornecedor = LocalizarFornecedor(cnpj);
+            if (fornecedor is null)
+            {
+                Console.WriteLine("\nCNPJ não encontrado.");
+            }
+            else
+            {
+                Console.WriteLine("\n\tFornecedor\n" + fornecedor);
+            }
+        }
+
         public void ImprimirFornecedores()
         {
             Console.WriteLine("-=-=- Lista de Fornecedores -=-=-");
@@ -138,6 +144,19 @@ namespace SneezePharm.PastaFornecedor
             foreach (var fornecedor in Fornecedores)
             {
                 Console.WriteLine(fornecedor + "\n");
+            }
+        }
+
+        public void ImprimirFornecedoresBloqueados()
+        {
+            Console.WriteLine("-=-=- Lista de Fornecedores Bloqueados -=-=-");
+            if (FornecedoresBloqueados.Count == 0)
+            {
+                Console.WriteLine("Nenhum fornecedor bloqueado.");
+            }
+            foreach (var cnpj in FornecedoresBloqueados)
+            {
+                Console.WriteLine(LocalizarFornecedor(cnpj));
             }
         }
 
@@ -206,19 +225,6 @@ namespace SneezePharm.PastaFornecedor
             }
         }
 
-        public void ImprimirFornecedoresBloqueados()
-        {
-            Console.WriteLine("-=-=- Lista de Fornecedores Bloqueados -=-=-");
-            if (FornecedoresBloqueados.Count == 0)
-            {
-                Console.WriteLine("Nenhum fornecedor bloqueado.");
-            }
-            foreach (var cnpj in FornecedoresBloqueados)
-            {
-                Console.WriteLine(LocalizarFornecedor(cnpj));
-            }
-        }
-
         public string CriarArquivosFornecedor()
         {
             string diretorio = @"C:\SneezePharma\Files";
@@ -254,6 +260,7 @@ namespace SneezePharm.PastaFornecedor
             }
             return diretorioFornecedor;
         }
+
         public List<Fornecedor> LerArquivoFornecedor()
         {
             StreamReader reader = new(CriarArquivosFornecedor());

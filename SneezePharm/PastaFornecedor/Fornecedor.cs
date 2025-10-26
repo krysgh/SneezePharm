@@ -53,12 +53,19 @@ namespace SneezePharm.PastaFornecedor
         {
             if (Situacao == 'A')
             {
+                Console.WriteLine("Alterando situação para Inativo...");
                 Situacao = 'I';
             }
             else
             {
+                Console.WriteLine("Alterando situação para Ativo...");
                 Situacao = 'A';
             }
+        }
+
+        public void AlterarUltimoFornecimento(DateOnly data)
+        {
+            UltimoFornecimento = data;
         }
 
         // Valida CNPJ por tamanho, por dígito verificador, e se tiver todos os números iguais
