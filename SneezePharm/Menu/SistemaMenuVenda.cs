@@ -19,7 +19,6 @@ namespace SneezePharm.Menu
             Opcoes = [
                 "Cadastrar Venda",
                 "Localizar Venda",
-                "Alterar Venda",
                 "Imprimir Vendas",
                 "Voltar ao Menu Principal"
                 ];
@@ -40,12 +39,9 @@ namespace SneezePharm.Menu
                         Console.WriteLine("Localizar Venda...");
                         break;
                     case 3:
-                        Console.WriteLine("Alterar Venda...");
-                        break;
-                    case 4:
                         Console.WriteLine("Imprimir Vendas...");
                         break;
-                    case 5:
+                    case 4:
                         Console.WriteLine("Voltando ao menu principal...");
                         break;
                     default:
@@ -56,7 +52,7 @@ namespace SneezePharm.Menu
                 }
                 Console.ReadKey();
 
-            } while (Opcao != 5);
+            } while (Opcao != 4);
         }
     }
 }
