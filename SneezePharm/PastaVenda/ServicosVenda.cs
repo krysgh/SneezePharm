@@ -1,4 +1,6 @@
-﻿using SneezePharm.PastaCliente;
+﻿using SneezePharm.Menu;
+using SneezePharm.PastaCliente;
+using SneezePharm.PastaCompra;
 using SneezePharm.PastaMedicamento;
 using System;
 using System.Collections.Generic;
@@ -22,6 +24,9 @@ namespace SneezePharm.PastaVenda
 
         private List<Medicamento> _medicamento { get; set; } = [];
 
+        public SistemaMenuVenda Menu { get; private set; }
+        public SistemaMenuItemVenda MenuItem { get; private set; }
+
         #endregion
 
         #region Construtor
@@ -31,6 +36,8 @@ namespace SneezePharm.PastaVenda
         {
             Vendas = LerArquivoVenda();
             ItensVenda = LerArquivoItemVenda();
+            Menu = new SistemaMenuVenda();
+            MenuItem = new SistemaMenuItemVenda();
         }
         #endregion
 
@@ -135,28 +142,28 @@ namespace SneezePharm.PastaVenda
 
         }
 
-        public void GravarArquivoVenda(List<Venda> vendas)
+        public void GravarArquivoVenda()
         {
             var caminho = CriarArquivoVenda();
 
             StreamWriter writer = new(caminho);
             using (writer)
             {
-                foreach (var venda in vendas)
+                foreach (var venda in Vendas)
                 {
                     writer.WriteLine(venda.ToFile());
                 }
                 writer.Close();
             }
         }
-        public void GravarArquivoItemVenda(List<ItemVenda> itensVenda)
+        public void GravarArquivoItemVenda()
         {
             var caminho = CriarArquivoItensVenda();
 
             StreamWriter writer = new(caminho);
             using (writer)
             {
-                foreach (var item in itensVenda)
+                foreach (var item in ItensVenda)
                 {
                     writer.WriteLine(item.ToFile());
                 }
