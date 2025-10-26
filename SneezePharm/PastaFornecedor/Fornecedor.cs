@@ -71,7 +71,7 @@ namespace SneezePharm.PastaFornecedor
         // Valida CNPJ por tamanho, por dígito verificador, e se tiver todos os números iguais
         public static bool ValidarCNPJ(string cnpj)
         {
-            if (cnpj.All(char.IsDigit))
+            if (!cnpj.All(char.IsDigit))
             {
                 return false;
             }
@@ -136,9 +136,10 @@ namespace SneezePharm.PastaFornecedor
         {
             if (string.IsNullOrEmpty(razaoSocial))
                 return false;
+            string caracteres = "&%#/\\'\"()*,!@";
             foreach (char c in razaoSocial)
             {
-                if (char.IsSymbol(c))
+                if (char.IsSymbol(c) || caracteres.ToCharArray().Contains(c))
                     return false;
             }
             return true;
