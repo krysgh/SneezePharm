@@ -8,12 +8,14 @@ namespace SneezePharm.PastaProducao
 {
     public class ItemProducao
     {
+        public int Id { get; private set; }
         public int IdProducao { get; private set; }
         public string Principio { get; private set; }
         public int QuantidadePrincipio { get; private set; }
 
-        public ItemProducao(int idProducao, string principio, int quantidadePrincipio)
+        public ItemProducao(int id, int idProducao, string principio, int quantidadePrincipio)
         {
+            Id = id;
             IdProducao = idProducao;
             Principio = principio;
             QuantidadePrincipio = quantidadePrincipio;
@@ -31,16 +33,18 @@ namespace SneezePharm.PastaProducao
 
         public string ToFile()
         {
+            string id = Id.ToString().PadLeft(5);
             string idProducao = IdProducao.ToString().PadLeft(5);
             string idPrincipio = Principio.ToString().PadLeft(6);
             string quantidadePrincipio = QuantidadePrincipio.ToString().PadLeft(4);
 
-            return $"{idProducao}{idPrincipio}{quantidadePrincipio}";
+            return $"{id}{idProducao}{idPrincipio}{quantidadePrincipio}";
         }
 
         public override string ToString()
         {
-            return $"\nId da Produção: {IdProducao.ToString().Trim()}\n\r" +
+            return $"\nId do Item: {Id.ToString().Trim()}\n\r" +
+                $"Id da Produção: {IdProducao.ToString().Trim()}\n\r" +
                 $"Princípio: {Principio.ToString().Trim()}\n\r" +
                 $"Quantidade de Princípio: {QuantidadePrincipio.ToString().Trim()}\n\r";
         }

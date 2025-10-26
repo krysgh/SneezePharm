@@ -1,4 +1,6 @@
-﻿using SneezePharm.PastaProducao;
+﻿using SneezePharm.PastaMedicamento;
+using SneezePharm.PastaPrincipioAtivo;
+using SneezePharm.PastaProducao;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +28,7 @@ namespace SneezePharm.Menu
 
         }
 
-        public void MenuItemProducao(ServicosProducao itemProducao)
+        public void MenuItemProducao(ServicosProducao itemProducao, List<Medicamento> medicamentos, List<PrincipioAtivo> principios)
         {
             do
             {
@@ -35,7 +37,7 @@ namespace SneezePharm.Menu
                 switch (Opcao)
                 {
                     case 1:
-                        itemProducao.IncluirProducao();
+                        itemProducao.IncluirProducao(medicamentos, principios);
                         break;
                     case 2:
                         itemProducao.LocalizarItemProducao();
