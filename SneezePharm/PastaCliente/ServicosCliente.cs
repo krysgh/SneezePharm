@@ -129,7 +129,7 @@ namespace SneezePharm.PastaCliente
         }
 
         // Busca
-        public Cliente BuscarCliente(string cpf)
+        public Cliente? BuscarCliente(string cpf)
         {
             return Clientes.Find(c => c.Cpf == cpf);
         }
@@ -474,6 +474,7 @@ namespace SneezePharm.PastaCliente
         // Armazenar clientes
         public void GravarArquivoCliente()
         {
+            
             var caminho = CriarArquivosCliente();
 
             StreamWriter sw = new StreamWriter(caminho);
