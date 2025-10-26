@@ -1,5 +1,4 @@
-﻿using SneezePharm.PastaFornecedor;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,7 +37,7 @@ namespace SneezePharm.PastaVenda
             DateOnly dataVenda,
             string cpf,
             decimal valorTotal
-            ):
+            ) :
             this(
                 id,
                 cpf,
