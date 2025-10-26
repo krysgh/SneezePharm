@@ -31,6 +31,7 @@ namespace SneezePharm.Menu
                 }
             }
             Console.WriteLine();
+
             return opcao;
         }
     }

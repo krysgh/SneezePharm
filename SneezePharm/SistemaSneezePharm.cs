@@ -8,7 +8,7 @@ using SneezePharm.PastaVenda;
 
 namespace SneezePharm;
 
-internal class SistemaSneezePharm
+public class SistemaSneezePharm
 {
     public ServicosCliente ServicosCliente { get; set; } = new ServicosCliente();
     public ServicosFornecedor ServicosFornecedor { get; set; } = new ServicosFornecedor();
@@ -53,7 +53,7 @@ internal class SistemaSneezePharm
         ServicosProducao.CriarArquivosItemProducao();
 
         // Criar arquivos Venda
-        ServicosVenda.CriarArquivosItensVenda();
+        ServicosVenda.CriarArquivoItensVenda();
     }
 
 

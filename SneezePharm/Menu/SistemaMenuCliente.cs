@@ -70,7 +70,6 @@ namespace SneezePharm.Menu
                         Console.ResetColor();
                         break;
                 }
-
                 Console.ReadKey();
 
             } while (Opcao != 8);
