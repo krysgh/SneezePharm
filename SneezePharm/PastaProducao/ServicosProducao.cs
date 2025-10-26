@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SneezePharm.Menu;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,11 +11,16 @@ namespace SneezePharm.PastaProducao
     {
         public List<Producao> Producoes { get; set; } = [];
         public List<ItemProducao> ItensProducao { get; set; } = [];
+        public SistemaMenuProducao Menu { get; private set; }
+        public SistemaMenuItemProducao MenuItem { get; private set; }
+
 
         public ServicosProducao()
         {
             Producoes = LerArquivoProducao();
             ItensProducao = LerArquivoItemProducao();
+            Menu = new SistemaMenuProducao();
+            MenuItem = new SistemaMenuItemProducao();
         }
 
         public void IncluirProducao()
@@ -348,14 +354,14 @@ namespace SneezePharm.PastaProducao
             }
 
         }
-        public void GravarArquivoItemProducao(List<ItemProducao> itensProducao)
+        public void GravarArquivoItemProducao()
         {
             var caminho = CriarArquivosItemProducao();
 
             StreamWriter writer = new(caminho);
             using (writer)
             {
-                foreach (var item in itensProducao)
+                foreach (var item in ItensProducao)
                 {
                     writer.WriteLine(item.ToFile());
                 }

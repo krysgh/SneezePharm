@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SneezePharm.Menu;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,11 +11,13 @@ namespace SneezePharm.PastaFornecedor
     {
         public List<Fornecedor> Fornecedores { get; private set; } = [];
         public List<string> FornecedoresBloqueados { get; private set; } = [];
+        public SistemaMenuFornecedor Menu { get; private set; }
 
         public ServicosFornecedor()
         {
             Fornecedores = LerArquivoFornecedor();
             FornecedoresBloqueados = LerArquivoFornecedorBloqueado();
+            Menu = new SistemaMenuFornecedor();
         }
 
         public void SetFornecedores(List<Fornecedor> fornecedores)
@@ -28,29 +31,41 @@ namespace SneezePharm.PastaFornecedor
 
         public void IncluirFornecedor()
         {
-            Console.Write("Insere o cnpj da empresa fornecedor: ");
-            string cnpj = Console.ReadLine();
-            if (!Fornecedor.ValidarCNPJ(cnpj))
+            string padrao = @"\D";
+
+            Console.Write("Insera o cnpj da empresa fornecedor: ");
+            if (!decimal.TryParse(Console.ReadLine() ?? "".Replace(padrao, ""), out var cnpj))
+            {
+                Console.WriteLine("Erro. Insira um CNPJ valido");
+                Console.Write("Insera o cnpj da empresa fornecedor: ");
+                while(!decimal.TryParse(Console.ReadLine() ?? "".Replace(padrao, ""), out cnpj))
+                {
+                    Console.WriteLine("Erro. Insira um CNPJ valido");
+                    Console.Write("Insera o cnpj da empresa fornecedor: ");
+                }
+            }
+
+            if (!Fornecedor.ValidarCNPJ(cnpj.ToString().PadLeft(14, '0')))
             {
                 Console.WriteLine("CNPJ inválido! Retornando para menu...");
                 return;
 
             }
-            if (LocalizarFornecedor(cnpj) is not null)
+            if (LocalizarFornecedor(cnpj.ToString().PadLeft(14, '0')) is not null)
             {
                 Console.WriteLine("CNPJ já cadastrada! Retornando para menu...");
                 return;
             }
 
-            Console.Write("Insere a razão social da empresa: ");
-            string razaoSocial = Console.ReadLine();
+            Console.Write("Insera a razão social da empresa: ");
+            string razaoSocial = Console.ReadLine() ?? "";
             if (razaoSocial.Length > 50)
             {
                 razaoSocial = razaoSocial.Substring(0, 50);
             }
 
-            Console.Write("Insere o país que a empresa está localizada: ");
-            string pais = Console.ReadLine();
+            Console.Write("Insera o país que a empresa está localizada: ");
+            string pais = Console.ReadLine() ?? "";
             if (pais.Length > 20)
             {
                 pais = pais.Substring(0, 20);
@@ -80,7 +95,7 @@ namespace SneezePharm.PastaFornecedor
                 return;
             }
 
-            Fornecedores.Add(new(cnpj, razaoSocial, pais, dataAbertura, dataFornecimento));
+            Fornecedores.Add(new(cnpj.ToString(), razaoSocial, pais, dataAbertura, dataFornecimento));
         }
 
         public Fornecedor? LocalizarFornecedor(string cnpj)

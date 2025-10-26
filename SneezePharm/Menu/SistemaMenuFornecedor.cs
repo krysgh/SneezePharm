@@ -1,4 +1,4 @@
-﻿using SneezePharm.PastaCliente;
+﻿using SneezePharm.PastaFornecedor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,59 +7,56 @@ using System.Threading.Tasks;
 
 namespace SneezePharm.Menu
 {
-    public class SistemaMenuCliente
+    public class SistemaMenuFornecedor
     {
         public string Titulo { get; private set; }
         public List<string> Opcoes { get; private set; }
         public int Opcao { get; private set; }
 
-        public SistemaMenuCliente()
+        public SistemaMenuFornecedor()
         {
-            Titulo = "=== Menu Cliente ===";
+            Titulo = "=== Menu Fornecedor ===";
             Opcoes = [
-                "Cadastrar Cliente",
-                "Localizar Cliente",
-                "Alterar Cliente",
-                "Imprimir Clientes",
-                "Bloquear Cliente",
-                "Desbloquear Cliente",
-                "Imprimir Clientes Bloquedos",
+                "Cadastrar Fornecedor",
+                "Localizar Fornecedor",
+                "Alterar Fornecedor",
+                "Imprimir Fornecedores",
+                "Bloquear Fornecedor",
+                "Desbloquear Fornecedor",
+                "Imprimir Fornecedores Bloqueados",
                 "Voltar ao Menu Principal"
                 ];
-
         }
 
-        public void MenuCliente(ServicosCliente cliente)
-        { 
+        public void MenuFornecedor(ServicosFornecedor fornecedor)
+        {
             do
             {
                 Console.Clear();
                 Opcao = Menu.Menus(Titulo, Opcoes);
+
                 switch (Opcao)
                 {
                     case 1:
-                        cliente.IncluirCliente();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write("\nCliente Adicionado com sucesso!");
-                        Console.ResetColor();
+                        fornecedor.IncluirFornecedor();
                         break;
                     case 2:
-                        cliente.LocalizarCliente();
+                        fornecedor.ImprimirFornecedorLocalizado();
                         break;
                     case 3:
-                        cliente.AlterarCliente();
+                        fornecedor.AlterarFornecedor();
                         break;
                     case 4:
-                        cliente.ImprimirClientes();
+                        fornecedor.ImprimirFornecedores();
                         break;
                     case 5:
-                        cliente.BloquearCliente();
+                        fornecedor.BloquearFornecedor();
                         break;
                     case 6:
-                        cliente.DesbloquearCliente();
+                        fornecedor.DesbloquearFornecedor();
                         break;
                     case 7:
-                        cliente.ImprimirClienteBloqueado();
+                        fornecedor.ImprimirFornecedoresBloqueados();
                         break;
                     case 8:
                         Console.WriteLine("Voltando ao menu principal...");
@@ -74,6 +71,5 @@ namespace SneezePharm.Menu
 
             } while (Opcao != 8);
         }
-
     }
 }

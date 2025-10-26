@@ -1,4 +1,5 @@
-﻿using SneezePharm.PastaCliente;
+﻿using SneezePharm.Menu;
+using SneezePharm.PastaCliente;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,10 @@ namespace SneezePharm.PastaVenda
         #region Propriedades
 
         public List<Venda> Vendas { get; private set; } = [];
-
-        public List<ItemVenda> ItensVenda { get; set; } = [];
-
-        public ServicosCliente _cliente { get; set; }
+        public List<ItemVenda> ItensVenda { get; private set; } = [];
+        public ServicosCliente Cliente { get; private set; }
+        public SistemaMenuVenda Menu { get; private set; }        
+        public SistemaMenuItemVenda MenuItem { get; private set; }        
 
         #endregion
 
@@ -27,6 +28,8 @@ namespace SneezePharm.PastaVenda
         {
             Vendas = LerArquivoVenda();
             ItensVenda = LerArquivoItemVenda();
+            Menu = new SistemaMenuVenda();
+            MenuItem = new SistemaMenuItemVenda();
         }
         #endregion
 
@@ -131,28 +134,28 @@ namespace SneezePharm.PastaVenda
 
         }
 
-        public void GravarArquivoVenda(List<Venda> vendas)
+        public void GravarArquivoVenda()
         {
             var caminho = CriarArquivoVenda();
 
             StreamWriter writer = new(caminho);
             using (writer)
             {
-                foreach (var venda in vendas)
+                foreach (var venda in Vendas)
                 {
                     writer.WriteLine(venda.ToFile());
                 }
                 writer.Close();
             }
         }
-        public void GravarArquivoItemVenda(List<ItemVenda> itensVenda)
+        public void GravarArquivoItemVenda()
         {
             var caminho = CriarArquivoItensVenda();
 
             StreamWriter writer = new(caminho);
             using (writer)
             {
-                foreach (var item in itensVenda)
+                foreach (var item in ItensVenda)
                 {
                     writer.WriteLine(item.ToFile());
                 }
@@ -168,17 +171,7 @@ namespace SneezePharm.PastaVenda
         #endregion
 
 
-        #region MENU
-        public static int Display(string title, List<string> options)
-        {
-            Console.WriteLine(title);
-            for (int i = 0; i < options.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}. {options[i]}");
-            }
-            Console.Write("Escolha uma opção válida: ");
-            return int.Parse(Console.ReadLine() ?? "0");
-        }
+
 
         public List<string> OpcoesVenda = [
             "Incluir Venda",
@@ -193,8 +186,6 @@ namespace SneezePharm.PastaVenda
                 "Imprimir os Itens",
                 "Voltar ao Menu Principal"
             ];
-
-        #endregion
     }
 }
 
