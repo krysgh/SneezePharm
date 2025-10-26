@@ -6,7 +6,7 @@ using SneezePharm.PastaPrincipioAtivo;
 using SneezePharm.PastaProducao;
 using SneezePharm.PastaVenda;
 
-namespace SneezePharm.Menu;
+namespace SneezePharm;
 
 internal class SistemaSneezePharm
 {
@@ -55,4 +55,6 @@ internal class SistemaSneezePharm
         // Criar arquivos Venda
         ServicosVenda.CriarArquivosItensVenda();
     }
+
+
 }
