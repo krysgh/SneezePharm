@@ -46,7 +46,7 @@ namespace SneezePharm.Menu
                         compra.ImprimirCompras();
                         break;
                     case 4:
-                        MenuItem.MenuItemCompra(compra);
+                        MenuItem.MenuItemCompra(compra, fornecedores, principios);
                         break;
                     case 5:
                         Console.WriteLine("Voltando ao menu principal...");

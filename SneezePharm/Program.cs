@@ -1,5 +1,7 @@
-﻿using SneezePharm;
+﻿using System.Collections.Generic;
+using SneezePharm;
 using SneezePharm.Menu;
+using SneezePharm.PastaMedicamento;
 
 string diretorio = @"C:\SneezePharma\Files\";
 if (!Directory.Exists(diretorio))
