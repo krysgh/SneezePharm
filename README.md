@@ -30,7 +30,7 @@ Desenvolver um sistema que gerencie, de forma integrada, os processos de uma **f
 
 ### 🎯 Objetivos Específicos
 - 📋 Implementar cadastros de **Clientes, Fornecedores, Médicos** e **Princípios Ativos**.  
-- 🧾 Controlar a **compra e o estoque** dos princípios ativos.  
+- 🧾 Controlar a **compra** dos princípios ativos.  
 - ⚗️ Gerenciar a **manipulação de medicamentos** com base em receitas médicas.  
 - ✅ Garantir **validações, consistência de dados** e aplicação das **regras de negócio** em todas as operações.
 
@@ -87,9 +87,8 @@ bool Ativo
 ```
 Indicando se o registro está ativo ou inativo.
 
-#### 📦 Controle de Estoque e Limites  
+#### 📦 Controle de Limites  
 - Limites de quantidade por pedido de compra e manipulação.  
-- O sistema bloqueia ações caso o estoque seja insuficiente.
 
 #### ⏱️ Controle de Datas  
 Cada entidade possui:
