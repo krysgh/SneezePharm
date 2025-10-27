@@ -110,7 +110,7 @@ Para executar o projeto localmente:
 
 1. **Clone o repositório:**
    ```bash
-   git clone https://github.com/[USUARIO]/SneezePharma.git
+   git clone https://github.com/krysgh/SneezePharma.git
    ```
 
 2. **Abra a solução no Visual Studio ou VS Code:**
