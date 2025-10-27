@@ -172,7 +172,7 @@ namespace SneezePharm.PastaVenda
 
         #region CRUD
 
-        public void IncluirVenda(ServicosCliente clientes, List<Medicamento> medicamentos)
+        public void IncluirVenda(ServicosCliente clientes, List<Medicamento> medicamentos, List<Producao> producoes)
         {
             int id = 1;
             if (Vendas.Select(x => x.Id).Any())
@@ -210,7 +210,7 @@ namespace SneezePharm.PastaVenda
             do
             {
                 Console.WriteLine("Inclua um item:");
-                var item = IncluirItem(id, medicamentos);
+                var item = IncluirItem(id, medicamentos, producoes);
 
                 if (item == null)
                 {
@@ -243,7 +243,7 @@ namespace SneezePharm.PastaVenda
                 valorTotalItens += item;
 
             Vendas.Add(new(id, cliente.Cpf, valorTotalItens));
-            cliente.SetUltimaCompra(DateOnly.FromDateTime(DateTime.Now));
+            cliente.AlterarUltimaCompraCliente();
         }
         public void LocalizarVenda()
         {
@@ -290,7 +290,7 @@ namespace SneezePharm.PastaVenda
 
         #region CRUDITENS
 
-        private ItemVenda IncluirItem(int idVenda, List<Medicamento> medicamentos)
+        private ItemVenda IncluirItem(int idVenda, List<Medicamento> medicamentos, List<Producao> producoes)
         {
             string codigoDeBarras;
             do
@@ -310,6 +310,11 @@ namespace SneezePharm.PastaVenda
             if (medicamento.Situacao == 'I')
             {
                 Console.WriteLine("Medicamento Inativo");
+                return null;
+            }
+            if (!producoes.Any(p => p.CDB == codigoDeBarras))
+            {
+                Console.WriteLine("Medicamento não foi produzido ainda.");
                 return null;
             }
 
@@ -338,7 +343,7 @@ namespace SneezePharm.PastaVenda
                 }
             }
 
-
+            medicamento.AlterarUltimaVenda();
             return new ItemVenda(idVenda, medicamento.CDB, quantidade, medicamento.ValorVenda);
         }
         public void AlterarItemVenda(List<Medicamento> medicamentos)
@@ -535,6 +540,26 @@ namespace SneezePharm.PastaVenda
                 Console.WriteLine("\n" + v);
             }
         }
+
+        public void GerarRelatorioMaisVendido(List<Medicamento> medicamentos)
+        {
+
+            if (ItensVenda.Count == 0)
+            {
+                Console.WriteLine("\nLista de vendas vazia!\n");
+                return;
+            }
+
+            var maisVendido = ItensVenda.GroupBy(item => item.Medicamento).Select(grupo => new
+            {
+                CodigoDeBarras = grupo.Key,
+                QuantidadeVendida = grupo.Sum(i => i.Quantidade)
+            }).OrderByDescending(g => g.QuantidadeVendida).FirstOrDefault();
+
+            var medicamento = medicamentos.FirstOrDefault(m => m.CDB == maisVendido.CodigoDeBarras);
+
+            Console.WriteLine($"Medicamento mais vendido: {medicamento.Nome}");
+            Console.WriteLine($"Quantidade vendida: {maisVendido.QuantidadeVendida}");
+        }
     }
 }
-

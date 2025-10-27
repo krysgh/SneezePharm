@@ -33,6 +33,7 @@ namespace SneezePharm.PastaProducao
             Console.Write("Insere o código de barras do medicamento em produção: ");
             string cdb = Console.ReadLine()!;
             Medicamento medicamento = medicamentos.Find(m => m.CDB == cdb)!;
+            // Valida código de barras, se não for válido cancela a produção e volta para o menu anterior
             if (medicamento is null)
             {
                 Console.WriteLine("Não existe um medicamento com esse código de barras!\nCancelando operação...");
@@ -53,6 +54,7 @@ namespace SneezePharm.PastaProducao
                 Console.WriteLine("Quantidade inválida! A quantidade precisa ser entre 0 e 1000.");
             }
 
+            // Busca último id adicionado e tenta acrescentar em 1; se tiver nenhum objeto na lista ou der erro, declara id como 1
             int id;
             try
             {
@@ -63,6 +65,7 @@ namespace SneezePharm.PastaProducao
                 id = 1;
             }
 
+            // Se der erro na hora de incluir o primeiro item, cancela a produção
             if (!IncluirItemProducao(id, principios))
                 return;
 
@@ -78,6 +81,7 @@ namespace SneezePharm.PastaProducao
             this.Producoes.Add(new(id, cdb, quantidade));
         }
 
+        // Retorna null se o id não for encontrado na lista de produçôes; senão, retorna a produção
         private Producao? LocalizarProducao(int id)
         {
             return Producoes.Find(p => p.Id == id);
@@ -97,6 +101,7 @@ namespace SneezePharm.PastaProducao
                 Console.WriteLine($"Produção de {medicamentos.Find(m => m.CDB == producao.CDB)!.Nome}");
                 Console.WriteLine(producao);
                 var itens = ItensProducao.FindAll(i => i.IdProducao == id);
+                // Para cada item de produção, busca o id do princípio ativo para obter seu respectivo nome
                 foreach (var item in itens)
                 {
                     var principio = principios.Find(p => p.Id == item.Principio);
@@ -105,6 +110,7 @@ namespace SneezePharm.PastaProducao
             }
         }
 
+        // Altera a quantidade produzido de medicamento
         public void AlterarProducao()
         {
             Console.WriteLine("Insere o ID da produção: ");
@@ -150,6 +156,7 @@ namespace SneezePharm.PastaProducao
                 Console.WriteLine($"Produção de {medicamentos.Find(m => m.CDB == producao.CDB)!.Nome}");
                 Console.WriteLine(producao);
                 var itens = ItensProducao.FindAll(i => i.IdProducao == producao.Id);
+                // Para cada item de produção, busca o id do princípio ativo para obter seu respectivo nome
                 foreach (var item in itens)
                 {
                     var principio = principios.Find(p => p.Id == item.Principio);

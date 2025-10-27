@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SneezePharm.PastaProducao;
 
 namespace SneezePharm.Menu
 {
@@ -30,7 +31,7 @@ namespace SneezePharm.Menu
                 ];
         }
 
-        public void MenuVenda(ServicosVenda venda, ServicosCliente clientes, List<Medicamento> medicamentos)
+        public void MenuVenda(ServicosVenda venda, ServicosCliente clientes, ServicosMedicamento medicamentos, List<Producao> producoes)
         {
             do
             {
@@ -39,7 +40,7 @@ namespace SneezePharm.Menu
                 switch (Opcao)
                 {
                     case 1:
-                        venda.IncluirVenda(clientes, medicamentos);
+                        venda.IncluirVenda(clientes, medicamentos.Medicamentos, producoes);
                         break;
                     case 2:
                         venda.LocalizarVenda();
@@ -51,7 +52,7 @@ namespace SneezePharm.Menu
                         venda.GerarRelatorioVendas();
                         break;
                     case 5:
-                        MenuItem.MenuItemVenda(venda,clientes,medicamentos);
+                        MenuItem.MenuItemVenda(venda, medicamentos.Medicamentos);
                         break;
                     case 6:
                         Console.WriteLine("Voltando ao menu principal...");

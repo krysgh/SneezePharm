@@ -1,6 +1,4 @@
-﻿using SneezePharm.PastaCliente;
-using SneezePharm.PastaMedicamento;
-using SneezePharm.PastaPrincipioAtivo;
+﻿using SneezePharm.PastaMedicamento;
 using SneezePharm.PastaVenda;
 using System;
 using System.Collections.Generic;
@@ -20,15 +18,14 @@ namespace SneezePharm.Menu
         {
             Titulo = "=== Menu Item Venda ===";
             Opcoes =  [
-                "Cadastrar Item Venda",
-                "Localizar Item Venda",
-                "Alterar Item Venda",
-                "Imprimir Item Vendas",
+                "Localizar Item da Venda",
+                "Alterar Item da Venda",
+                "Imprimir Itens da Venda",
                 "Voltar ao Menu Principal"
                 ];
         }
 
-        public void MenuItemVenda(ServicosVenda itemVenda,ServicosCliente clientes, List<Medicamento> medicamentos )
+        public void MenuItemVenda(ServicosVenda itemVenda, List<Medicamento> medicamentos)
         {
             do
             {
@@ -37,18 +34,15 @@ namespace SneezePharm.Menu
                 switch (Opcao)
                 {
                     case 1:
-                        itemVenda.IncluirVenda(clientes, medicamentos);
+                        itemVenda.LocalizarItemVenda(medicamentos);
                         break;
                     case 2:
-                        itemVenda.LocalizarItemVenda(medicamentos);
-                        break; 
-                    case 3:
                         itemVenda.AlterarItemVenda(medicamentos);
                         break;
-                    case 4:
+                    case 3:
                         itemVenda.ImprimirItemVenda();
                         break;
-                    case 5:
+                    case 4:
                         Console.WriteLine("Voltando ao menu principal...");
                         break;
                     default:
@@ -59,7 +53,7 @@ namespace SneezePharm.Menu
                 }
                 Console.ReadKey();
 
-            } while (Opcao != 5);
+            } while (Opcao != 4);
         }
     }
 }

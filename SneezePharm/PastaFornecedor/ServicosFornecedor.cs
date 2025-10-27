@@ -21,19 +21,13 @@ namespace SneezePharm.PastaFornecedor
             Menu = new SistemaMenuFornecedor();
         }
 
-        public void SetFornecedores(List<Fornecedor> fornecedores)
-        {
-            Fornecedores = fornecedores;
-        }
-        public void SetFornecedoresBloqueados(List<string> fornecedoresBloqueados)
-        {
-            FornecedoresBloqueados = fornecedoresBloqueados;
-        }
 
+        #region Métodos CRUD
         public void IncluirFornecedor()
         {
             Console.Write("Insere o CNPJ da empresa fornecedor (apenas números): ");
             string cnpj = Console.ReadLine() ?? "";
+            // Valida CNPJ, se não for válido cancela o cadastro e volta para o menu anterior
             if (!Fornecedor.ValidarCNPJ(cnpj))
             {
                 Console.WriteLine("Retornando para menu...");
@@ -79,6 +73,7 @@ namespace SneezePharm.PastaFornecedor
             {
                 Console.WriteLine("Data inválida! Insira novamente.");
             }
+            // Se fornecedor não tiver pelo menos 2 anos de abertura, cancela cadastro de fornecedor
             if (!Fornecedor.ValidarDataAbertura(dataAbertura))
             {
                 Console.WriteLine("A empresa precisa ter pelo menos 2 anos de abertura! Cancelando operação...");
@@ -88,11 +83,13 @@ namespace SneezePharm.PastaFornecedor
             Fornecedores.Add(new(cnpj, razaoSocial, pais, dataAbertura));
         }
 
+        // Retorna null se o cnpj não está na lista de fornecedores; senão, retorna o fornecedor
         public Fornecedor? LocalizarFornecedor(string cnpj)
         {
             return Fornecedores.Find(f => f.Cnpj == cnpj);
         }
 
+        // Retorna true se fornecedor está bloqueado; caso contrário, retorna false
         public bool VerificarFornecedorBloqueado(string cnpj) 
         {
             return FornecedoresBloqueados.Contains(cnpj);
@@ -126,7 +123,7 @@ namespace SneezePharm.PastaFornecedor
         public void ImprimirFornecedorLocalizado()
         {
             Console.WriteLine("Insere o CNPJ do fornecedor: ");
-            string cnpj = Console.ReadLine();
+            string cnpj = Console.ReadLine() ?? "";
             var fornecedor = LocalizarFornecedor(cnpj);
             if (fornecedor is null)
             {
@@ -164,6 +161,7 @@ namespace SneezePharm.PastaFornecedor
             }
         }
 
+        // Adiciona CNPJ do fornecedor na lista dos bloqueados se CNPJ existir e tiver confirmação
         public void BloquearFornecedor()
         {
             Console.WriteLine("Insere o CNPJ do fornecedor: ");
@@ -197,6 +195,7 @@ namespace SneezePharm.PastaFornecedor
 
         }
 
+        // Remove CNPJ do fornecedor na lista dos bloqueados se CNPJ existir e tiver confirmação
         public void DesbloquearFornecedor()
         {
             Console.WriteLine("Insere o CNPJ do fornecedor: ");
@@ -228,7 +227,9 @@ namespace SneezePharm.PastaFornecedor
                 Console.WriteLine("\nCNPJ não encontrado.");
             }
         }
+        #endregion
 
+        #region Métodos Arquivo
         public string CriarArquivosFornecedor()
         {
             string diretorio = @"C:\SneezePharma\Files";
@@ -349,5 +350,6 @@ namespace SneezePharm.PastaFornecedor
                 sw.Close();
             }
         }
+        #endregion
     }
 }
