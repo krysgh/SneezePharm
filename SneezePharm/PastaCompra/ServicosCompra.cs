@@ -1,11 +1,13 @@
-﻿using System;
+﻿using SneezePharm.Menu;
+using SneezePharm.PastaCliente;
+using SneezePharm.PastaFornecedor;
+using SneezePharm.PastaPrincipioAtivo;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SneezePharm.PastaFornecedor;
-using SneezePharm.PastaPrincipioAtivo;
 
 namespace SneezePharm.PastaCompra
 {
@@ -13,13 +15,16 @@ namespace SneezePharm.PastaCompra
     {
         public List<Compra> Compras { get; private set; } = [];
         public List<ItemCompra> ItensCompra { get; private set; } = [];
-        private ServicosFornecedor _fornecedor { get; set; } = new ServicosFornecedor();
-        private List<PrincipioAtivo> _principioAtivo { get; set; } = [];
+        public SistemaMenuCompra Menu { get; private set; }
+        public SistemaMenuItemCompra MenuItem { get; private set; }
+
 
         public ServicosCompra()
         {
             Compras = LerArquivoCompra();
             ItensCompra = LerArquivoItemCompra();
+            Menu = new SistemaMenuCompra();
+            MenuItem = new SistemaMenuItemCompra();
         }
 
         public void SetCompras(List<Compra> compra)
@@ -32,7 +37,7 @@ namespace SneezePharm.PastaCompra
         }
 
         // CRUD Compras
-        public void IncluirCompra()
+        public void IncluirCompra(ServicosFornecedor fornecedores, List<PrincipioAtivo> principios)
         {
             int id = 1;
             if (Compras.Select(x => x.Id).Any())
@@ -43,7 +48,7 @@ namespace SneezePharm.PastaCompra
 
             var fornecedorCnpj = Console.ReadLine() ?? "";
 
-            var fornecedor = _fornecedor.LocalizarFornecedor(fornecedorCnpj);
+            var fornecedor = fornecedores.LocalizarFornecedor(fornecedorCnpj);
 
             if (fornecedor is null)
             {
@@ -57,7 +62,7 @@ namespace SneezePharm.PastaCompra
             do
             {
                 Console.WriteLine("\nAdicione o produto");
-                var item = IncluirItem(id);
+                var item = IncluirItem(id, principios);
 
                 if (item == null)
                 {
@@ -65,6 +70,7 @@ namespace SneezePharm.PastaCompra
                 }
 
                 ItensCompra.Add(item);
+
                 cont++;
 
                 if (cont <= 3)
@@ -89,6 +95,7 @@ namespace SneezePharm.PastaCompra
             Compra compra = new(id, fornecedor.Cnpj, valorTotalItens);
 
             Compras.Add(compra);
+            fornecedor.AlterarUltimoFornecimento();
         } // falta verificacao do cnpj
         public void LocalizarCompra()
         {
@@ -97,14 +104,14 @@ namespace SneezePharm.PastaCompra
             var idCompra = BuscarCompra(id);
 
             if (idCompra is null)
-                Console.WriteLine("Nao foi encontrada nenhuma compra com esse endereco ID!");
+                Console.WriteLine("Não foi encontrada nenhuma compra com esse endereco ID!");
             else
                 Console.WriteLine(idCompra);
         }
         public void ImprimirCompras()
         {
             if (Compras is null)
-                Console.WriteLine("Nao foi encontrada nenhuma compra!");
+                Console.WriteLine("Não foi encontrada nenhuma compra!");
             else
                 foreach (var compra in Compras)
                 {
@@ -126,18 +133,14 @@ namespace SneezePharm.PastaCompra
         {
             return Compras.Find(x => x.Id == id)!;
         }
-        private PrincipioAtivo BuscarPA(string idPrincipioAtivo)
-        {
-            return _principioAtivo.Find(x => x.Id == idPrincipioAtivo)!;
-        }
 
         // CRUD Itens da compra
-        private ItemCompra IncluirItem(int idCompra)
+        private ItemCompra IncluirItem(int idCompra, List<PrincipioAtivo> principios)
         {
             Console.Write("Informe o Id do Ingrediente/Principio Ativo: (ex: AI0001) ");
             var idPrincipioAtivo = Console.ReadLine()!.ToUpper();
 
-            var principioAtivo = BuscarPA(idPrincipioAtivo);
+            var principioAtivo = principios.Find(x => x.Id == idPrincipioAtivo);
 
             if (principioAtivo is null)
             {
@@ -200,9 +203,10 @@ namespace SneezePharm.PastaCompra
                 }
             }
 
+            principioAtivo.AlterarUltimaCompraPA();
             return new ItemCompra(idCompra, principioAtivo.Id, quantidade, valorUnitario);
         }
-        public void AlterarItemCompra()
+        public void AlterarItemCompra(List<PrincipioAtivo> principios)
         {
             Console.Write("Informe o ID da compra: ");
             var id = int.Parse(Console.ReadLine()!);
@@ -210,7 +214,7 @@ namespace SneezePharm.PastaCompra
 
             if (idCompra is null)
             {
-                Console.WriteLine("Nao foi encontrada nenhuma compra com esse endereco ID!");
+                Console.WriteLine("Não foi encontrada nenhuma compra com esse endereco ID!");
                 return;
             }
 
@@ -222,18 +226,18 @@ namespace SneezePharm.PastaCompra
             Console.Write("Informe o ID do Principio Ativo que deseja alterar: ");
             var idPrincipioAtivo = Console.ReadLine()!.ToUpper() ?? "";
 
-            var idItem = BuscarPA(idPrincipioAtivo);
+            var idItem = principios.Find(p => p.Id == idPrincipioAtivo);
 
             if (idItem is null)
             {
-                Console.WriteLine("Nao foi encontrado nenhum Ingrediente com esse endereco ID!");
+                Console.WriteLine("Não foi encontrado nenhum Ingrediente com esse endereco ID!");
                 return;
             }
             var itemVendido = itemCompra.FirstOrDefault(x => x.Ingrediente == idItem.Id);
 
             if (itemVendido is null)
             {
-                Console.WriteLine("Nao foi encontrado nenhum item com esse Principio Ativo!");
+                Console.WriteLine("Não foi encontrado nenhum item com esse Principio Ativo!");
                 return;
             }
 
@@ -248,18 +252,18 @@ namespace SneezePharm.PastaCompra
             Console.Write("Informe o ID do Principio ativo: ");
             idPrincipioAtivo = Console.ReadLine()!.ToUpper() ?? itemVendido.Ingrediente;
 
-            var principioAtivo = BuscarPA(idPrincipioAtivo);
+            var principioAtivo = principios.Find(p => p.Id == idPrincipioAtivo);
 
             while (principioAtivo is null)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Nao foi encontrado nenhum item com esse Principio Ativo!");
+                Console.WriteLine("Não foi encontrado nenhum item com esse Principio Ativo!");
                 Console.ResetColor();
                 Console.WriteLine("\nTente novamente.");
                 Console.Write("Informe o ID do Principio ativo: ");
                 idPrincipioAtivo = Console.ReadLine()!.ToUpper() ?? itemVendido.Ingrediente;
 
-                principioAtivo = BuscarPA(idPrincipioAtivo);
+                principioAtivo = principios.Find(p => p.Id == idPrincipioAtivo);
             }
 
 
@@ -331,15 +335,15 @@ namespace SneezePharm.PastaCompra
             Console.WriteLine("Item Atualizado com sucesso!");
             Console.WriteLine(itemVendido);
         }
-        public void LocalizarItemCompra()
+        public void LocalizarItemCompra(List<PrincipioAtivo> principios)
         {
             Console.Write("Informe o ID da compra: ");
             var id = int.Parse(Console.ReadLine()!);
-            var idCompra = BuscarCompra(id);
+            var idCompra = BuscarCompra(id);    
 
             if (idCompra is null)
             {
-                Console.WriteLine("Nao foi encontrada nenhuma compra com esse endereco ID!");
+                Console.WriteLine("Não foi encontrada nenhuma compra com esse endereco ID!");
                 return;
             }
 
@@ -351,18 +355,18 @@ namespace SneezePharm.PastaCompra
             Console.Write("Informe o Ingrediente: (ex: AI0001) ");
             var idPrincipioAtivo = Console.ReadLine()!.ToUpper() ?? "";
 
-            var idItem = BuscarPA(idPrincipioAtivo);
+            var idItem = principios.Find(p => p.Id == idPrincipioAtivo);
 
             if (idItem is null)
             {
-                Console.WriteLine("Nao foi encontrado nenhum Ingrediente com esse endereco ID!");
+                Console.WriteLine("Não foi encontrado nenhum Ingrediente com esse endereco ID!");
                 return;
             }
             var itemVendido = itemCompra.FirstOrDefault(x => x.Ingrediente == idItem.Id);
 
             if (itemVendido is null)
             {
-                Console.WriteLine("Nao foi encontrado nenhum item com esse Principio Ativo!");
+                Console.WriteLine("Não foi encontrado nenhum item com esse Principio Ativo!");
                 return;
             }
 
@@ -378,7 +382,7 @@ namespace SneezePharm.PastaCompra
 
             if (idCompra is null)
             {
-                Console.WriteLine("Nao foi encontrada nenhuma compra com esse endereco ID!");
+                Console.WriteLine("Não foi encontrada nenhuma compra com esse endereco ID!");
                 return;
             }
 
@@ -489,28 +493,28 @@ namespace SneezePharm.PastaCompra
         }
 
         // gravar a lista nos arquivos
-        public void GravarArquivoCompra(List<Compra> compras)
+        public void GravarArquivoCompra()
         {
             var caminho = CriarArquivosCompra();
 
             StreamWriter writer = new(caminho);
             using (writer)
             {
-                foreach (var compra in compras)
+                foreach (var compra in Compras)
                 {
                     writer.WriteLine(compra.ToFile());
                 }
                 writer.Close();
             }
         }
-        public void GravarArquivoItemCompra(List<ItemCompra> itensCompra)
+        public void GravarArquivoItemCompra()
         {
             var caminho = CriarArquivosItensCompra();
 
             StreamWriter writer = new(caminho);
             using (writer)
             {
-                foreach (var item in itensCompra)
+                foreach (var item in ItensCompra)
                 {
                     writer.WriteLine(item.ToFile());
                 }
@@ -518,17 +522,6 @@ namespace SneezePharm.PastaCompra
             }
         }
 
-        // menu
-        public static int Display(string title, List<string> options)
-        {
-            Console.WriteLine(title);
-            for (int i = 0; i < options.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}. {options[i]}");
-            }
-            Console.Write("Escolha uma opção válida: ");
-            return int.Parse(Console.ReadLine() ?? "0");
-        }
 
         // menu Compras
         public List<string> OpcoesCompra = [
@@ -546,5 +539,38 @@ namespace SneezePharm.PastaCompra
                 "Voltar ao Menu Principal"
             ];
 
+
+        public void GerarRelatorioCompras(ServicosFornecedor fornecedores)
+        {
+            Console.Write("Informe o CNPJ do fornecedor que deseja gerar o relatório: ");
+            string cnpj = Console.ReadLine()!;
+
+            var fornecedor = fornecedores.LocalizarFornecedor(cnpj);
+
+            if (fornecedor == null)
+            {
+                Console.WriteLine("Fornecedor não encontrado!");
+                return;
+            }
+
+            var comprasFornecedor = Compras.Where(c => c.Fornecedor == cnpj).ToList();
+
+            if (comprasFornecedor.Count == 0)
+            {
+                Console.WriteLine("Nenhuma compra encontrada para este fornecedor!");
+                return;
+            }
+
+            string nomeFornecedor = fornecedor.RazaoSocial;
+            DateOnly dataPrimeiraCompra = comprasFornecedor.Min(c => c.DataCompra);
+            DateOnly dataUltimaCompra = comprasFornecedor.Max(c => c.DataCompra);
+            decimal valorTotalGasto = comprasFornecedor.Sum(c => c.ValorTotal);
+
+            Console.WriteLine($"CNPJ informado para relatório: {cnpj}");
+            Console.WriteLine($"Nome do fornecedor: {nomeFornecedor}");
+            Console.WriteLine($"Data da primeira compra: {dataPrimeiraCompra:dd/MM/yyyy}");
+            Console.WriteLine($"Data da última compra: {dataUltimaCompra:dd/MM/yyyy}");
+            Console.WriteLine($"Valor total gasto com esse fornecedor: R$ {valorTotalGasto:F2}\n");
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SneezePharm.Menu;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,13 @@ namespace SneezePharm.PastaMedicamento
 {
     public class ServicosMedicamento
     {
-        public List<Medicamento> Medicamentos { get; set; } = [];
+        public List<Medicamento> Medicamentos { get; private set; } = [];
+        public SistemaMenuMedicamento Menu { get; private set; }
 
         public ServicosMedicamento()
         {
             Medicamentos = LerArquivoMedicamento();
+            Menu = new SistemaMenuMedicamento();
         }
 
         public void IncluirMedicamento()
@@ -102,9 +105,8 @@ namespace SneezePharm.PastaMedicamento
 
             Console.WriteLine("\nRegistro adicionado com sucesso: ");
             Console.WriteLine(novoMed.ToString());
-
-            GravarArquivoMedicamento();
         }
+
         public void LocalizarMedicamento()
         {
             Console.WriteLine("Digite o codigo de barras do medicamento: ");
@@ -183,8 +185,6 @@ namespace SneezePharm.PastaMedicamento
 
                 Console.WriteLine("\nAlteração realizada com sucesso");
                 Console.WriteLine(achado.ToString());
-
-                GravarArquivoMedicamento();
             }
             else
             {

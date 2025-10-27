@@ -6,9 +6,9 @@ using SneezePharm.PastaPrincipioAtivo;
 using SneezePharm.PastaProducao;
 using SneezePharm.PastaVenda;
 
-namespace SneezePharm.Menu;
+namespace SneezePharm;
 
-internal class SistemaSneezePharm
+public class SistemaSneezePharm
 {
     public ServicosCliente ServicosCliente { get; set; } = new ServicosCliente();
     public ServicosFornecedor ServicosFornecedor { get; set; } = new ServicosFornecedor();
@@ -18,16 +18,8 @@ internal class SistemaSneezePharm
     public ServicosProducao ServicosProducao { get; set; } = new ServicosProducao();
     public ServicosVenda ServicosVenda { get; set; } = new ServicosVenda();
 
-    // Todos as classes iniciam populadas pelo proprio construtor.
+    // Todas as classes iniciam populadas pelo proprio construtor.
 
-    public void CriarDiretorio()
-    {
-        string diretorio = @"C:\SneezePharma\Files\";
-        if (!Directory.Exists(diretorio))
-        {
-            Directory.CreateDirectory(diretorio);
-        }
-    }
     public void CriarTodosArquivos()
     {
         // Criar arquivos Cliente
@@ -53,6 +45,35 @@ internal class SistemaSneezePharm
         ServicosProducao.CriarArquivosItemProducao();
 
         // Criar arquivos Venda
-        ServicosVenda.CriarArquivosItensVenda();
+        ServicosVenda.CriarArquivoVenda();
+        ServicosVenda.CriarArquivoItensVenda();
+    }
+    public void GravarTodosArquivos()
+    {
+        // Gravar arquivos Cliente
+        ServicosCliente.GravarArquivoCliente();
+        ServicosCliente.GravarArquivoBloqueado();
+
+        // Gravar arquivos Fornecedor
+        ServicosFornecedor.GravarArquivoFornecedor();
+        ServicosFornecedor.GravarArquivoFornecedorBloqueado();
+
+        // Gravar arquivos Compra
+        ServicosCompra.GravarArquivoCompra();
+        ServicosCompra.GravarArquivoItemCompra();
+
+        // Gravar arquivos Medicamento
+        ServicosMedicamento.GravarArquivoMedicamento();
+
+        // Gravar aquivos Principio Ativo
+        ServicosPrincipioAtivo.GravarArquivoPrincipioAtivo();
+
+        // Gravar arquivos Producao
+        ServicosProducao.GravarArquivoProducao();
+        ServicosProducao.GravarArquivoItemProducao();
+
+        // Gravar arquivos Venda
+        ServicosVenda.GravarArquivoVenda();
+        ServicosVenda.GravarArquivoItemVenda();
     }
 }

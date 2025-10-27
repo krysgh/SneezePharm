@@ -53,29 +53,39 @@ namespace SneezePharm.PastaFornecedor
         {
             if (Situacao == 'A')
             {
+                Console.WriteLine("Alterando situação para Inativo...");
                 Situacao = 'I';
             }
             else
             {
+                Console.WriteLine("Alterando situação para Ativo...");
                 Situacao = 'A';
             }
+        }
+
+        public void AlterarUltimoFornecimento()
+        {
+            UltimoFornecimento = DateOnly.FromDateTime(DateTime.Now);
         }
 
         // Valida CNPJ por tamanho, por dígito verificador, e se tiver todos os números iguais
         public static bool ValidarCNPJ(string cnpj)
         {
-            if (cnpj.All(char.IsDigit))
+            if (!cnpj.All(char.IsDigit))
             {
+                Console.WriteLine("CNPJ só pode conter números!");
                 return false;
             }
 
             int[] cnpjNumeros = cnpj.ToCharArray().Select(c => (int)char.GetNumericValue(c)).ToArray();
             if (cnpjNumeros.Length != 14)
             {
+                Console.WriteLine("Tamanho de CNPJ inválido!");
                 return false;
             }
             if (cnpjNumeros.Distinct().Count() == 1)
             {
+                Console.WriteLine("CNPJ inválido!");
                 return false;
             }
 
@@ -91,6 +101,7 @@ namespace SneezePharm.PastaFornecedor
 
             if (calculo != cnpjNumeros[12])
             {
+                Console.WriteLine("CNPJ inválido!");
                 return false;
             }
 
@@ -104,6 +115,7 @@ namespace SneezePharm.PastaFornecedor
 
             if (calculo != cnpjNumeros[13])
             {
+                Console.WriteLine("CNPJ inválido!");
                 return false;
             }
 
@@ -122,6 +134,33 @@ namespace SneezePharm.PastaFornecedor
             {
                 return true;
             }
+        }
+
+        // Valida razão social, retorna true se não for vazio e não possuir símbolos; senão, retorna false
+        public static bool ValidarRazaoSocial(string razaoSocial)
+        {
+            if (string.IsNullOrEmpty(razaoSocial))
+                return false;
+            string caracteres = "&%#/\\'\"()*,!@";
+            foreach (char c in razaoSocial)
+            {
+                if (char.IsSymbol(c) || caracteres.ToCharArray().Contains(c))
+                    return false;
+            }
+            return true;
+        }
+
+        // Valida pais, retorna true se todos os caracteres forem letras ou letras e espaços; senão, retorna false
+        public static bool ValidarPais(string pais)
+        {
+            if (string.IsNullOrEmpty(pais))
+                return false;
+            foreach (char c in pais)
+            {
+                if (!char.IsLetter(c) && c != ' ')
+                    return false;
+            }
+            return true;
         }
 
         public override string ToString()
@@ -143,7 +182,6 @@ namespace SneezePharm.PastaFornecedor
                 UltimoFornecimento.ToString().Replace("/", "") +
                 DataCadastro.ToString().Replace("/", "") +
                 Situacao;
-            ;
         }
     }
 }

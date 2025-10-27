@@ -1,8 +1,11 @@
-﻿using System;
+﻿using SneezePharm.Menu;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SneezePharm.PastaMedicamento;
+using SneezePharm.PastaPrincipioAtivo;
 
 namespace SneezePharm.PastaProducao
 {
@@ -10,29 +13,44 @@ namespace SneezePharm.PastaProducao
     {
         public List<Producao> Producoes { get; set; } = [];
         public List<ItemProducao> ItensProducao { get; set; } = [];
+        public SistemaMenuProducao Menu { get; private set; }
+        public SistemaMenuItemProducao MenuItem { get; private set; }
+
 
         public ServicosProducao()
         {
             Producoes = LerArquivoProducao();
             ItensProducao = LerArquivoItemProducao();
+            Menu = new SistemaMenuProducao();
+            MenuItem = new SistemaMenuItemProducao();
         }
 
-        public void IncluirProducao()
+        #region Produção
+
+        #region CRUD
+        public void IncluirProducao(List<Medicamento> medicamentos, List<PrincipioAtivo> principios)
         {
             Console.Write("Insere o código de barras do medicamento em produção: ");
             string cdb = Console.ReadLine()!;
-            //if (Medicamentos.Find(m => m.CDB == cdb) is null)
-            //{
-            //    Console.WriteLine("Não existe um medicamento com esse código de barras!\nCancelando operação...");
-            //    return;
-            //}
+            Medicamento medicamento = medicamentos.Find(m => m.CDB == cdb)!;
+            if (medicamento is null)
+            {
+                Console.WriteLine("Não existe um medicamento com esse código de barras!\nCancelando operação...");
+                return;
+            }
+            if (medicamento.Situacao == 'I')
+            {
+                Console.WriteLine("Medicamento precisa estar ativo para produzir!\nCancelando operação...");
+            }
+
 
             Console.Write("Insere a quantidade do produto produzido (entre 0 e 1000): ");
-            int quantidade = int.Parse(Console.ReadLine() ?? "0");
-            if ((quantidade < 1) || (quantidade > 999))
+            int quantidade = 0;
+            while ((!int.TryParse(Console.ReadLine(), out quantidade)) || 
+                   (quantidade > 999) || 
+                   (quantidade < 1))
             {
-                Console.WriteLine("Quantidade inválida! A quantidade precisa ser entre 0 e 1000.\nCancelando operação...");
-                return;
+                Console.WriteLine("Quantidade inválida! A quantidade precisa ser entre 0 e 1000.");
             }
 
             int id;
@@ -42,8 +60,20 @@ namespace SneezePharm.PastaProducao
             }
             catch
             {
-                id = 0;
+                id = 1;
             }
+
+            if (!IncluirItemProducao(id, principios))
+                return;
+
+            string escolha;
+            do
+            {
+                Console.WriteLine("Deseja adicionar mais um princípio ativo na produção? (0 - não, 1 - sim)");
+                escolha = Console.ReadLine() ?? "1";
+                if (escolha == "1")
+                    IncluirItemProducao(id, principios);
+            } while (escolha == "1");
 
             this.Producoes.Add(new(id, cdb, quantidade));
         }
@@ -52,7 +82,8 @@ namespace SneezePharm.PastaProducao
         {
             return Producoes.Find(p => p.Id == id);
         }
-        public void ImprimirProducaoLocalizado()
+
+        public void ImprimirProducaoLocalizado(List<Medicamento> medicamentos, List<PrincipioAtivo> principios)
         {
             Console.Write("Insere o ID da produção: ");
             int id = int.Parse(Console.ReadLine() ?? "-1");
@@ -63,9 +94,17 @@ namespace SneezePharm.PastaProducao
             }
             else
             {
-                Console.WriteLine(producao);                            // Falta imprimir o princípio ativo da produção junto                        
+                Console.WriteLine($"Produção de {medicamentos.Find(m => m.CDB == producao.CDB)!.Nome}");
+                Console.WriteLine(producao);
+                var itens = ItensProducao.FindAll(i => i.IdProducao == id);
+                foreach (var item in itens)
+                {
+                    var principio = principios.Find(p => p.Id == item.Principio);
+                    Console.WriteLine($"{principio!.Nome}: {item.QuantidadePrincipio}g");
+                }
             }
         }
+
         public void AlterarProducao()
         {
             Console.WriteLine("Insere o ID da produção: ");
@@ -74,25 +113,23 @@ namespace SneezePharm.PastaProducao
             if (producao is not null)
             {
                 Console.WriteLine("Insere a quantidade nova da produção (entre 0 e 1000): ");
-                int quantidade = int.Parse(Console.ReadLine() ?? "0");
-                if ((quantidade < 1) || (quantidade > 999))
+                int quantidade = 0;
+                while ((!int.TryParse(Console.ReadLine(), out quantidade)) ||
+                       (quantidade > 999) || (quantidade < 1))
                 {
-                    Console.WriteLine("Quantidade inválida! A quantidade precisa ser entre 0 e 1000.\nCancelando operação...");
-                    return;
+                    Console.WriteLine("Quantidade inválida! A quantidade precisa ser entre 0 e 1000.");
+                }
+                
+                Console.WriteLine($"Deseja mesmo alterar a quantidade da produção de {producao.Quantidade} para {quantidade}? (0 - cancelar, 1 - confirmar)");
+                var confirmar = Console.ReadLine() ?? "0";
+                if (confirmar == "1")
+                {
+                    producao.AlterarQuantidade(quantidade);
+                    Console.WriteLine("\nQuantidade da produção alterada com sucesso!");
                 }
                 else
                 {
-                    Console.WriteLine("Deseja mesmo alterar a quantidade da produção? (0 - cancelar, 1 - confirmar)");
-                    var confirmar = Console.ReadLine() ?? "0";
-                    if (confirmar == "1")
-                    {
-                        producao.AlterarQuantidade(quantidade);
-                        Console.WriteLine("\nQuantidade da produção alterada com sucesso!");
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nOperação cancelada. Retornando para menu...");
-                    }
+                    Console.WriteLine("\nOperação cancelada. Retornando para menu...");
                 }
             }
             else
@@ -101,7 +138,7 @@ namespace SneezePharm.PastaProducao
             }
         }
 
-        public void ImprimirProducoes()
+        public void ImprimirProducoes(List<Medicamento> medicamentos, List<PrincipioAtivo> principios)
         {
             Console.WriteLine("-=-=- Lista de Produções -=-=-");
             if (Producoes.Count == 0)
@@ -110,9 +147,20 @@ namespace SneezePharm.PastaProducao
             }
             foreach (var producao in Producoes)
             {
-                Console.WriteLine(producao + "\n");                            // Falta imprimir o princípio ativo da produção junto
+                Console.WriteLine($"Produção de {medicamentos.Find(m => m.CDB == producao.CDB)!.Nome}");
+                Console.WriteLine(producao);
+                var itens = ItensProducao.FindAll(i => i.IdProducao == producao.Id);
+                foreach (var item in itens)
+                {
+                    var principio = principios.Find(p => p.Id == item.Principio);
+                    Console.WriteLine($"{principio!.Nome}: {item.QuantidadePrincipio}g");
+                }
+                Console.WriteLine();
             }
         }
+        #endregion
+
+        #region Métodos Arquivos
         public string CriarArquivosProducao()
         {
             string diretorio = @"C:\SneezePharma\Files";
@@ -127,6 +175,7 @@ namespace SneezePharm.PastaProducao
             }
             return diretorioProducao;
         }
+
         public List<Producao> LerArquivoProducao()
         {
             StreamReader reader = new(CriarArquivosProducao());
@@ -171,9 +220,15 @@ namespace SneezePharm.PastaProducao
                 sw.Close();
             }
         }
+        #endregion
 
-        // falta validacao de princípio ativo e verificacao de producao existente
-        public void IncluirItemProducao(int idProducao)
+        #endregion
+
+        // falta verificacao de producao existente
+        #region Item de Produção
+
+        #region CRUD
+        private bool IncluirItemProducao(int idProducao, List<PrincipioAtivo> principios)
         {
             Console.Write("Informe o ID do princípio ativo: ");
             var idPrincipioAtivo = Console.ReadLine() ?? "";
@@ -183,6 +238,17 @@ namespace SneezePharm.PastaProducao
                 Console.WriteLine("Erro. Informe um ID valido!\n");
                 Console.Write("Informe o ID do princípio ativo: ");
                 idPrincipioAtivo = Console.ReadLine() ?? "";
+            }
+            var principio = principios.Find(p => p.Id == idPrincipioAtivo);
+            if (principio is null)
+            {
+                Console.WriteLine("Esse ID não existe!\nCancelando operação...");
+                return false;
+            }
+            if (principio.Situacao == 'I')
+            {
+                Console.WriteLine("Princípio ativo precisa estar ativo para ser usado!\nCancelando operação...");
+                return false;
             }
 
             Console.Write("Informe a quantidade em gramas do princípio ativo: (max: 9999) ");
@@ -208,10 +274,21 @@ namespace SneezePharm.PastaProducao
                 }
             }
 
-            ItemProducao itemProducao = new ItemProducao(idProducao, idPrincipioAtivo, quantidadePrincipio);
-            ItensProducao.Add(itemProducao);
+            int id;
+            try
+            {
+                id = ItensProducao.Last().Id + 1;
+            }
+            catch
+            {
+                id = 0;
+            }
 
+            ItemProducao itemProducao = new ItemProducao(id, idProducao, idPrincipioAtivo, quantidadePrincipio);
+            ItensProducao.Add(itemProducao);
+            return true;
         }
+
         public void LocalizarItemProducao()
         {
             Console.Write("Informe o ID da produção: ");
@@ -232,6 +309,7 @@ namespace SneezePharm.PastaProducao
 
             Console.WriteLine(itensProducao);
         }
+
         public void AlterarItemProducao()
         {
             Console.Write("Informe o ID da produção: ");
@@ -295,6 +373,7 @@ namespace SneezePharm.PastaProducao
             Console.WriteLine("Alteração concluída com sucesso!");
             Console.WriteLine(itensProducao);
         }
+
         public void ImprimirItemProducao()
         {
             if (ItensProducao is null)
@@ -302,7 +381,9 @@ namespace SneezePharm.PastaProducao
             else
                 ItensProducao.ForEach(x => Console.WriteLine(x));
         }
+        #endregion
 
+        #region Métodos Arquivos
         public string CriarArquivosItemProducao()
         {
             string diretorio = @"C:\SneezePharma\Files";
@@ -318,6 +399,7 @@ namespace SneezePharm.PastaProducao
 
             return diretorioItemCompra;
         }
+
         public List<ItemProducao> LerArquivoItemProducao()
         {
             var caminho = CriarArquivosItemProducao();
@@ -331,11 +413,13 @@ namespace SneezePharm.PastaProducao
                 {
                     var linha = reader.ReadLine();
 
-                    string idProducao = linha.Substring(0, 5);
-                    string idPrincipio = linha.Substring(5, 6);
-                    string quantidadePrincipio = linha.Substring(11, 4);
+                    string id = linha.Substring(0, 5);
+                    string idProducao = linha.Substring(5, 5);
+                    string idPrincipio = linha.Substring(10, 6);
+                    string quantidadePrincipio = linha.Substring(16, 4);
 
                     ItemProducao itemCompra = new(
+                        int.Parse(id),
                         int.Parse(idProducao),
                         idPrincipio,
                         int.Parse(quantidadePrincipio)
@@ -348,19 +432,23 @@ namespace SneezePharm.PastaProducao
             }
 
         }
-        public void GravarArquivoItemProducao(List<ItemProducao> itensProducao)
+
+        public void GravarArquivoItemProducao()
         {
             var caminho = CriarArquivosItemProducao();
 
             StreamWriter writer = new(caminho);
             using (writer)
             {
-                foreach (var item in itensProducao)
+                foreach (var item in ItensProducao)
                 {
                     writer.WriteLine(item.ToFile());
                 }
                 writer.Close();
             }
         }
+        #endregion
+
+        #endregion
     }
 }
