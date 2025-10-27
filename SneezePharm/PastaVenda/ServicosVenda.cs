@@ -187,7 +187,7 @@ namespace SneezePharm.PastaVenda
 
             if (cliente is null)
             {
-                Console.WriteLine("Cliente não encotrado!");
+                Console.WriteLine("Cliente não encontrado!");
                 return;
             }
 

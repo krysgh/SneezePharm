@@ -30,7 +30,7 @@ namespace SneezePharm.Menu
                 ];
         }
 
-        public void MenuVenda(ServicosVenda venda, ServicosCliente clientes, ServicosMedicamento medicamentos)
+        public void MenuVenda(ServicosVenda venda, ServicosCliente clientes, List<Medicamento> medicamentos)
         {
             do
             {
@@ -39,7 +39,7 @@ namespace SneezePharm.Menu
                 switch (Opcao)
                 {
                     case 1:
-                        venda.IncluirVenda(clientes, medicamentos.Medicamentos);
+                        venda.IncluirVenda(clientes, medicamentos);
                         break;
                     case 2:
                         venda.LocalizarVenda();
@@ -51,7 +51,7 @@ namespace SneezePharm.Menu
                         venda.GerarRelatorioVendas();
                         break;
                     case 5:
-                        MenuItem.MenuItemVenda(venda);
+                        MenuItem.MenuItemVenda(venda,clientes,medicamentos);
                         break;
                     case 6:
                         Console.WriteLine("Voltando ao menu principal...");

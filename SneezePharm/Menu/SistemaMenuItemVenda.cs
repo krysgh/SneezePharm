@@ -1,4 +1,7 @@
-﻿using SneezePharm.PastaVenda;
+﻿using SneezePharm.PastaCliente;
+using SneezePharm.PastaMedicamento;
+using SneezePharm.PastaPrincipioAtivo;
+using SneezePharm.PastaVenda;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +28,7 @@ namespace SneezePharm.Menu
                 ];
         }
 
-        public void MenuItemVenda(ServicosVenda itemVenda)
+        public void MenuItemVenda(ServicosVenda itemVenda,ServicosCliente clientes, List<Medicamento> medicamentos )
         {
             do
             {
@@ -34,16 +37,16 @@ namespace SneezePharm.Menu
                 switch (Opcao)
                 {
                     case 1:
-                        Console.WriteLine("Cadastrar Item Venda...");
+                        itemVenda.IncluirVenda(clientes, medicamentos);
                         break;
                     case 2:
-                        Console.WriteLine("Localizar Item Venda...");
-                        break;
+                        itemVenda.LocalizarItemVenda(medicamentos);
+                        break; 
                     case 3:
-                        Console.WriteLine("Alterar Item Venda...");
+                        itemVenda.AlterarItemVenda(medicamentos);
                         break;
                     case 4:
-                        Console.WriteLine("Imprimir Item Vendas...");
+                        itemVenda.ImprimirItemVenda();
                         break;
                     case 5:
                         Console.WriteLine("Voltando ao menu principal...");
