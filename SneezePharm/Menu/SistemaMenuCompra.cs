@@ -12,14 +12,17 @@ namespace SneezePharm.Menu
         public string Titulo { get; private set; }
         public List<string> Opcoes { get; private set; }
         public int Opcao { get; private set; }
+        public SistemaMenuItemCompra MenuItem { get; private set; }
 
         public SistemaMenuCompra()
         {
+            MenuItem = new SistemaMenuItemCompra();
             Titulo = "=== Menu Compra ===";
             Opcoes = [
                 "Cadastrar Compra",
                 "Localizar Compra",
                 "Imprimir Compra",
+                "Item Compra",
                 "Sair"
                 ];
         }
@@ -41,6 +44,9 @@ namespace SneezePharm.Menu
                         compra.ImprimirCompras();
                         break;
                     case 4:
+                        MenuItem.MenuItemCompra(compra);
+                        break;
+                    case 5:
                         Console.WriteLine("Voltando ao menu principal...");
                         break;
 
@@ -52,7 +58,7 @@ namespace SneezePharm.Menu
                 }
                 Console.ReadKey();
 
-            } while (Opcao != 4);
+            } while (Opcao != 5);
         }
     }
 }

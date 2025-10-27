@@ -1,9 +1,14 @@
 ﻿using SneezePharm;
 using SneezePharm.Menu;
 
+string diretorio = @"C:\SneezePharma\Files\";
+if (!Directory.Exists(diretorio))
+{
+    Directory.CreateDirectory(diretorio);
+}
+
 SistemaSneezePharm sneeze = new();
 
-sneeze.CriarDiretorio();
 sneeze.CriarTodosArquivos();
 
 var menuPrincipal = new SistemaMenuPrincipal();
@@ -14,37 +19,42 @@ do
     var opcao = Menu.Menus(menuPrincipal.Titulo, menuPrincipal.Opcoes);
     switch (opcao)
     {
+        // Menu cliente
         case 1:
             sneeze.ServicosCliente.Menu.MenuCliente(sneeze.ServicosCliente);
             break;
+
+        // Menu Fornecedor
         case 2:
             sneeze.ServicosFornecedor.Menu.MenuFornecedor(sneeze.ServicosFornecedor);
             break;
+
+        // Menu Principio Ativo
         case 3:
             sneeze.ServicosPrincipioAtivo.Menu.MenuPrincipioAtivo(sneeze.ServicosPrincipioAtivo);
             break;
+
+        // Menu Medicamento
         case 4:
             sneeze.ServicosMedicamento.Menu.MenuMedicamento(sneeze.ServicosMedicamento);
             break;
+
+        // Menu Venda
         case 5:
             sneeze.ServicosVenda.Menu.MenuVenda(sneeze.ServicosVenda, sneeze.ServicosCliente, sneeze.ServicosMedicamento); // acho q seria uma boa colocar o menu de item venda dentro do menu Venda
             break;
+
+        // Menu Compra
         case 6:
-            sneeze.ServicosVenda.MenuItem.MenuItemVenda(sneeze.ServicosVenda);
-            break;
-        case 7:
             sneeze.ServicosCompra.Menu.MenuCompra(sneeze.ServicosCompra);
             break;
-        case 8:
-            sneeze.ServicosCompra.MenuItem.MenuItemCompra(sneeze.ServicosCompra);
-            break;
-        case 9:
+        // Menu Producao
+        case 7:
             sneeze.ServicosProducao.Menu.MenuProducao(sneeze.ServicosProducao, sneeze.ServicosMedicamento.Medicamentos, sneeze.ServicosPrincipioAtivo.PrincipiosAtivos);
             break;
-        case 10:
-            sneeze.ServicosProducao.MenuItem.MenuItemProducao(sneeze.ServicosProducao, sneeze.ServicosMedicamento.Medicamentos, sneeze.ServicosPrincipioAtivo.PrincipiosAtivos);
-            break;
-        case 11:
+
+        // Sair
+        case 8:
             working = false;
             Console.WriteLine("Saindo...");
             sneeze.GravarTodosArquivos();

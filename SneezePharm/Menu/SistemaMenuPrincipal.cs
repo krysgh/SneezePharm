@@ -21,11 +21,8 @@ namespace SneezePharm.Menu
                 "Menu Principio Ativo",
                 "Menu Medicamento",
                 "Menu Venda",
-                "Menu Item Venda",
                 "Menu Compra",
-                "Menu Item Compra",
                 "Menu Produção",
-                "Menu Item Produção",
                 "Sair"
                 ];
         }

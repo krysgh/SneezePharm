@@ -14,15 +14,18 @@ namespace SneezePharm.Menu
         public string Titulo { get; private set; }
         public List<string> Opcoes { get; private set; }
         public int Opcao { get; private set; }
+        public SistemaMenuItemVenda MenuItem { get; private set; }
 
         public SistemaMenuVenda()
         {
+            MenuItem = new SistemaMenuItemVenda();
             Titulo = "=== Menu Venda ===";
             Opcoes = [
                 "Cadastrar Venda",
                 "Localizar Venda",
                 "Imprimir Vendas",
                 "Gerar Relatório de Vendas",
+                "Item de Venda",
                 "Voltar ao Menu Principal"
                 ];
         }
@@ -48,6 +51,9 @@ namespace SneezePharm.Menu
                         venda.GerarRelatorioVendas();
                         break;
                     case 5:
+                        MenuItem.MenuItemVenda(venda);
+                        break;
+                    case 6:
                         Console.WriteLine("Voltando ao menu principal...");
                         break;
                     default:
@@ -58,7 +64,7 @@ namespace SneezePharm.Menu
                 }
                 Console.ReadKey();
 
-            } while (Opcao != 5);
+            } while (Opcao != 6);
         }
     }
 }

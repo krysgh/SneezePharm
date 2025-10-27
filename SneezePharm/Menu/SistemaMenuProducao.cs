@@ -14,15 +14,18 @@ namespace SneezePharm.Menu
         public string Titulo { get; private set; }
         public List<string> Opcoes { get; private set; }
         public int Opcao { get; private set; }
+        public SistemaMenuItemProducao MenuItem { get; private set; }
 
         public SistemaMenuProducao()
         {
+            MenuItem = new SistemaMenuItemProducao();
             Titulo = "=== Menu Produção ===";
             Opcoes = [
                 "Cadastrar Produção",
                 "Localizar Produção",
                 "Alterar Produção",
                 "Imprimir Produção",
+                "Item Produção",
                 "Sair"
                 ];
 
@@ -49,6 +52,9 @@ namespace SneezePharm.Menu
                         producao.ImprimirProducoes(medicamentos, principios);
                         break;
                     case 5:
+                        MenuItem.MenuItemProducao(producao, medicamentos, principios);
+                        break;
+                    case 6:
                         Console.WriteLine("Voltando ao menu principal...");
                         break;
                     default:
@@ -59,7 +65,7 @@ namespace SneezePharm.Menu
                 }
                 Console.ReadKey();
 
-            } while (Opcao != 5);
+            } while (Opcao != 6);
         }
     }
 }
