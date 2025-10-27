@@ -182,7 +182,6 @@ namespace SneezePharm.PastaFornecedor
                 UltimoFornecimento.ToString().Replace("/", "") +
                 DataCadastro.ToString().Replace("/", "") +
                 Situacao;
-            ;
         }
     }
 }
