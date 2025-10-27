@@ -51,7 +51,7 @@ namespace SneezePharm.PastaFornecedor
             razaoSocial = razaoSocial.Trim();
             while (!Fornecedor.ValidarRazaoSocial(razaoSocial))
             {
-                Console.WriteLine("Texto contem caracteres inválidas! Tente novamente.");
+                Console.WriteLine("Texto contem caracteres inválidas! Insira novamente.");
                 razaoSocial = Console.ReadLine() ?? "";
             }
             if (razaoSocial.Length > 50)
@@ -65,7 +65,7 @@ namespace SneezePharm.PastaFornecedor
             while (!Fornecedor.ValidarPais(pais))
             {
                 Console.WriteLine("Texto contem caracteres diferentes de letras e espaços." +
-                                "\nTente novamente.");
+                                "\nInsira novamente.");
                 pais = Console.ReadLine() ?? "";
             }
             if (pais.Length > 20)
@@ -77,7 +77,7 @@ namespace SneezePharm.PastaFornecedor
             Console.Write("Insere a data de abertura da empresa (formato dd/mm/aaaa): ");
             while (!DateOnly.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", out dataAbertura))
             {
-                Console.WriteLine("Data inválida! Tente novamente.");
+                Console.WriteLine("Data inválida! Insira novamente.");
             }
             if (!Fornecedor.ValidarDataAbertura(dataAbertura))
             {
