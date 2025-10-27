@@ -12,22 +12,20 @@ namespace SneezePharm.PastaFornecedor
         public string RazaoSocial { get; private set; }
         public string Pais { get; private set; }
         public DateOnly DataAbertura { get; private set; }
-        public DateOnly UltimoFornecimento { get; private set; }
+        public DateOnly UltimoFornecimento { get; private set; } = DateOnly.FromDateTime(DateTime.Now);
         public DateOnly DataCadastro { get; private set; } = DateOnly.FromDateTime(DateTime.Now);
         public char Situacao { get; private set; } = 'A';
 
         public Fornecedor(string cnpj,
             string razaoSocial,
             string pais,
-            DateOnly dataAbertura,
-            DateOnly ultimoFornecimento
+            DateOnly dataAbertura
             )
         {
             Cnpj = cnpj;
             RazaoSocial = razaoSocial;
             Pais = pais;
             DataAbertura = dataAbertura;
-            UltimoFornecimento = ultimoFornecimento;
         }
 
         public Fornecedor(string cnpj,

@@ -74,8 +74,8 @@ namespace SneezePharm.PastaFornecedor
             }
 
             DateOnly dataAbertura;
-            Console.Write("Insere a data de abertura da empresa (formato ddMMyyyy): ");
-            while (!DateOnly.TryParseExact(Console.ReadLine(), "ddMMyyyy", out dataAbertura))
+            Console.Write("Insere a data de abertura da empresa (formato dd/mm/aaaa): ");
+            while (!DateOnly.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", out dataAbertura))
             {
                 Console.WriteLine("Data inválida! Tente novamente.");
             }
@@ -85,19 +85,7 @@ namespace SneezePharm.PastaFornecedor
                 return;
             }
 
-            DateOnly dataFornecimento;
-            Console.Write("Insere a data do último fornecimento (formato ddMMyyyy): ");
-            while (!DateOnly.TryParseExact(Console.ReadLine(), "ddMMyyyy", out dataFornecimento))
-            {
-                Console.WriteLine("Data inválida! Tente novamente.");
-            }
-            if (dataFornecimento > DateOnly.FromDateTime(DateTime.Now))
-            {
-                Console.WriteLine("A data do último fornecimento não pode ser no futuro. Cancelando operação...");
-                return;
-            }
-
-            Fornecedores.Add(new(cnpj, razaoSocial, pais, dataAbertura, dataFornecimento));
+            Fornecedores.Add(new(cnpj, razaoSocial, pais, dataAbertura));
         }
 
         public Fornecedor? LocalizarFornecedor(string cnpj)
@@ -117,7 +105,7 @@ namespace SneezePharm.PastaFornecedor
             var fornecedor = LocalizarFornecedor(cnpj);
             if (fornecedor is not null)
             {
-                Console.WriteLine($"Deseja mesmo alterar a situação do fornecedor {fornecedor.RazaoSocial}? (0 - cancelar, 1 - confirmar)");
+                Console.WriteLine($"Deseja mesmo alterar a situação do fornecedor {fornecedor.RazaoSocial} para {(fornecedor.Situacao == 'A' ? "Inativo" : "Ativo")}? (0 - cancelar, 1 - confirmar)");
                 var confirma = Console.ReadLine() ?? "0";
                 if (confirma == "1")
                 {
