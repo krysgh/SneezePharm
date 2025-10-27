@@ -132,6 +132,19 @@ Para executar o projeto localmente:
 
 ---
 
+## 👥 Equipe de Desenvolvimento
+
+Este projeto foi desenvolvido como parte da **Avaliação em Equipe da disciplina de C# Básico**.  
+
+| Integrantes | GitHub |
+|--------------|--------|
+| Bruno Nascimento | [kihus](https://github.com/kihus) | 
+| Gabriela Fernanda | [gabriela-fernanda](https://github.com/gabriela-fernanda) |
+| Krysthian Hernández | [krysgh](https://github.com/krysgh) |
+| Natalia Zamperlini | [NataliaMZ-IT](https://github.com/NataliaMZ-IT) |
+| Wayne Junior | [waynemcjr](https://github.com/waynemcjr) |
+
+---
 
 ## 🧾 Licença
 
