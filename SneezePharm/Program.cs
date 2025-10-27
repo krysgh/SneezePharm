@@ -46,7 +46,7 @@ do
 
         // Menu Compra
         case 6:
-            sneeze.ServicosCompra.Menu.MenuCompra(sneeze.ServicosCompra);
+            sneeze.ServicosCompra.Menu.MenuCompra(sneeze.ServicosCompra, sneeze.ServicosFornecedor, sneeze.ServicosPrincipioAtivo.PrincipiosAtivos);
             break;
         // Menu Producao
         case 7:

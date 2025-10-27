@@ -20,10 +20,6 @@ public class SistemaSneezePharm
 
     // Todas as classes iniciam populadas pelo proprio construtor.
 
-    public void CriarDiretorio()
-    {
-       
-    }
     public void CriarTodosArquivos()
     {
         // Criar arquivos Cliente
@@ -80,5 +76,4 @@ public class SistemaSneezePharm
         ServicosVenda.GravarArquivoVenda();
         ServicosVenda.GravarArquivoItemVenda();
     }
-
 }
