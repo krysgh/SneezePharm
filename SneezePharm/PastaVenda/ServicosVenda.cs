@@ -257,7 +257,7 @@ namespace SneezePharm.PastaVenda
             var idVenda = BuscarVenda(id);
 
             if (idVenda is null)
-                Console.WriteLine("!");
+                Console.WriteLine("Venda n]ao localizada");
             else
                 Console.WriteLine(idVenda);
         }
