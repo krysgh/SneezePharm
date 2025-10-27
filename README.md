@@ -71,13 +71,6 @@ Administra o fluxo de aquisição e armazenamento dos insumos.
 
 ### 📜 Regras de Negócio Principais
 
-#### 🧱 Exclusão Lógica  
-Nenhum registro é excluído fisicamente. Todas as entidades possuem o campo:
-```csharp
-bool Ativo
-```
-Indicando se o registro está ativo ou inativo.
-
 #### 📦 Controle de Limites  
 - Limites de quantidade por pedido de compra e manipulação.  
 
