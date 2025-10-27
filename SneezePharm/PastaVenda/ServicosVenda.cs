@@ -488,7 +488,11 @@ namespace SneezePharm.PastaVenda
         public void ImprimirItemVenda()
         {
             Console.Write("Informe o ID da venda: ");
-            var id = int.Parse(Console.ReadLine()!);
+            if (!int.TryParse(Console.ReadLine()!, out var id))
+            {
+                Console.WriteLine("ID inválido! Retornando ao menu...");
+                return;
+            }
             var idVenda = BuscarVenda(id);
 
             if (idVenda is null)
