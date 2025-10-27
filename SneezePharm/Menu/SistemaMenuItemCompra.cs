@@ -1,4 +1,6 @@
 ﻿using SneezePharm.PastaCompra;
+using SneezePharm.PastaFornecedor;
+using SneezePharm.PastaPrincipioAtivo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +29,7 @@ namespace SneezePharm.Menu
 
         }
 
-        public void MenuItemCompra(ServicosCompra itemCompra)
+        public void MenuItemCompra(ServicosCompra itemCompra, ServicosFornecedor fornecedores, List<PrincipioAtivo> principios)
         {
             do
             {
@@ -36,13 +38,13 @@ namespace SneezePharm.Menu
                 switch (Opcao)
                 {
                     case 1:
-                        itemCompra.IncluirCompra();
+                        itemCompra.IncluirCompra(fornecedores, principios);
                         break;
                     case 2:
-                        itemCompra.LocalizarItemCompra();
+                        itemCompra.LocalizarItemCompra(principios);
                         break;
                     case 3:
-                        itemCompra.AlterarItemCompra();
+                        itemCompra.AlterarItemCompra(principios);
                         break;
                     case 4:
                         itemCompra.ImprimirItemCompra();

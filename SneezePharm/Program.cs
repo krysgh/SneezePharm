@@ -33,10 +33,10 @@ do
             sneeze.ServicosVenda.MenuItem.MenuItemVenda(sneeze.ServicosVenda);
             break;
         case 7:
-            sneeze.ServicosCompra.Menu.MenuCompra(sneeze.ServicosCompra);
+            sneeze.ServicosCompra.Menu.MenuCompra(sneeze.ServicosCompra, sneeze.ServicosFornecedor, sneeze.ServicosPrincipioAtivo.PrincipiosAtivos);
             break;
         case 8:
-            sneeze.ServicosCompra.MenuItem.MenuItemCompra(sneeze.ServicosCompra);
+            sneeze.ServicosCompra.MenuItem.MenuItemCompra(sneeze.ServicosCompra, sneeze.ServicosFornecedor, sneeze.ServicosPrincipioAtivo.PrincipiosAtivos);
             break;
         case 9:
             sneeze.ServicosProducao.Menu.MenuProducao(sneeze.ServicosProducao, sneeze.ServicosMedicamento.Medicamentos, sneeze.ServicosPrincipioAtivo.PrincipiosAtivos);
