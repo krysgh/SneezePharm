@@ -535,6 +535,26 @@ namespace SneezePharm.PastaVenda
                 Console.WriteLine("\n" + v);
             }
         }
+
+        public void GerarRelatorioMaisVendido(List<Medicamento> medicamentos)
+        {
+
+            if (ItensVenda.Count == 0)
+            {
+                Console.WriteLine("\nLista de vendas vazia!\n");
+                return;
+            }
+
+            var maisVendido = ItensVenda.GroupBy(item => item.Medicamento).Select(grupo => new
+            {
+                CodigoDeBarras = grupo.Key,
+                QuantidadeVendida = grupo.Sum(i => i.Quantidade)
+            }).OrderByDescending(g => g.QuantidadeVendida).FirstOrDefault();
+
+            var medicamento = medicamentos.FirstOrDefault(m => m.CDB == maisVendido.CodigoDeBarras);
+
+            Console.WriteLine($"Medicamento mais vendido: {medicamento.Nome}");
+            Console.WriteLine($"Quantidade vendida: {maisVendido.QuantidadeVendida}");
+        }
     }
 }
-

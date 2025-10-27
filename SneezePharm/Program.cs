@@ -1,5 +1,7 @@
-﻿using SneezePharm;
+﻿using System.Collections.Generic;
+using SneezePharm;
 using SneezePharm.Menu;
+using SneezePharm.PastaMedicamento;
 
 string diretorio = @"C:\SneezePharma\Files\";
 if (!Directory.Exists(diretorio))
@@ -23,7 +25,6 @@ do
         case 1:
             sneeze.ServicosCliente.Menu.MenuCliente(sneeze.ServicosCliente);
             break;
-
         // Menu Fornecedor
         case 2:
             sneeze.ServicosFornecedor.Menu.MenuFornecedor(sneeze.ServicosFornecedor);
