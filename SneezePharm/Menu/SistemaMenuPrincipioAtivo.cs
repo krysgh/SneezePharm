@@ -29,6 +29,7 @@ namespace SneezePharm.Menu
         {
             do
             {
+                Console.Clear();
                 Opcao = Menu.Menus(Titulo, Opcoes);
 
                 switch (Opcao)
