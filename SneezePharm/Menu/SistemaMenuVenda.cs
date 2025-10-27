@@ -26,6 +26,7 @@ namespace SneezePharm.Menu
                 "Localizar Venda",
                 "Imprimir Vendas",
                 "Gerar Relatório de Vendas",
+                "Gerar Relatório mais Vendido",
                 "Item de Venda",
                 "Voltar ao Menu Principal"
                 ];
@@ -53,9 +54,12 @@ namespace SneezePharm.Menu
                         venda.GerarRelatorioVendas();
                         break;
                     case 5:
-                        MenuItem.MenuItemVenda(venda, medicamentos.Medicamentos);
+                        venda.GerarRelatorioMaisVendido(medicamentos.Medicamentos);
                         break;
                     case 6:
+                        MenuItem.MenuItemVenda(venda, medicamentos.Medicamentos);
+                        break;
+                    case 7:
                         Console.WriteLine("Voltando ao menu principal...");
                         break;
                     default:
@@ -66,7 +70,7 @@ namespace SneezePharm.Menu
                 }
                 Console.ReadKey();
 
-            } while (Opcao != 6);
+            } while (Opcao != 7);
         }
     }
 }
