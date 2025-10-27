@@ -70,6 +70,7 @@ namespace SneezePharm.PastaCompra
                 }
 
                 ItensCompra.Add(item);
+
                 cont++;
 
                 if (cont <= 3)
@@ -202,6 +203,7 @@ namespace SneezePharm.PastaCompra
                 }
             }
 
+            principioAtivo.AlterarUltimaCompraPA();
             return new ItemCompra(idCompra, principioAtivo.Id, quantidade, valorUnitario);
         }
         public void AlterarItemCompra(List<PrincipioAtivo> principios)

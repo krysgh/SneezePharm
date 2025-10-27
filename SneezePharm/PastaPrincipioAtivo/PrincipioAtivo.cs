@@ -36,6 +36,10 @@ namespace SneezePharm.PastaPrincipioAtivo
             Situacao = situacao;
         }
 
+        public void AlterarUltimaCompraPA()
+        {
+            UltimaCompra = DateOnly.FromDateTime(DateTime.Now);
+        }
         public string GerarId()
         {
             string prefixo = "AI";
@@ -88,6 +92,10 @@ namespace SneezePharm.PastaPrincipioAtivo
             }
         }
 
+        public void  SetUltimaCompra(DateOnly ultimaCompra)
+        {
+            this.UltimaCompra = ultimaCompra;
+        }
         public override string ToString()
         {
             return $"Id: {Id}\nNome: {Nome}\nUltima Compra: {UltimaCompra:dd/MM/yyyy}\nData Cadastro: {DataCadastro:dd/MM/yyyy}\nSituação: {Situacao}";
