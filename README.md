@@ -144,7 +144,7 @@ Sinta-se livre para estudar, melhorar e adaptar o código.
 
 | Tecnologia | Descrição |
 |-------------|------------|
-| 💻 **C# (.NET 8.0)** | Linguagem e framework utilizados |
+| 💻 **C# (.NET 9.0)** | Linguagem e framework utilizados |
 | 🧩 **POO** | Paradigma aplicado ao design do sistema |
 | 🧮 **Console App** | Interface via linha de comando |
 | 🧱 **Validações e Regras de Negócio** | Implementadas em todas as camadas |
