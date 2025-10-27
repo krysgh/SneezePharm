@@ -27,6 +27,11 @@ namespace SneezePharm.PastaCliente
             this.UltimaCompra = ultimaCompra;
         }
 
+        public void AlterarUltimaCompraCliente()
+        {
+            UltimaCompra = DateOnly.FromDateTime(DateTime.Now);
+        }
+
         public Cliente(string cpf, string nome, DateOnly dataNascismento,
             string telefone, DateOnly ultimaCompra, DateOnly dataCadastro, char situacao)
         {

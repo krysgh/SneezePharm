@@ -12,12 +12,14 @@ namespace SneezePharm.PastaMedicamento
         public List<Medicamento> Medicamentos { get; private set; } = [];
         public SistemaMenuMedicamento Menu { get; private set; }
 
+        // construtor para carregar os dados existentes do arquivo e inicializa o menu para o usuário
         public ServicosMedicamento()
         {
             Medicamentos = LerArquivoMedicamento();
             Menu = new SistemaMenuMedicamento();
         }
 
+        //metodo para incluir medicamento
         public void IncluirMedicamento()
         {
             string nome;
@@ -34,13 +36,13 @@ namespace SneezePharm.PastaMedicamento
                 {
                     Console.WriteLine("Nome invalido, O nome deve ter no maximo 40 caracteres");
                 }
-                else if (!Medicamento.VerificarSeAlfanumericoMed(nome))
+                else if (!Medicamento.VerificarSeAlfanumericoMed(nome))//condição é verdadeira quando o nome nao é alfanumérico.
                 {
                     Console.WriteLine("Nome invalido, use apenas letras e numeros");
                 }
 
 
-            } while (nome.Length > 40 || !Medicamento.VerificarSeAlfanumericoMed(nome));
+            } while (nome.Length > 40 || !Medicamento.VerificarSeAlfanumericoMed(nome));// repete ser menor que 40 e alfanumerico
 
             do
             {
@@ -49,7 +51,7 @@ namespace SneezePharm.PastaMedicamento
 
                 if (inputSituacao == "A" || inputSituacao == "I")
                 {
-                    situacao = inputSituacao[0];
+                    situacao = inputSituacao[0];// se for 'a' ou 'i' ele pega o primeiro caractere da string e sai do loop
                     break;
                 }
                 else
@@ -81,6 +83,7 @@ namespace SneezePharm.PastaMedicamento
                 Console.WriteLine("Digite o valor da venda: ");
                 string inputValor = Console.ReadLine();
 
+                //conversao e verificação do valor venda
                 if (decimal.TryParse(inputValor, out valorVenda) && valorVenda > 0 && valorVenda <= 9999.99m && inputValor.Length <= 7)
                 {
                     if (Medicamento.VerificarValorVenda(valorVenda))
@@ -99,10 +102,13 @@ namespace SneezePharm.PastaMedicamento
 
             } while (true);
 
-            Medicamento novoMed = new Medicamento(nome, categoria, valorVenda, situacao);
+            //cria um novo objeto da classe medicamento
+            Medicamento novoMed = new Medicamento(nome, categoria, valorVenda,situacao);
 
+            //adiciona na lista
             Medicamentos.Add(novoMed);
 
+            //mostra na tela
             Console.WriteLine("\nRegistro adicionado com sucesso: ");
             Console.WriteLine(novoMed.ToString());
         }
@@ -112,8 +118,10 @@ namespace SneezePharm.PastaMedicamento
             Console.WriteLine("Digite o codigo de barras do medicamento: ");
             string cdb = Console.ReadLine();
 
+            //procura o medicamento que o cdb seja igual ao digitado
             Medicamento achado = Medicamentos.Find(m => m.CDB == cdb);
 
+            //se achar, exibe
             if (achado != null)
             {
                 Console.WriteLine("O medicameto foi achado: ");
@@ -129,6 +137,7 @@ namespace SneezePharm.PastaMedicamento
             Console.WriteLine("Digite o codigo de barras do medicamento: ");
             string cdb = Console.ReadLine();
 
+            //procura o medicamento que o cdb seja igual ao digitado
             Medicamento achado = Medicamentos.Find(m => m.CDB == cdb);
 
             if (achado != null)
@@ -233,6 +242,7 @@ namespace SneezePharm.PastaMedicamento
         }
         public void ImprimirMedicamentosPorSituacao(char situacao)
         {
+            //pega só os medicamentos que têm a situação igual ao parametro passado.
             var medicamentosFiltrados = Medicamentos.Where(p => p.Situacao == situacao).ToList();
 
             if (medicamentosFiltrados.Count == 0)
@@ -276,10 +286,10 @@ namespace SneezePharm.PastaMedicamento
 
             using (reader)
             {
-                while (reader.Peek() >= 0)
+                while (reader.Peek() >= 0) //enquanto houver linhas no arquivo.
                 {
 
-                    string linha = reader.ReadLine();
+                    string linha = reader.ReadLine(); // le a linha do arquivo
                     string cDB = linha.Substring(0, 13);
                     string nome = linha.Substring(13, 40);
                     string categoria = linha.Substring(53, 1);
@@ -291,6 +301,7 @@ namespace SneezePharm.PastaMedicamento
                     DateOnly uv = DateOnly.ParseExact(ultimaVenda, "ddMMyyyy");
                     DateOnly dc = DateOnly.ParseExact(dataCadastro, "ddMMyyyy");
 
+                    //instancia um novo medicamento usando todos os dados convertidos.
                     Medicamento medicamento = new(
                         cDB, nome, char.Parse(categoria), decimal.Parse(valorVenda), uv, dc, char.Parse(situacao)
                         );

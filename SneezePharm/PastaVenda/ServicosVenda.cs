@@ -243,7 +243,7 @@ namespace SneezePharm.PastaVenda
                 valorTotalItens += item;
 
             Vendas.Add(new(id, cliente.Cpf, valorTotalItens));
-            cliente.SetUltimaCompra(DateOnly.FromDateTime(DateTime.Now));
+            cliente.AlterarUltimaCompraCliente();
         }
         public void LocalizarVenda()
         {
@@ -338,7 +338,7 @@ namespace SneezePharm.PastaVenda
                 }
             }
 
-
+            medicamento.AlterarUltimaVenda();
             return new ItemVenda(idVenda, medicamento.CDB, quantidade, medicamento.ValorVenda);
         }
         public void AlterarItemVenda(List<Medicamento> medicamentos)
