@@ -172,7 +172,7 @@ namespace SneezePharm.PastaVenda
 
         #region CRUD
 
-        public void IncluirVenda(ServicosCliente clientes, List<Medicamento> medicamentos)
+        public void IncluirVenda(ServicosCliente clientes, List<Medicamento> medicamentos, List<Producao> producoes)
         {
             int id = 1;
             if (Vendas.Select(x => x.Id).Any())
@@ -210,7 +210,7 @@ namespace SneezePharm.PastaVenda
             do
             {
                 Console.WriteLine("Inclua um item:");
-                var item = IncluirItem(id, medicamentos);
+                var item = IncluirItem(id, medicamentos, producoes);
 
                 if (item == null)
                 {
@@ -290,7 +290,7 @@ namespace SneezePharm.PastaVenda
 
         #region CRUDITENS
 
-        private ItemVenda IncluirItem(int idVenda, List<Medicamento> medicamentos)
+        private ItemVenda IncluirItem(int idVenda, List<Medicamento> medicamentos, List<Producao> producoes)
         {
             string codigoDeBarras;
             do
@@ -310,6 +310,11 @@ namespace SneezePharm.PastaVenda
             if (medicamento.Situacao == 'I')
             {
                 Console.WriteLine("Medicamento Inativo");
+                return null;
+            }
+            if (!producoes.Any(p => p.CDB == codigoDeBarras))
+            {
+                Console.WriteLine("Medicamento não foi produzido ainda.");
                 return null;
             }
 

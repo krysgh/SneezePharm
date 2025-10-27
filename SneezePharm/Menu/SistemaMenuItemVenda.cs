@@ -1,4 +1,5 @@
-﻿using SneezePharm.PastaVenda;
+﻿using SneezePharm.PastaMedicamento;
+using SneezePharm.PastaVenda;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,15 +18,14 @@ namespace SneezePharm.Menu
         {
             Titulo = "=== Menu Item Venda ===";
             Opcoes =  [
-                "Cadastrar Item Venda",
-                "Localizar Item Venda",
-                "Alterar Item Venda",
-                "Imprimir Item Vendas",
+                "Localizar Item da Venda",
+                "Alterar Item da Venda",
+                "Imprimir Itens da Venda",
                 "Voltar ao Menu Principal"
                 ];
         }
 
-        public void MenuItemVenda(ServicosVenda itemVenda)
+        public void MenuItemVenda(ServicosVenda itemVenda, List<Medicamento> medicamentos)
         {
             do
             {
@@ -34,18 +34,15 @@ namespace SneezePharm.Menu
                 switch (Opcao)
                 {
                     case 1:
-                        Console.WriteLine("Cadastrar Item Venda...");
+                        itemVenda.LocalizarItemVenda(medicamentos);
                         break;
                     case 2:
-                        Console.WriteLine("Localizar Item Venda...");
+                        itemVenda.AlterarItemVenda(medicamentos);
                         break;
                     case 3:
-                        Console.WriteLine("Alterar Item Venda...");
+                        itemVenda.ImprimirItemVenda();
                         break;
                     case 4:
-                        Console.WriteLine("Imprimir Item Vendas...");
-                        break;
-                    case 5:
                         Console.WriteLine("Voltando ao menu principal...");
                         break;
                     default:
@@ -56,7 +53,7 @@ namespace SneezePharm.Menu
                 }
                 Console.ReadKey();
 
-            } while (Opcao != 5);
+            } while (Opcao != 4);
         }
     }
 }

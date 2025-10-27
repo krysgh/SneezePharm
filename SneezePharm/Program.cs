@@ -41,7 +41,7 @@ do
 
         // Menu Venda
         case 5:
-            sneeze.ServicosVenda.Menu.MenuVenda(sneeze.ServicosVenda, sneeze.ServicosCliente, sneeze.ServicosMedicamento); // acho q seria uma boa colocar o menu de item venda dentro do menu Venda
+            sneeze.ServicosVenda.Menu.MenuVenda(sneeze.ServicosVenda, sneeze.ServicosCliente, sneeze.ServicosMedicamento, sneeze.ServicosProducao.Producoes);
             break;
 
         // Menu Compra

@@ -16,6 +16,7 @@ namespace SneezePharm.PastaFornecedor
         public DateOnly DataCadastro { get; private set; } = DateOnly.FromDateTime(DateTime.Now);
         public char Situacao { get; private set; } = 'A';
 
+        // Método Construtor para um cadastro novo 
         public Fornecedor(string cnpj,
             string razaoSocial,
             string pais,
@@ -28,6 +29,7 @@ namespace SneezePharm.PastaFornecedor
             DataAbertura = dataAbertura;
         }
 
+        // Sobrecarga do método construtor para leitura de arquivo
         public Fornecedor(string cnpj,
             string razaoSocial,
             string pais,
@@ -74,7 +76,7 @@ namespace SneezePharm.PastaFornecedor
                 Console.WriteLine("CNPJ só pode conter números!");
                 return false;
             }
-
+            // Transforma o string num array de char e para cada char retorna o valor númerico e armazena num array
             int[] cnpjNumeros = cnpj.ToCharArray().Select(c => (int)char.GetNumericValue(c)).ToArray();
             if (cnpjNumeros.Length != 14)
             {
