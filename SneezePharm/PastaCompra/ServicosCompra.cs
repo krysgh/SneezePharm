@@ -1,12 +1,13 @@
-﻿using System;
+﻿using SneezePharm.Menu;
+using SneezePharm.PastaCliente;
+using SneezePharm.PastaFornecedor;
+using SneezePharm.PastaPrincipioAtivo;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SneezePharm.Menu;
-using SneezePharm.PastaFornecedor;
-using SneezePharm.PastaPrincipioAtivo;
 
 namespace SneezePharm.PastaCompra
 {
@@ -95,6 +96,7 @@ namespace SneezePharm.PastaCompra
             Compra compra = new(id, fornecedor.Cnpj, valorTotalItens);
 
             Compras.Add(compra);
+            fornecedor.AlterarUltimoFornecimento();
         } // falta verificacao do cnpj
         public void LocalizarCompra()
         {

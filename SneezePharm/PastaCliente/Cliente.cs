@@ -34,10 +34,13 @@ namespace SneezePharm.PastaCliente
             Nome = nome;
             DataNascimento = dataNascismento;
             Telefone = telefone;
-            UltimaCompra = DateOnly.FromDateTime(DateTime.Now);
-            DataCadastro = DateOnly.FromDateTime(DateTime.Now);
-            Situacao = 'A';
+            UltimaCompra = ultimaCompra;
+            DataCadastro = dataCadastro;
+            Situacao = situacao;
         }
+
+
+
         #endregion
 
         #region toString

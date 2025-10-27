@@ -223,7 +223,10 @@ namespace SneezePharm.PastaVenda
                 if (cont <= 3)
                 {
                     Console.Write("Deseja adicionar outro item? [S]Sim [N]Não ");
-                    resp = char.Parse(Console.ReadLine()!);
+                    if (!char.TryParse(Console.ReadLine()!, out resp))
+                    {
+                        break;
+                    }
                 }
                 else
                 {
@@ -260,7 +263,7 @@ namespace SneezePharm.PastaVenda
             else
                 foreach (var vendas in Vendas)
                 {
-                    Console.WriteLine("=== Venda ===");
+                    Console.WriteLine("\n=== Venda ===");
                     Console.WriteLine(vendas);
 
                     var idVenda = vendas.Id;
@@ -289,8 +292,13 @@ namespace SneezePharm.PastaVenda
 
         private ItemVenda IncluirItem(int idVenda, List<Medicamento> medicamentos)
         {
-            Console.Write("Informe o código de barras do medicamento: ");
-            var codigoDeBarras = Console.ReadLine()!.ToUpper();
+            string codigoDeBarras;
+            do
+            {
+                Console.Write("Informe o código de barras do medicamento: ");
+                codigoDeBarras = Console.ReadLine()!;
+
+            } while (codigoDeBarras.Length != 13);
 
             var medicamento = BuscarCDB(codigoDeBarras, medicamentos);
 
