@@ -25,7 +25,6 @@ do
         case 1:
             sneeze.ServicosCliente.Menu.MenuCliente(sneeze.ServicosCliente);
             break;
-
         // Menu Fornecedor
         case 2:
             sneeze.ServicosFornecedor.Menu.MenuFornecedor(sneeze.ServicosFornecedor);
