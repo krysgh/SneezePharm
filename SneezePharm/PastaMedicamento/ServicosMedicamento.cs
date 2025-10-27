@@ -269,7 +269,7 @@ namespace SneezePharm.PastaMedicamento
             {
                 using (StreamWriter sw = File.CreateText(caminho))
                 {
-                    Console.WriteLine("Arquivo criado com sucesso");
+                    Console.WriteLine($"{arquivoMedicamento} criado com sucesso");
                     Console.ReadKey();
                 }
             }

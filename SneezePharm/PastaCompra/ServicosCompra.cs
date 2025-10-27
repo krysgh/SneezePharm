@@ -404,7 +404,7 @@ namespace SneezePharm.PastaCompra
             if (!File.Exists(diretorioCompra))
             {
                 using StreamWriter sw = File.CreateText(diretorioCompra);
-                Console.WriteLine("Arquivo criado com sucesso");
+                Console.WriteLine($"{arquivoCompra} criado com sucesso");
                 Console.ReadKey();
             }
             return diretorioCompra;
@@ -419,7 +419,7 @@ namespace SneezePharm.PastaCompra
             if (!File.Exists(diretorioItemCompra))
             {
                 using StreamWriter sw = File.CreateText(diretorioItemCompra);
-                Console.WriteLine("Arquivo criado com sucesso");
+                Console.WriteLine($"{arquivoItemCompra} criado com sucesso");
                 Console.ReadKey();
             }
 

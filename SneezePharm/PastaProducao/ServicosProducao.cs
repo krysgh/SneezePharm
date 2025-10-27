@@ -160,8 +160,9 @@ namespace SneezePharm.PastaProducao
                 foreach (var item in itens)
                 {
                     var principio = principios.Find(p => p.Id == item.Principio);
-                    Console.WriteLine($"{principio!.Nome}: {item.QuantidadePrincipio}g");
-                }
+                    Console.WriteLine($"{principio!.Nome.ToString().Trim()}: {item.QuantidadePrincipio}g");
+                
+               }
                 Console.WriteLine();
             }
         }
@@ -177,7 +178,7 @@ namespace SneezePharm.PastaProducao
             if (!File.Exists(diretorioProducao))
             {
                 using StreamWriter sw = File.CreateText(diretorioProducao);
-                Console.WriteLine("Arquivo criado com sucesso");
+                Console.WriteLine($"{arquivoProducao} criado com sucesso");
                 Console.ReadKey();
             }
             return diretorioProducao;
@@ -400,7 +401,7 @@ namespace SneezePharm.PastaProducao
             if (!File.Exists(diretorioItemCompra))
             {
                 using StreamWriter sw = File.CreateText(diretorioItemCompra);
-                Console.WriteLine("Arquivo criado com sucesso");
+                Console.WriteLine($"{arquivoItemCompra} criado com sucesso");
                 Console.ReadKey();
             }
 

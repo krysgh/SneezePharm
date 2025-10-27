@@ -190,7 +190,7 @@ namespace SneezePharm.PastaPrincipioAtivo
             {
                 using (StreamWriter sw = File.CreateText(caminho))
                 {
-                    Console.WriteLine("Arquivo criado com sucesso");
+                    Console.WriteLine($"{arquivoPrincipioAtivo} criado com sucesso");
                     Console.ReadKey();
                 }
             }

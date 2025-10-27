@@ -17,7 +17,7 @@ var menuPrincipal = new SistemaMenuPrincipal();
 var working = true;
 do
 {
-    //Console.Clear();
+    Console.Clear();
     var opcao = Menu.Menus(menuPrincipal.Titulo, menuPrincipal.Opcoes);
     switch (opcao)
     {

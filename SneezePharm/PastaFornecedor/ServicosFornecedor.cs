@@ -241,7 +241,7 @@ namespace SneezePharm.PastaFornecedor
             {
                 using (StreamWriter sw = File.CreateText(diretorioFornecedor))
                 {
-                    Console.WriteLine("Arquivo criado com sucesso");
+                    Console.WriteLine($"{arquivoFornecedor} criado com sucesso");
                     Console.ReadKey();
                 }
             }
@@ -259,7 +259,7 @@ namespace SneezePharm.PastaFornecedor
             {
                 using (StreamWriter sw = File.CreateText(diretorioFornecedor))
                 {
-                    Console.WriteLine("Arquivo criado com sucesso");
+                    Console.WriteLine($"{arquivoFornecedor} criado com sucesso");
                     Console.ReadKey();
                 }
             }

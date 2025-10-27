@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using SneezePharm.Menu;
 using SneezePharm.PastaCliente;
-using SneezePharm.PastaCompra;
 using SneezePharm.PastaMedicamento;
 using SneezePharm.PastaProducao;
 
@@ -43,6 +42,7 @@ namespace SneezePharm.PastaVenda
 
         public string CriarArquivoVenda()
         {
+
             string diretorio = @"C:\SneezePharma\Files";
             string arquivoVenda = "Sales.data";
 
@@ -51,7 +51,7 @@ namespace SneezePharm.PastaVenda
             if (!File.Exists(diretorioVenda))
             {
                 using StreamWriter sw = File.CreateText(diretorioVenda);
-                Console.WriteLine("Arquivo criado com sucesso!");
+                Console.WriteLine($"{arquivoVenda} criado com sucesso!");
                 Console.ReadKey();
             }
             return diretorioVenda;
@@ -67,7 +67,7 @@ namespace SneezePharm.PastaVenda
             if (!File.Exists(diretorioItemVenda))
             {
                 using StreamWriter sw = File.CreateText(diretorioItemVenda);
-                Console.WriteLine("Arquivo criado com sucesso!");
+                Console.WriteLine($"{arquivoItemVenda} criado com sucesso!");
                 Console.ReadKey();
             }
 
@@ -83,7 +83,7 @@ namespace SneezePharm.PastaVenda
             {
                 List<Venda> vendas = new();
 
-                while (reader.Peek() >= 0)
+                while (reader.Peek() >= 0) //reader.Peek lê o próximo carctere sem consumir da stream
                 {
 
                     var linha = reader.ReadLine();
@@ -116,7 +116,7 @@ namespace SneezePharm.PastaVenda
             {
                 List<ItemVenda> itensVenda = new();
 
-                while (reader.Peek() >= 0)
+                while (reader.Peek() >= 0) //reader.Peek lê o próximo carctere sem consumir da stream
                 {
                     var linha = reader.ReadLine();
 
@@ -175,8 +175,10 @@ namespace SneezePharm.PastaVenda
         public void IncluirVenda(ServicosCliente clientes, List<Medicamento> medicamentos, List<Producao> producoes)
         {
             int id = 1;
+
+            //verifica se há registro na lista de vendas
             if (Vendas.Select(x => x.Id).Any())
-                id = Vendas.Select(x => x.Id).Last() + 1;
+                id = Vendas.Select(x => x.Id).Last() + 1; //id recebe sempre o id da ultima venda + 1
 
             Console.WriteLine($"Id da Venda: {id}");
             Console.Write("Informe o CPF do cliente: ");
@@ -214,6 +216,7 @@ namespace SneezePharm.PastaVenda
 
                 if (item == null)
                 {
+                    Console.WriteLine("Não foi possível incluir o item!");
                     return;
                 }
 
@@ -225,6 +228,7 @@ namespace SneezePharm.PastaVenda
                     Console.Write("Deseja adicionar outro item? [S]Sim [N]Não ");
                     if (!char.TryParse(Console.ReadLine()!, out resp))
                     {
+                        Console.WriteLine("Digite uma opção válida!");
                         break;
                     }
                 }
@@ -244,6 +248,7 @@ namespace SneezePharm.PastaVenda
 
             Vendas.Add(new(id, cliente.Cpf, valorTotalItens));
             cliente.AlterarUltimaCompraCliente();
+            GravarArquivoVenda();
         }
         public void LocalizarVenda()
         {
@@ -276,6 +281,7 @@ namespace SneezePharm.PastaVenda
                 }
         }
 
+
         private Venda BuscarVenda(int id)
         {
             return Vendas.Find(x => x.Id == id)!;
@@ -284,7 +290,6 @@ namespace SneezePharm.PastaVenda
         {
             return medicamentos.Find(x => x.CDB == codigoDeBarras)!;
         }
-
 
         #endregion
 

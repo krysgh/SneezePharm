@@ -401,7 +401,10 @@ namespace SneezePharm.PastaCliente
 
             if (!File.Exists(Path.Combine(diretorio, arquivo)))
             {
-                using (File.Create(Path.Combine(diretorio, arquivo))) { }
+                using (File.Create(Path.Combine(diretorio, arquivo))) {
+                    Console.WriteLine($"{arquivo} criado com sucesso!");
+                    Console.ReadKey();
+                }
             }
 
             return Path.Combine(diretorio, arquivo);
@@ -413,7 +416,11 @@ namespace SneezePharm.PastaCliente
 
             if (!File.Exists(Path.Combine(diretorio, arquivoBloqueado)))
             {
-                using (File.Create(Path.Combine(diretorio, arquivoBloqueado))) { }
+                using (File.Create(Path.Combine(diretorio, arquivoBloqueado))) {
+
+                    Console.WriteLine($"{arquivoBloqueado} criado com sucesso!");
+                    Console.ReadKey();
+                }
             }
 
             return Path.Combine(diretorio, arquivoBloqueado);
